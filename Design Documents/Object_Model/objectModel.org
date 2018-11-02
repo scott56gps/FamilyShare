@@ -1,13 +1,10 @@
-* Temple Ordinance Record
-  - ancestorId (KY12-LPM)
-  - state (Available)
-  - ordinancesToBeDone (['Baptism', 'Confirmation', 'Initiatory', 'Endowment', 'Sealing to Parents']
-
-* Ancestor
+* Ancestor Record
   - id (KY12-LPM)
   - name (Luciano De Luna)
   - birthDate (12-Aug-2018)
   - deathDate (13-Sep-2018)
+  - state (Available)
+  - ordinancesToBeDone  (['Baptism', 'Confirmation', 'Initiatory', 'Endowment', 'Sealing to Parents'])
 
 * ListAncestorTransferObject
   - ancestorId (KY12-LPM)
