@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1320A88D20F01E86004EC5DF /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1320A88C20F01E86004EC5DF /* Group.swift */; };
 		1320A88F20F01F1B004EC5DF /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1320A88E20F01F1B004EC5DF /* Member.swift */; };
 		1320A89320F42BAC004EC5DF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1320A89220F42BAC004EC5DF /* User.swift */; };
 		13C3E2A020EBD7FD00458251 /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C3E29F20EBD7FD00458251 /* Gender.swift */; };
@@ -30,7 +29,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1320A88C20F01E86004EC5DF /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		1320A88E20F01F1B004EC5DF /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
 		1320A89220F42BAC004EC5DF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		13C3E29F20EBD7FD00458251 /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
@@ -97,7 +95,6 @@
 				2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */,
 				279F5BEA20E6D34200DA7396 /* TabBarController.swift */,
 				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
-				1320A88C20F01E86004EC5DF /* Group.swift */,
 				1320A89220F42BAC004EC5DF /* User.swift */,
 				1320A88E20F01F1B004EC5DF /* Member.swift */,
 				27705E7520C7D4180048DCC1 /* Ancestor.swift */,
@@ -254,7 +251,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1320A88D20F01E86004EC5DF /* Group.swift in Sources */,
 				27705E7620C7D4180048DCC1 /* Ancestor.swift in Sources */,
 				13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */,
 				279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */,
