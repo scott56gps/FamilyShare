@@ -137,7 +137,7 @@
                                             <action selector="showTempleActionSheet:" destination="aNy-e4-cBh" eventType="touchUpInside" id="fU1-ba-Qrq"/>
                                         </connections>
                                     </button>
-                                    <button userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uKX-N3-umn">
+                                    <button contentMode="scaleToFill" horizontalHuggingPriority="249" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uKX-N3-umn">
                                         <rect key="frame" x="8" y="8" width="56" height="30"/>
                                         <color key="backgroundColor" red="0.98823529409999999" green="0.70196078429999997" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="Share">

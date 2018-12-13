@@ -91,6 +91,6 @@ class AncestorDTO {
         self.familySearchId = familySearchId
         
         // Get the gender of this ancestor
-        self.gender = pdfLines[pdfLines.count - 2]
+        self.gender = pdfLines[pdfLines.count - 3]
     }
 }

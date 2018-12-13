@@ -30,6 +30,7 @@
 		13C3E2A120EBDC4000458251 /* Ordinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ordinance.swift; sourceTree = "<group>"; };
 		13E0132B21C08874009BC28D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		13FDDF5121C23E8F00A84F4A /* AncestorDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorDTO.swift; sourceTree = "<group>"; };
+		13FDDF5321C2468B00A84F4A /* FamilyShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyShare.entitlements; sourceTree = "<group>"; };
 		1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FamilyShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C172981C9446BC2EB1A425C /* Pods-FamilyShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.release.xcconfig"; sourceTree = "<group>"; };
 		2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedViewController.swift; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 		27705E5020C7C8AF0048DCC1 /* FamilyShare */ = {
 			isa = PBXGroup;
 			children = (
+				13FDDF5321C2468B00A84F4A /* FamilyShare.entitlements */,
 				27705E5120C7C8AF0048DCC1 /* AppDelegate.swift */,
 				27705E5320C7C8AF0048DCC1 /* ViewController.swift */,
 				27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */,
@@ -156,6 +158,11 @@
 					27705E4D20C7C8AF0048DCC1 = {
 						CreatedOnToolsVersion = 9.4;
 						LastSwiftMigration = 1010;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -393,6 +400,7 @@
 			baseConfigurationReference = F18ECCE529B89326DC3C32F2 /* Pods-FamilyShare.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FamilyShare/FamilyShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZULRH345LL;
 				"DYLIB_INSTALL_NAME_BASE[arch=*]" = "@rpath";
@@ -414,6 +422,7 @@
 			baseConfigurationReference = 1C172981C9446BC2EB1A425C /* Pods-FamilyShare.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FamilyShare/FamilyShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZULRH345LL;
 				INFOPLIST_FILE = "$(SRCROOT)/FamilyShare/Info.plist";

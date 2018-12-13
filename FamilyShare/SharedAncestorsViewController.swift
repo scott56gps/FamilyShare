@@ -133,6 +133,9 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             let pdfLines = parsePDF(pdfDocument: templeCardPdf)
             let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
             
+            print(pdfLines)
+            print(pdfLines[pdfLines.count - 2])
+            
             // Populate a new Ancestor Object
             ancestorToShare = AncestorDTO(pdfLines, digitRegex: digitRegex)
             
@@ -153,6 +156,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Actions
     @IBAction func pickFile(_ sender: UIButton) {
+        print("BUTTON PRESSED")
         // Present the Document Picker
         let importPicker = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
         
@@ -160,7 +164,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         
         importPicker.modalPresentationStyle = .currentContext
         
-        present(importPicker, animated: true, completion: nil)
+        self.present(importPicker, animated: true, completion: nil)
     }
     
     @IBAction func showTempleActionSheet(_ sender: UIButton) {
@@ -246,7 +250,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             if let array = value as? [Any] {
                 var receivedAncestors = [Ancestor]()
                 for object in array {
-                    print(object)
                     let jsonArray = object as? [String: Any]
                     let givenName = jsonArray!["given_name"]! as! String
                     let surname =  jsonArray!["surname"] as! String
