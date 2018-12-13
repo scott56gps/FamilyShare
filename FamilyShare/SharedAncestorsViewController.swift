@@ -30,6 +30,8 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         
         reserveButton.isEnabled = false
         reserveButton.alpha = 0.5
+        
+        loadSampleSharedAncestors()
     }
 
     override func didReceiveMemoryWarning() {
@@ -74,10 +76,10 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         dateFormatter.dateFormat = "d MMMM YYYY"
         
         cell.ancestorNameLabel.text = ancestor.name
-        cell.nextOrdinanceLabel.text = ancestor.ordinancesAvailable[0].rawValue
+        cell.nextOrdinanceLabel.text = ancestor.neededOrdinance.rawValue
         
         // Determine which photo to place based on gender
-        if (ancestor.gender == .male) {
+        if (ancestor.gender == "Male") {
             cell.photoImageView.image = #imageLiteral(resourceName: "Default Male")
             cell.backgroundColor = UIColor(red: 125.0/255.0, green: 126.0/255.0, blue: 232.0/255.0, alpha: 0.25)
         } else {
@@ -184,6 +186,13 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     
     //MARK: Private methods
+    private func loadSampleSharedAncestors() {
+        let ancestor1 = Ancestor(name: "Juan De Luna", gender: "Male", neededOrdinance: .baptism)
+        let ancestor2 = Ancestor(name: "Zsuzanna Zsik", gender: "Female", neededOrdinance: .endowment)
+        
+        ancestors = [ancestor1, ancestor2]
+    }
+    
     private func setBadge() {
         if let tabItems = self.tabBarController?.tabBar.items {
             let reservedTab = tabItems[1]

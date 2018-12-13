@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1320A88F20F01F1B004EC5DF /* Member.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1320A88E20F01F1B004EC5DF /* Member.swift */; };
-		1320A89320F42BAC004EC5DF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1320A89220F42BAC004EC5DF /* User.swift */; };
-		13C3E2A020EBD7FD00458251 /* Gender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C3E29F20EBD7FD00458251 /* Gender.swift */; };
 		13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C3E2A120EBDC4000458251 /* Ordinance.swift */; };
 		13E0132C21C08875009BC28D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E0132B21C08874009BC28D /* Default-568h@2x.png */; };
 		2702DB9020E42A2A00A193D5 /* ReservedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */; };
@@ -29,9 +26,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1320A88E20F01F1B004EC5DF /* Member.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Member.swift; sourceTree = "<group>"; };
-		1320A89220F42BAC004EC5DF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		13C3E29F20EBD7FD00458251 /* Gender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gender.swift; sourceTree = "<group>"; };
 		13C3E2A120EBDC4000458251 /* Ordinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ordinance.swift; sourceTree = "<group>"; };
 		13E0132B21C08874009BC28D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FamilyShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,11 +89,8 @@
 				2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */,
 				279F5BEA20E6D34200DA7396 /* TabBarController.swift */,
 				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
-				1320A89220F42BAC004EC5DF /* User.swift */,
-				1320A88E20F01F1B004EC5DF /* Member.swift */,
 				27705E7520C7D4180048DCC1 /* Ancestor.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
-				13C3E29F20EBD7FD00458251 /* Gender.swift */,
 				27705E5820C7C8B90048DCC1 /* Assets.xcassets */,
 				27BAF3BA20E18940007EDA9D /* exampleFOR.pdf */,
 				279F5BEE20E83C7100DA7396 /* shareIconBlack.png */,
@@ -258,11 +249,8 @@
 				27705E7420C7CAD50048DCC1 /* AncestorTableViewCell.swift in Sources */,
 				27BAF3B920DF00C0007EDA9D /* SharedAncestorsViewController.swift in Sources */,
 				27705E5420C7C8AF0048DCC1 /* ViewController.swift in Sources */,
-				13C3E2A020EBD7FD00458251 /* Gender.swift in Sources */,
-				1320A89320F42BAC004EC5DF /* User.swift in Sources */,
 				2702DB9020E42A2A00A193D5 /* ReservedViewController.swift in Sources */,
 				27705E5220C7C8AF0048DCC1 /* AppDelegate.swift in Sources */,
-				1320A88F20F01F1B004EC5DF /* Member.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,16 +10,12 @@ import Foundation
 
 class Ancestor {
     var name: String
-    var gender: Gender
-    var ordinancesAvailable: [Ordinance]
-    var reservedDate: Date
-    var sharedBy: Member?
+    var gender: String
+    var neededOrdinance: Ordinance
     
-    init(name: String, gender: Gender, ordinancesAvailable: [Ordinance], reservedDate: Date, sharedBy: Member?) {
+    init(name: String, gender: String, neededOrdinance: Ordinance) {
         self.name = name
         self.gender = gender
-        self.ordinancesAvailable = ordinancesAvailable
-        self.reservedDate = reservedDate
-        self.sharedBy = sharedBy
+        self.neededOrdinance = neededOrdinance
     }
 }

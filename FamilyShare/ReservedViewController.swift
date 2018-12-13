@@ -9,7 +9,6 @@
 import UIKit
 
 class ReservedViewController: UIViewController, UITableViewDataSource {
-    let user = User()!
     var ancestors = [Ancestor]()
     @IBOutlet weak var ancestorTableView: UITableView!
     @IBOutlet weak var shareButton: UIButton!
@@ -24,7 +23,7 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         
         shareButton.isEnabled = false
         
-        ancestors = user.ancestors
+        loadSampleReservedAncestors()
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,10 +53,10 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         dateFormatter.dateFormat = "d MMM YYYY"
         
         cell.ancestorNameLabel.text = ancestor.name
-        cell.nextOrdinanceLabel.text = ancestor.ordinancesAvailable[0].rawValue
+        cell.nextOrdinanceLabel.text = ancestor.neededOrdinance.rawValue
         
         // Determine which photo to place based on gender
-        if (ancestor.gender == .male) {
+        if (ancestor.gender == "Male") {
             cell.photoImageView.image = #imageLiteral(resourceName: "Default Male")
             cell.backgroundColor = UIColor(red: 125.0/255.0, green: 126.0/255.0, blue: 232.0/255.0, alpha: 0.25)
         } else {
@@ -69,4 +68,10 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
     }
     
     //MARK: Private Functions
+    private func loadSampleReservedAncestors() {
+        let ancestor1 = Ancestor(name: "Hector Lopez", gender: "Male", neededOrdinance: .initiatory)
+        let ancestor2 = Ancestor(name: "Evangelina De Luna", gender: "Female", neededOrdinance: .baptism)
+        
+        ancestors = [ancestor1, ancestor2]
+    }
 }
