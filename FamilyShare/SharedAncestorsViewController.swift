@@ -11,11 +11,14 @@ import PDFKit
 import CoreGraphics
 import Alamofire
 
-class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
     //MARK: Properties
     var ancestors = [Ancestor]()
-    //var selectedAncestorCells = [IndexPath]()
+    var ancestorToShare: AncestorDTO?
+    var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
+    
+    // MARK: Outlets
     @IBOutlet weak var reserveButton: UIButton!
     @IBOutlet weak var ancestorTableView: UITableView!
     @IBOutlet weak var sliderConstraint: NSLayoutConstraint!
@@ -113,14 +116,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         // Decrement selected ancestor count
         selectedAncestorsCount -= 1
         
-        // Search for the indexPath to remove
-//        for index in 0..<selectedAncestorCells.count {
-//            if (indexPath.description == selectedAncestorCells[index].description) {
-//                // Remove this index path from the array
-//                selectedAncestorCells.remove(at: index)
-//            }
-//        }
-        
         // Check to see if we should disable the reserve button
         if (selectedAncestorsCount == 0) {
             reserveButton.isEnabled = false
@@ -128,7 +123,46 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
+    // MARK: UIDocumentPickerDelegate Methods
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        // Load the PDF
+        if let templeCardPdf = PDFDocument(url: urls[0]) {
+            templeCard = templeCardPdf
+            // Parse the PDF
+            //let templeOrdinanceInformation = parsePDF(pdfDocument: templeCardPdf)
+            let pdfLines = parsePDF(pdfDocument: templeCardPdf)
+            let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
+            
+            // Populate a new Ancestor Object
+            ancestorToShare = AncestorDTO(pdfLines, digitRegex: digitRegex)
+            
+            print(ancestorToShare!.givenNames)
+            print(ancestorToShare!.surname)
+            print(ancestorToShare!.neededOrdinance)
+            print(ancestorToShare!.gender)
+            print(ancestorToShare!.familySearchId)
+        } else {
+            // Throw an error
+            fatalError("PDF Document creation failed")
+        }
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        
+    }
+    
     //MARK: Actions
+    @IBAction func pickFile(_ sender: UIButton) {
+        // Present the Document Picker
+        let importPicker = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
+        
+        importPicker.delegate = self
+        
+        importPicker.modalPresentationStyle = .currentContext
+        
+        present(importPicker, animated: true, completion: nil)
+    }
+    
     @IBAction func showTempleActionSheet(_ sender: UIButton) {
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
@@ -233,6 +267,55 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             }
         }
     }
+    
+    private func uploadFile(_ sender: UIButton) {
+        // Make an HTTP request
+        let url = URL(string: "https://postgres-query-ancestors.herokuapp.com/share")!
+        
+        // Make parameters
+        var parameters = [String: String]()
+        parameters["givenNames"] = ancestorToShare!.givenNames
+        parameters["surname"] = ancestorToShare!.surname
+        parameters["gender"] = ancestorToShare!.gender
+        parameters["ordinanceNeeded"] = ancestorToShare!.neededOrdinance
+        parameters["familySearchId"] = ancestorToShare!.familySearchId
+        
+        // Using Alamofire
+        Alamofire.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(self.templeCard!.documentURL!, withName: "templePdf", fileName: "\(self.ancestorToShare!.familySearchId).pdf", mimeType: "application/pdf")
+            for (key, value) in parameters {
+                multipartFormData.append(value.data(using: .utf8)!, withName: key)
+            }
+        },
+                         to: url,
+                         encodingCompletion: { encodingResult in
+                            switch encodingResult {
+                            case .success(let upload, _, _):
+                                upload.responseString { response in
+                                    debugPrint(response)
+                                }
+                            case .failure(let encodingError):
+                                print(encodingError)
+                            }
+        })
+    }
+    
+    private func parsePDF(pdfDocument: PDFDocument) -> [String] {
+        // Get an array of lines of the PDF String
+        if let pdfString = pdfDocument.string {
+            var pdfLines = pdfString.components(separatedBy: CharacterSet.newlines)
+            
+            // Trim the whitespace in the array of pdfLines
+            pdfLines = pdfLines.map {
+                $0.trimmingCharacters(in: CharacterSet.whitespaces)
+            }
+            
+            return pdfLines
+        } else {
+            fatalError("PDF String could not be extracted using the iOS API")
+        }
+    }
+
     
     private func loadSampleSharedAncestors() {
         let ancestor1 = Ancestor(name: "Juan De Luna", gender: "Male", neededOrdinance: .baptism)!
