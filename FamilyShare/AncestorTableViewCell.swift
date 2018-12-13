@@ -12,8 +12,6 @@ class AncestorTableViewCell: UITableViewCell {
     // MARK: Properties
     @IBOutlet weak var ancestorNameLabel: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var reservedByNameLabel: UILabel!
-    @IBOutlet weak var reservedDateLabel: UILabel!
     @IBOutlet weak var nextOrdinanceLabel: UILabel!
     
     override func awakeFromNib() {

@@ -20,7 +20,7 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         // Do any additional setup after loading the view.
         ancestorTableView.dataSource = self
         ancestorTableView.separatorColor = UIColor.black
-        ancestorTableView.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        ancestorTableView.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         
         shareButton.isEnabled = false
         
@@ -54,8 +54,6 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         dateFormatter.dateFormat = "d MMM YYYY"
         
         cell.ancestorNameLabel.text = ancestor.name
-        cell.reservedDateLabel.text = dateFormatter.string(from: ancestor.reservedDate)
-        cell.reservedByNameLabel.text = nil
         cell.nextOrdinanceLabel.text = ancestor.ordinancesAvailable[0].rawValue
         
         // Determine which photo to place based on gender

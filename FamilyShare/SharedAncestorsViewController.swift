@@ -12,7 +12,6 @@ import CoreGraphics
 
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //MARK: Properties
-    var group = Group()
     var ancestors = [Ancestor]()
     //var selectedAncestorCells = [IndexPath]()
     var selectedAncestorsCount = 0
@@ -27,12 +26,10 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         ancestorTableView.dataSource = self
         ancestorTableView.delegate = self
         ancestorTableView.separatorColor = UIColor.black
-        ancestorTableView.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
+        ancestorTableView.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         
         reserveButton.isEnabled = false
         reserveButton.alpha = 0.5
-        
-        ancestors = group!.ancestors
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,8 +74,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         dateFormatter.dateFormat = "d MMMM YYYY"
         
         cell.ancestorNameLabel.text = ancestor.name
-        cell.reservedDateLabel.text = dateFormatter.string(from: ancestor.reservedDate)
-        cell.reservedByNameLabel.text = "Reserved By \(ancestor.sharedBy!.name)"
         cell.nextOrdinanceLabel.text = ancestor.ordinancesAvailable[0].rawValue
         
         // Determine which photo to place based on gender
@@ -127,18 +122,18 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: Actions
     @IBAction func showTempleActionSheet(_ sender: UIButton) {
         // Initialize Alert Controller
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
         // Make actions for Action Sheet
-        let showCodeAction = UIAlertAction(title: "Show Code", style: UIAlertActionStyle.default, handler: {
+        let showCodeAction = UIAlertAction(title: "Show Code", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in self.showCodeView()
         })
         
-        let printFORAction = UIAlertAction(title: "Print", style: UIAlertActionStyle.default, handler: {
+        let printFORAction = UIAlertAction(title: "Print", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in self.printFOR()
         })
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: {(UIAlertAction) -> Void in})
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {(UIAlertAction) -> Void in})
         
         alertController.addAction(showCodeAction)
         alertController.addAction(printFORAction)
