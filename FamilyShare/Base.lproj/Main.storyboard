@@ -408,25 +408,40 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="logIn:" destination="hvA-Tg-8OB" eventType="editingDidEnd" id="bVf-EB-Nmq"/>
+                                </connections>
                             </textField>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqx-0i-Sqq" userLabel="Log In Info Label">
+                                <rect key="frame" x="166" y="404" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.79607843137254897" green="0.94697457110000005" blue="0.79577922099999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="EmG-wC-F9h" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="105" id="7nQ-Wh-YhY"/>
-                            <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="115.5" id="A4v-8V-O3A"/>
                             <constraint firstItem="MAj-qL-Run" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="139" id="RLy-i6-46U"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="MAj-qL-Run" secondAttribute="trailing" constant="139" id="ReD-N5-vdm"/>
+                            <constraint firstItem="mqx-0i-Sqq" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="166" id="UoM-UT-wbl"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="MAj-qL-Run" secondAttribute="bottom" constant="142" id="nsR-TT-Eq8"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="mqx-0i-Sqq" secondAttribute="trailing" constant="167" id="oep-EY-Yqs"/>
+                            <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="mqx-0i-Sqq" secondAttribute="bottom" constant="21" id="rb5-mK-KLw"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="EmG-wC-F9h" secondAttribute="trailing" constant="106" id="tYH-57-hxb"/>
                             <constraint firstItem="EmG-wC-F9h" firstAttribute="top" secondItem="TiN-rZ-TCm" secondAttribute="top" constant="290" id="zAK-4n-Za4"/>
+                            <constraint firstItem="mqx-0i-Sqq" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="73.5" id="zOg-Vr-kLU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TiN-rZ-TCm"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="9dN-5l-JqO"/>
+                    <connections>
+                        <outlet property="infoLable" destination="mqx-0i-Sqq" id="Sii-3C-0w8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YUR-de-cF5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-182" y="938"/>
+            <point key="canvasLocation" x="-174" y="878"/>
         </scene>
     </scenes>
     <resources>
