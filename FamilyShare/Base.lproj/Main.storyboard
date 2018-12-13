@@ -29,6 +29,7 @@
                     <connections>
                         <segue destination="aNy-e4-cBh" kind="relationship" relationship="viewControllers" id="rum-1G-gut"/>
                         <segue destination="fYS-o3-PUg" kind="relationship" relationship="viewControllers" id="Ulh-Rs-djs"/>
+                        <segue destination="hvA-Tg-8OB" kind="relationship" relationship="viewControllers" id="I65-pD-gSG"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Odr-ZL-BoG" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -396,34 +397,36 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log In to FamilyShare" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EmG-wC-F9h" userLabel="Log In Label">
-                                <rect key="frame" x="105" y="309" width="164" height="20.5"/>
+                                <rect key="frame" x="105" y="310" width="164" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MAj-qL-Run" userLabel="Username Text Field">
-                                <rect key="frame" x="139" y="446.5" width="97" height="30"/>
+                                <rect key="frame" x="139" y="446" width="97" height="30"/>
+                                <color key="backgroundColor" red="0.98823529409999999" green="0.70196078429999997" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.79607843137254897" green="0.94697457110000005" blue="0.79577922099999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="EmG-wC-F9h" firstAttribute="top" secondItem="TiN-rZ-TCm" secondAttribute="top" constant="289" id="RXI-BI-59s"/>
-                            <constraint firstItem="EmG-wC-F9h" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="105" id="XEW-Xv-vHW"/>
-                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="MAj-qL-Run" secondAttribute="bottom" constant="190.5" id="esF-MF-HVJ"/>
-                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="MAj-qL-Run" secondAttribute="trailing" constant="139" id="fFL-Fa-E7w"/>
-                            <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="117" id="jSZ-3C-RZ7"/>
-                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="EmG-wC-F9h" secondAttribute="trailing" constant="106" id="mTU-Q3-lTP"/>
-                            <constraint firstItem="MAj-qL-Run" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="139" id="ryL-ba-fJ1"/>
+                            <constraint firstItem="EmG-wC-F9h" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="105" id="7nQ-Wh-YhY"/>
+                            <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="115.5" id="A4v-8V-O3A"/>
+                            <constraint firstItem="MAj-qL-Run" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="139" id="RLy-i6-46U"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="MAj-qL-Run" secondAttribute="trailing" constant="139" id="ReD-N5-vdm"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="MAj-qL-Run" secondAttribute="bottom" constant="142" id="nsR-TT-Eq8"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="EmG-wC-F9h" secondAttribute="trailing" constant="106" id="tYH-57-hxb"/>
+                            <constraint firstItem="EmG-wC-F9h" firstAttribute="top" secondItem="TiN-rZ-TCm" secondAttribute="top" constant="290" id="zAK-4n-Za4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TiN-rZ-TCm"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="9dN-5l-JqO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YUR-de-cF5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="613.60000000000002" y="1555.7721139430287"/>
+            <point key="canvasLocation" x="-182" y="938"/>
         </scene>
     </scenes>
     <resources>
