@@ -182,6 +182,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         })
     }
     
+    
     //MARK: Private methods
     private func setBadge() {
         if let tabItems = self.tabBarController?.tabBar.items {
