@@ -36,6 +36,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         reserveButton.alpha = 0.5
         
         //loadSampleSharedAncestors()
+        //downloadAvailableAncestors()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -144,6 +145,8 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             print(ancestorToShare!.neededOrdinance)
             print(ancestorToShare!.gender)
             print(ancestorToShare!.familySearchId)
+            
+            uploadFile()
         } else {
             // Throw an error
             fatalError("PDF Document creation failed")
@@ -271,7 +274,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
-    private func uploadFile(_ sender: UIButton) {
+    private func uploadFile() {
         // Make an HTTP request
         let url = URL(string: "https://postgres-query-ancestors.herokuapp.com/share")!
         
@@ -296,6 +299,9 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                             case .success(let upload, _, _):
                                 upload.responseString { response in
                                     debugPrint(response)
+                                    
+                                    // Update the available ancestors
+                                    self.downloadAvailableAncestors()
                                 }
                             case .failure(let encodingError):
                                 print(encodingError)
