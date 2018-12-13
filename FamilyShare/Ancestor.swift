@@ -13,7 +13,11 @@ class Ancestor {
     var gender: String
     var neededOrdinance: Ordinance
     
-    init(name: String, gender: String, neededOrdinance: Ordinance) {
+    init?(name: String, gender: String, neededOrdinance: Ordinance) {
+        if (name.isEmpty || gender.isEmpty) {
+            return nil
+        }
+        
         self.name = name
         self.gender = gender
         self.neededOrdinance = neededOrdinance

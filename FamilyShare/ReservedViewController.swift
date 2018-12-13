@@ -69,8 +69,12 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
     
     //MARK: Private Functions
     private func loadSampleReservedAncestors() {
-        let ancestor1 = Ancestor(name: "Hector Lopez", gender: "Male", neededOrdinance: .initiatory)
-        let ancestor2 = Ancestor(name: "Evangelina De Luna", gender: "Female", neededOrdinance: .baptism)
+        guard let ancestor1 = Ancestor(name: "Hector Lopez", gender: "Male", neededOrdinance: .initiatory) else {
+            fatalError("Error in instatiating Hector Lopez")
+        }
+        guard let ancestor2 = Ancestor(name: "Evangelina De Luna", gender: "Female", neededOrdinance: .baptism) else {
+            fatalError("Error in instatiating Evangelina De Luna")
+        }
         
         ancestors = [ancestor1, ancestor2]
     }

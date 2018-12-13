@@ -9,6 +9,7 @@
 import UIKit
 import PDFKit
 import CoreGraphics
+import Alamofire
 
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //MARK: Properties
@@ -31,7 +32,13 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         reserveButton.isEnabled = false
         reserveButton.alpha = 0.5
         
-        loadSampleSharedAncestors()
+        //loadSampleSharedAncestors()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        downloadAvailableAncestors()
     }
 
     override func didReceiveMemoryWarning() {
@@ -186,9 +193,50 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     
     //MARK: Private methods
+    private func downloadAvailableAncestors() {
+        // Make an Alamofire request to get the available ancestor data
+        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
+            guard response.result.isSuccess else {
+                print("GET request for available ancestors failed: \(String(describing: response.result.error))")
+                return
+            }
+            
+            //print("response.result.value: \(String(describing: response.result.value!))")
+            
+            guard let value = response.result.value else {
+                print("Data received was not able to be formed correctly")
+                return
+            }
+            
+            //let rows = value["rows"] as? [[String: Any]]
+            if let array = value as? [Any] {
+                var receivedAncestors = [Ancestor]()
+                for object in array {
+                    print(object)
+                    let jsonArray = object as? [String: Any]
+                    let givenName = jsonArray!["given_name"]! as! String
+                    let surname =  jsonArray!["surname"] as! String
+                    let gender = jsonArray!["gender"] as! String
+                    let fullName = givenName + " " + surname
+                    let neededOrdinance = Ordinance(rawValue: jsonArray!["ordinance_needed"]! as! String)!
+                    
+                    // Create an Ancestor Object from the parts that we got from the JSON
+                    guard let ancestor = Ancestor(name: fullName, gender: gender, neededOrdinance: neededOrdinance) else {
+                        fatalError("There was an error in instantiating ancestor with name \(fullName)")
+                    }
+                    
+                    receivedAncestors.append(ancestor)
+                }
+                
+                self.ancestors = receivedAncestors
+                self.ancestorTableView.reloadData()
+            }
+        }
+    }
+    
     private func loadSampleSharedAncestors() {
-        let ancestor1 = Ancestor(name: "Juan De Luna", gender: "Male", neededOrdinance: .baptism)
-        let ancestor2 = Ancestor(name: "Zsuzanna Zsik", gender: "Female", neededOrdinance: .endowment)
+        let ancestor1 = Ancestor(name: "Juan De Luna", gender: "Male", neededOrdinance: .baptism)!
+        let ancestor2 = Ancestor(name: "Zsuzanna Zsik", gender: "Female", neededOrdinance: .endowment)!
         
         ancestors = [ancestor1, ancestor2]
     }
