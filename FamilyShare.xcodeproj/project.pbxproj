@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		136B58DB21C2E92C00C8D9FB /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */; };
 		13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C3E2A120EBDC4000458251 /* Ordinance.swift */; };
 		13E0132C21C08875009BC28D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E0132B21C08874009BC28D /* Default-568h@2x.png */; };
 		13FDDF5221C23E8F00A84F4A /* AncestorDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FDDF5121C23E8F00A84F4A /* AncestorDTO.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		13C3E2A120EBDC4000458251 /* Ordinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ordinance.swift; sourceTree = "<group>"; };
 		13E0132B21C08874009BC28D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		13FDDF5121C23E8F00A84F4A /* AncestorDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorDTO.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */,
 				279F5BEA20E6D34200DA7396 /* TabBarController.swift */,
 				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
+				136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */,
 				27705E7520C7D4180048DCC1 /* Ancestor.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
 				27705E5820C7C8B90048DCC1 /* Assets.xcassets */,
@@ -261,6 +264,7 @@
 				27BAF3B920DF00C0007EDA9D /* SharedAncestorsViewController.swift in Sources */,
 				27705E5420C7C8AF0048DCC1 /* ViewController.swift in Sources */,
 				2702DB9020E42A2A00A193D5 /* ReservedViewController.swift in Sources */,
+				136B58DB21C2E92C00C8D9FB /* LogInViewController.swift in Sources */,
 				27705E5220C7C8AF0048DCC1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
