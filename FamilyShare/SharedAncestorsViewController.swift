@@ -254,6 +254,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         // Make actions for Action Sheet
         let showCodeAction = UIAlertAction(title: "Show Code", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in
+            self.downloadTempleCard(ancestorId: ancestorId)
             self.showCodeView()
         })
         
