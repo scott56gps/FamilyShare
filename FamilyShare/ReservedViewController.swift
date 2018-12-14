@@ -115,15 +115,4 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
             print("User Id nil.  User not signed in")
         }
     }
-    
-    private func loadSampleReservedAncestors() {
-        guard let ancestor1 = Ancestor(id: 1, givenNames: "Hector", surname: "Lopez", gender: "Male", neededOrdinance: .initiatory) else {
-            fatalError("Error in instatiating Hector Lopez")
-        }
-        guard let ancestor2 = Ancestor(id: 1, givenNames: "Evangelina", surname: "De Luna", gender: "Female", neededOrdinance: .baptism) else {
-            fatalError("Error in instatiating Evangelina De Luna")
-        }
-        
-        ancestors = [ancestor1, ancestor2]
-    }
 }
