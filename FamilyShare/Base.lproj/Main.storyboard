@@ -358,8 +358,21 @@
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VKk-5c-XAV" userLabel="Footer">
                                 <rect key="frame" x="0.0" y="574" width="375" height="44"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kqv-oG-SYu">
+                                        <rect key="frame" x="313" y="6" width="54" height="30"/>
+                                        <color key="backgroundColor" red="0.98823529409999999" green="0.70196078429999997" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Print">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="kqv-oG-SYu" firstAttribute="leading" secondItem="VKk-5c-XAV" secondAttribute="leading" constant="313" id="1vL-99-pna"/>
+                                    <constraint firstItem="kqv-oG-SYu" firstAttribute="top" secondItem="VKk-5c-XAV" secondAttribute="top" constant="6" id="B7s-ca-LIi"/>
+                                    <constraint firstAttribute="trailing" secondItem="kqv-oG-SYu" secondAttribute="trailing" constant="8" id="CKd-aj-mXw"/>
+                                    <constraint firstAttribute="bottom" secondItem="kqv-oG-SYu" secondAttribute="bottom" constant="8" id="deB-4f-Ose"/>
                                     <constraint firstAttribute="height" constant="44" id="miY-D7-mOy"/>
                                 </constraints>
                             </view>
@@ -386,7 +399,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mjO-3d-kXS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="617" y="878"/>
+            <point key="canvasLocation" x="616.79999999999995" y="877.51124437781118"/>
         </scene>
         <!--Log In-->
         <scene sceneID="zyV-fk-aso">
