@@ -215,6 +215,38 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
+    func downloadTempleCard(ancestorId: Int) {
+        if let userId = defaults.string(forKey: "User Id") {
+            // Set the parameters for the GET request
+            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + String(ancestorId)
+            
+            // Create a place to put the PDF once downloaded
+            let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                let fileURL = documentsURL.appendingPathComponent("\(ancestorId).pdf")
+                
+                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            }
+            
+            // Make an Alamofire GET request to get the temple card for this ancestorId
+            Alamofire.download(url, to: destination).response { response in
+                if response.error == nil, let fileURL = response.destinationURL {
+                    print ("PDF Downloaded!")
+                    
+                    if let pdf = PDFDocument(url: fileURL) {
+                        print(pdf.string!)
+                        
+                        self.templeCard = pdf
+                    }
+                } else {
+                    fatalError("PDF was not downloaded correctly")
+                }
+            }
+        } else {
+            fatalError("User Id was not found")
+        }
+    }
+    
     func showTempleActionSheet(ancestorId: Int) {
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
