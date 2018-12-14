@@ -35,9 +35,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         
         reserveButton.isEnabled = false
         reserveButton.alpha = 0.5
-        
-        //loadSampleSharedAncestors()
-        //downloadAvailableAncestors()
     }
     
     override func viewWillAppear(_ animated: Bool) {

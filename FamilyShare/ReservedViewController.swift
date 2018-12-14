@@ -10,25 +10,28 @@ import UIKit
 import PDFKit
 import Alamofire
 
-class ReservedViewController: UIViewController, UITableViewDataSource {
+class ReservedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var ancestors = [Ancestor]()
-    var templeCard: PDFDocument?
+    //var templeCard: PDFDocument?
     
     var defaults = UserDefaults.standard
     var selectedAncestorsCount = 0
     
     //MARK: Outlets
     @IBOutlet weak var ancestorTableView: UITableView!
+    @IBOutlet weak var printButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         ancestorTableView.dataSource = self
+        ancestorTableView.delegate = self
         ancestorTableView.separatorColor = UIColor.black
         ancestorTableView.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         
-        //loadSampleReservedAncestors()
+        printButton.isEnabled = false
+        printButton.alpha = 0.5
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +60,21 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
             fatalError("Unable to downcast tableViewCell to AncestorTableViewCell")
         }
         
+        // Configure Cell Selection Color
+        let selectionView = UIView(frame: cell.frame)
+        selectionView.backgroundColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
+        
+        // Configure Cell Selection Checkmark
+        guard let image = UIImage(named: "blueCheckmark.png") else {
+            fatalError("PNG not loaded")
+        }
+        
+        let imageView = UIImageView(image: image)
+        imageView.frame = CGRect(x: 4, y: 26, width: 24, height: 24)
+        selectionView.addSubview(imageView)
+        
+        cell.selectedBackgroundView = selectionView
+        
         let ancestor = ancestors[indexPath.row]
         
         // Configure Date Formatter
@@ -78,8 +96,29 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Increment selected ancestor count
+        selectedAncestorsCount += 1
+        
+        // Enable Print Button
+        printButton.isEnabled = true
+        printButton.alpha = 1.0
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        // Decrement selected ancestor count
+        selectedAncestorsCount -= 1
+        
+        // Check to see if we should disable the reserve button
+        if (selectedAncestorsCount == 0) {
+            printButton.isEnabled = false
+            printButton.alpha = 0.5
+        }
+    }
+
+    
     //MARK: Actions
-    func showTempleActionSheet(familySearchId: String) {
+    @IBAction func showTempleActionSheet(_ sender: UIButton) {
         print("I AM IN showTempleActionsSheet!")
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
@@ -93,7 +132,8 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         
         let printFORAction = UIAlertAction(title: "Print", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in
-            self.printFOR()
+            self.downloadTempleCard()
+            //self.printTempleCard()
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler:{(UIAlertAction) -> Void in
@@ -101,7 +141,7 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
             self.downloadReservedAncestors()
         })
         
-        alertController.addAction(showCodeAction)
+        //alertController.addAction(showCodeAction)
         alertController.addAction(printFORAction)
         alertController.addAction(cancelAction)
         
@@ -151,15 +191,18 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         }
     }
     
-    private func downloadTempleCard(familySearchId: String) {
+    private func downloadTempleCard() {
         if let userId = defaults.string(forKey: "User Id") {
+            // Get the ids for the selected ancestors
+            var ids = getIdsForSelectedAncestors()
+            
             // Set the parameters for the GET request
-            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + familySearchId
+            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + String(ids[0])
             
             // Create a place to put the PDF once downloaded
             let destination: DownloadRequest.DownloadFileDestination = { _, _ in
                 let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let fileURL = documentsURL.appendingPathComponent("\(familySearchId).pdf")
+                let fileURL = documentsURL.appendingPathComponent("templeCard.pdf")
                 
                 return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
             }
@@ -172,7 +215,8 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
                     if let pdf = PDFDocument(url: fileURL) {
                         print(pdf.string!)
                         
-                        self.templeCard = pdf
+                        //self.templeCard = pdf
+                        self.printTempleCard(templeCard: pdf)
                     }
                 } else {
                     fatalError("PDF was not downloaded correctly")
@@ -183,17 +227,18 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         }
     }
     
-    private func printFOR() {
+    private func printTempleCard(templeCard: PDFDocument) {
         // Get the FOR request
         
         
         // Configure the controller
         let printController = UIPrintInteractionController.shared
-        printController.printingItem = forRequest
+        //printController.printingItem = forRequest
+        printController.printingItem = templeCard
         
         // Make Print Info Object
         let printInfo = UIPrintInfo(dictionary: nil)
-        printInfo.jobName = "FOR Request"
+        printInfo.jobName = "TempleCard"
         
         printController.printInfo = printInfo
         
@@ -209,10 +254,24 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
             }
             
             self.selectedAncestorsCount = 0
-            self.reserveButton.isEnabled = false
-            self.reserveButton.alpha = 0.5
+            self.printButton.isEnabled = false
+            self.printButton.alpha = 0.5
         }
     }
+    
+    private func getIdsForSelectedAncestors() -> [Int] {
+        if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
+            var ids = [Int]()
+            for indexPath in selectedIndexPaths {
+                let retrievedAncestor = ancestors[indexPath.row]
+                ids.append(retrievedAncestor.id)
+            }
+            return ids
+        } else {
+            fatalError("Could not retrieve indexPathsForSelectedRows")
+        }
+    }
+
     
 //    func showCodeView() {
 //        UIView.animate(withDuration: 0.5, animations: {
