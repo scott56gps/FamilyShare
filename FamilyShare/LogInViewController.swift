@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class LogInViewController: UIViewController {
+class LogInViewController: UIViewController, UITextFieldDelegate {
     //MARK: Outlets
     @IBOutlet weak var infoLable: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
@@ -18,6 +18,15 @@ class LogInViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        usernameTextField.delegate = self
+    }
+    
+    //MARK: UITextFieldDelegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Hide the keyboard
+        textField.resignFirstResponder()
+        
+        return true
     }
     
     //MARK: Actions
