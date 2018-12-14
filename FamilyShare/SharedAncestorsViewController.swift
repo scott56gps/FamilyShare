@@ -193,7 +193,20 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 switch response {
                 case .success(let upload, _, _):
                     upload.responseJSON { jsonResponse in
-                        debugPrint(jsonResponse)
+                        debugPrint(jsonResponse.result)
+                        
+                        guard let value = jsonResponse.result.value else {
+                            print("Data received was not able to be formed correctly")
+                            return
+                        }
+                        
+                        if let array = value as? [Any] {
+                            let jsonObject = array[0] as? [String: Any]
+                            let id = jsonObject!["id"] as! Int
+                            
+                            // Show the temple action sheet
+                            self.showTempleActionSheet(ancestorId: id)
+                        }
                     }
                 case .failure(let encodingError):
                     print(encodingError)
@@ -202,20 +215,25 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
-    func showTempleActionSheet() {
+    func showTempleActionSheet(ancestorId: Int) {
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
         // Make actions for Action Sheet
         let showCodeAction = UIAlertAction(title: "Show Code", style: UIAlertAction.Style.default, handler: {
-            (UIAlertAction) -> Void in self.showCodeView()
+            (UIAlertAction) -> Void in
+            self.showCodeView()
         })
         
         let printFORAction = UIAlertAction(title: "Print", style: UIAlertAction.Style.default, handler: {
-            (UIAlertAction) -> Void in self.printFOR()
+            (UIAlertAction) -> Void in
+            self.printFOR()
         })
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {(UIAlertAction) -> Void in})
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler:{(UIAlertAction) -> Void in
+            self.deselectTableViewCells()
+            self.downloadAvailableAncestors()
+        })
         
         alertController.addAction(showCodeAction)
         alertController.addAction(printFORAction)
@@ -282,12 +300,12 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             if let array = value as? [Any] {
                 var receivedAncestors = [Ancestor]()
                 for object in array {
-                    let jsonArray = object as? [String: Any]
-                    let id = jsonArray!["id"]! as! Int
-                    let givenName = jsonArray!["given_name"]! as! String
-                    let surname =  jsonArray!["surname"] as! String
-                    let gender = jsonArray!["gender"] as! String
-                    let neededOrdinance = Ordinance(rawValue: jsonArray!["ordinance_needed"]! as! String)!
+                    let jsonObject = object as? [String: Any]
+                    let id = jsonObject!["id"]! as! Int
+                    let givenName = jsonObject!["given_name"]! as! String
+                    let surname =  jsonObject!["surname"] as! String
+                    let gender = jsonObject!["gender"] as! String
+                    let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
                     
                     // Create an Ancestor Object from the parts that we got from the JSON
                     guard let ancestor = Ancestor(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
@@ -322,19 +340,19 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 multipartFormData.append(value.data(using: .utf8)!, withName: key)
             }
         },
-                         to: url,
-                         encodingCompletion: { encodingResult in
-                            switch encodingResult {
-                            case .success(let upload, _, _):
-                                upload.responseString { response in
-                                    debugPrint(response)
+         to: url,
+         encodingCompletion: { encodingResult in
+            switch encodingResult {
+                case .success(let upload, _, _):
+                    upload.responseString { response in
+                        debugPrint(response)
                                     
-                                    // Update the available ancestors
-                                    self.downloadAvailableAncestors()
-                                }
-                            case .failure(let encodingError):
-                                print(encodingError)
-                            }
+                        // Update the available ancestors
+                        self.downloadAvailableAncestors()
+                    }
+                case .failure(let encodingError):
+                    print(encodingError)
+            }
         })
     }
     
