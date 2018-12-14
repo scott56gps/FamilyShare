@@ -49,7 +49,7 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d MMM YYYY"
         
-        cell.ancestorNameLabel.text = ancestor.name
+        cell.ancestorNameLabel.text = ancestor.givenNames + " " + ancestor.surname
         cell.nextOrdinanceLabel.text = ancestor.neededOrdinance.rawValue
         
         // Determine which photo to place based on gender
@@ -66,10 +66,10 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
     
     //MARK: Private Functions
     private func loadSampleReservedAncestors() {
-        guard let ancestor1 = Ancestor(name: "Hector Lopez", gender: "Male", neededOrdinance: .initiatory) else {
+        guard let ancestor1 = Ancestor(id: 1, givenNames: "Hector", surname: "Lopez", gender: "Male", neededOrdinance: .initiatory) else {
             fatalError("Error in instatiating Hector Lopez")
         }
-        guard let ancestor2 = Ancestor(name: "Evangelina De Luna", gender: "Female", neededOrdinance: .baptism) else {
+        guard let ancestor2 = Ancestor(id: 1, givenNames: "Evangelina", surname: "De Luna", gender: "Female", neededOrdinance: .baptism) else {
             fatalError("Error in instatiating Evangelina De Luna")
         }
         

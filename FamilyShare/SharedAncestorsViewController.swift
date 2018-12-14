@@ -17,6 +17,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     var ancestorToShare: AncestorDTO?
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
+    let defaults = UserDefaults.standard
     
     // MARK: Outlets
     @IBOutlet weak var reserveButton: UIButton!
@@ -86,7 +87,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "d MMMM YYYY"
         
-        cell.ancestorNameLabel.text = ancestor.name
+        cell.ancestorNameLabel.text = ancestor.givenNames + " " + ancestor.surname
         cell.nextOrdinanceLabel.text = ancestor.neededOrdinance.rawValue
         
         // Determine which photo to place based on gender
@@ -170,6 +171,17 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         self.present(importPicker, animated: true, completion: nil)
     }
     
+    func reserveAncestors() {
+        if let userId = defaults.string(forKey: "User Id") {
+            // Make an Alamofire request to reserve the selected ancestors
+            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/reserve", method: .post).responseJSON { response in
+                
+            }
+            
+            // Show the Action Sheet
+        }
+    }
+    
     @IBAction func showTempleActionSheet(_ sender: UIButton) {
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
@@ -242,27 +254,24 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             
-            //print("response.result.value: \(String(describing: response.result.value!))")
-            
             guard let value = response.result.value else {
                 print("Data received was not able to be formed correctly")
                 return
             }
             
-            //let rows = value["rows"] as? [[String: Any]]
             if let array = value as? [Any] {
                 var receivedAncestors = [Ancestor]()
                 for object in array {
                     let jsonArray = object as? [String: Any]
+                    let id = jsonArray!["id"]! as! Int
                     let givenName = jsonArray!["given_name"]! as! String
                     let surname =  jsonArray!["surname"] as! String
                     let gender = jsonArray!["gender"] as! String
-                    let fullName = givenName + " " + surname
                     let neededOrdinance = Ordinance(rawValue: jsonArray!["ordinance_needed"]! as! String)!
                     
                     // Create an Ancestor Object from the parts that we got from the JSON
-                    guard let ancestor = Ancestor(name: fullName, gender: gender, neededOrdinance: neededOrdinance) else {
-                        fatalError("There was an error in instantiating ancestor with name \(fullName)")
+                    guard let ancestor = Ancestor(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
+                        fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
                     }
                     
                     receivedAncestors.append(ancestor)
@@ -324,14 +333,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             fatalError("PDF String could not be extracted using the iOS API")
         }
     }
-
-    
-    private func loadSampleSharedAncestors() {
-        let ancestor1 = Ancestor(name: "Juan De Luna", gender: "Male", neededOrdinance: .baptism)!
-        let ancestor2 = Ancestor(name: "Zsuzanna Zsik", gender: "Female", neededOrdinance: .endowment)!
-        
-        ancestors = [ancestor1, ancestor2]
-    }
     
     private func setBadge() {
         if let tabItems = self.tabBarController?.tabBar.items {
@@ -350,6 +351,20 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             self.selectedAncestorsCount = 0
             self.reserveButton.isEnabled = false
             self.reserveButton.alpha = 0.5
+        }
+    }
+    
+    private func getIdsForSelectedAncestors() -> [Int] {
+        if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
+            var ids = [Int]()
+            for indexPath in selectedIndexPaths {
+                // Make an AncestorDTO for the Ancestor at this indexPath
+                let retrievedAncestor = ancestors[indexPath.row]
+                ids.append(retrievedAncestor.id)
+            }
+            return ids
+        } else {
+            fatalError("Could not retrieve indexPathsForSelectedRows")
         }
     }
     

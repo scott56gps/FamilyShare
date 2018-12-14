@@ -9,16 +9,20 @@
 import Foundation
 
 class Ancestor {
-    var name: String
+    var id: Int
+    var givenNames: String
+    var surname: String
     var gender: String
     var neededOrdinance: Ordinance
     
-    init?(name: String, gender: String, neededOrdinance: Ordinance) {
-        if (name.isEmpty || gender.isEmpty) {
+    init?(id: Int, givenNames: String, surname: String, gender: String, neededOrdinance: Ordinance) {
+        if (givenNames.isEmpty || surname.isEmpty || gender.isEmpty) {
             return nil
         }
         
-        self.name = name
+        self.id = id
+        self.givenNames = givenNames
+        self.surname = surname
         self.gender = gender
         self.neededOrdinance = neededOrdinance
     }
