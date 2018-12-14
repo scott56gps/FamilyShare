@@ -441,7 +441,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TiN-rZ-TCm"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="9dN-5l-JqO"/>
+                    <tabBarItem key="tabBarItem" title="Item" id="9dN-5l-JqO" userLabel="Log In"/>
                     <connections>
                         <outlet property="infoLable" destination="mqx-0i-Sqq" id="Sii-3C-0w8"/>
                         <outlet property="usernameTextField" destination="MAj-qL-Run" id="oi1-Pi-ojD"/>
