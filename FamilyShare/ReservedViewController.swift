@@ -233,18 +233,22 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         
         // Configure the controller
         let printController = UIPrintInteractionController.shared
-        //printController.printingItem = forRequest
-        printController.printingItem = templeCard
-        
-        // Make Print Info Object
-        let printInfo = UIPrintInfo(dictionary: nil)
-        printInfo.jobName = "TempleCard"
-        
-        printController.printInfo = printInfo
-        
-        printController.present(animated: true, completionHandler: { theHandler, didComplete, errorOptional in
-            self.deselectTableViewCells()
-        })
+        if let pdfUrl = templeCard.documentURL {
+            printController.printingItem = pdfUrl
+            
+            // Make Print Info Object
+            let printInfo = UIPrintInfo(dictionary: nil)
+            printInfo.jobName = "TempleCard"
+            printInfo.outputType = .grayscale
+            
+            printController.printInfo = printInfo
+            
+            printController.present(animated: true, completionHandler: { theHandler, didComplete, errorOptional in
+                self.deselectTableViewCells()
+            })
+        } else {
+            print("PDF Url could not be loaded")
+        }
     }
     
     private func deselectTableViewCells() {
