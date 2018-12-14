@@ -119,7 +119,6 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: Actions
     @IBAction func showTempleActionSheet(_ sender: UIButton) {
-        print("I AM IN showTempleActionsSheet!")
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
@@ -194,10 +193,10 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     private func downloadTempleCard() {
         if let userId = defaults.string(forKey: "User Id") {
             // Get the ids for the selected ancestors
-            var ids = getIdsForSelectedAncestors()
+            var selectedAncestors = getSelectedAncestors()
             
             // Set the parameters for the GET request
-            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + String(ids[0])
+            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + String(selectedAncestors[0].id)
             
             // Create a place to put the PDF once downloaded
             let destination: DownloadRequest.DownloadFileDestination = { _, _ in
@@ -215,8 +214,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
                     if let pdf = PDFDocument(url: fileURL) {
                         print(pdf.string!)
                         
-                        //self.templeCard = pdf
-                        self.printTempleCard(templeCard: pdf)
+                        self.printTempleCard(templeCard: pdf, selectedAncestor: selectedAncestors[0])
                     }
                 } else {
                     fatalError("PDF was not downloaded correctly")
@@ -227,10 +225,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    private func printTempleCard(templeCard: PDFDocument) {
-        // Get the FOR request
-        
-        
+    private func printTempleCard(templeCard: PDFDocument, selectedAncestor: Ancestor) {
         // Configure the controller
         let printController = UIPrintInteractionController.shared
         if let pdfUrl = templeCard.documentURL {
@@ -238,13 +233,21 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
             
             // Make Print Info Object
             let printInfo = UIPrintInfo(dictionary: nil)
-            printInfo.jobName = "TempleCard"
+            printInfo.jobName = selectedAncestor.givenNames + " " + selectedAncestor.surname
             printInfo.outputType = .grayscale
             
             printController.printInfo = printInfo
             
             printController.present(animated: true, completionHandler: { theHandler, didComplete, errorOptional in
-                self.deselectTableViewCells()
+                // Delete the pdf that was downloaded
+                let fileManager = FileManager.default
+                do {
+                    try fileManager.removeItem(at: pdfUrl)
+                    self.deselectTableViewCells()
+                } catch {
+                    print("Error in deleting pdf")
+                    self.deselectTableViewCells()
+                }
             })
         } else {
             print("PDF Url could not be loaded")
@@ -263,14 +266,14 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    private func getIdsForSelectedAncestors() -> [Int] {
+    private func getSelectedAncestors() -> [Ancestor] {
         if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
-            var ids = [Int]()
+            var retrievedAncestors = [Ancestor]()
             for indexPath in selectedIndexPaths {
                 let retrievedAncestor = ancestors[indexPath.row]
-                ids.append(retrievedAncestor.id)
+                retrievedAncestors.append(retrievedAncestor)
             }
-            return ids
+            return retrievedAncestors
         } else {
             fatalError("Could not retrieve indexPathsForSelectedRows")
         }
