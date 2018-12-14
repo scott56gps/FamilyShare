@@ -11,7 +11,6 @@ import UIKit
 class ReservedViewController: UIViewController, UITableViewDataSource {
     var ancestors = [Ancestor]()
     @IBOutlet weak var ancestorTableView: UITableView!
-    @IBOutlet weak var shareButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,8 +19,6 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         ancestorTableView.dataSource = self
         ancestorTableView.separatorColor = UIColor.black
         ancestorTableView.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
-        
-        shareButton.isEnabled = false
         
         loadSampleReservedAncestors()
     }

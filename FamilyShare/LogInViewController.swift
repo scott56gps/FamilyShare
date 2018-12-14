@@ -12,6 +12,7 @@ import Alamofire
 class LogInViewController: UIViewController {
     //MARK: Outlets
     @IBOutlet weak var infoLable: UILabel!
+    @IBOutlet weak var usernameTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,16 +21,19 @@ class LogInViewController: UIViewController {
     }
     
     //MARK: Actions
-    @IBAction func logIn(_ sender: UITextField) {
+    @IBAction func logIn(_ sender: UIButton) {
+        if (usernameTextField.text == nil) {
+            return
+        }
+        
         // If there is no userId in UserDefaults, then make a request to get the id
         let defaults = UserDefaults.standard
         if (defaults.string(forKey: "User Id") == nil) {
             // Make parameters
-            var parameters = [String: String]()
-            parameters["username"] = sender.text!
+            let username = usernameTextField.text!
             
             // Make a log in request
-            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/login", method: .get, parameters: parameters).responseJSON { response in
+            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/login/" + username, method: .get).responseJSON { response in
                 guard response.result.isSuccess else {
                     print("GET request for user_id failed: \(String(describing: response.result.error))")
                     return
@@ -40,10 +44,12 @@ class LogInViewController: UIViewController {
                     return
                 }
                 
+                print(response)
+                
                 if let array = value as? [Any] {
                     for object in array {
                         let jsonArray = object as? [String: Any]
-                        let userId = jsonArray!["user_id"]! as? String
+                        let userId = jsonArray!["user_id"]! as? Int
                         
                         // Save the userId in UserDefaults
                         defaults.set(userId!, forKey: "User Id")

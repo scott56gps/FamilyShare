@@ -403,14 +403,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MAj-qL-Run" userLabel="Username Text Field">
-                                <rect key="frame" x="139" y="446" width="97" height="30"/>
-                                <color key="backgroundColor" red="0.98823529409999999" green="0.70196078429999997" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="105" y="449" width="87" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="logIn:" destination="hvA-Tg-8OB" eventType="editingDidEnd" id="bVf-EB-Nmq"/>
-                                </connections>
                             </textField>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqx-0i-Sqq" userLabel="Log In Info Label">
                                 <rect key="frame" x="166" y="404" width="42" height="21"/>
@@ -418,16 +414,27 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l7J-66-nUs">
+                                <rect key="frame" x="227" y="447" width="42" height="30"/>
+                                <color key="backgroundColor" red="0.98823529409999999" green="0.70196078429999997" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Log In"/>
+                                <connections>
+                                    <action selector="logIn:" destination="hvA-Tg-8OB" eventType="touchUpInside" id="lLG-7p-97T"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.79607843137254897" green="0.94697457110000005" blue="0.79577922099999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="mqx-0i-Sqq" secondAttribute="bottom" constant="24" id="0w4-1Q-CwQ"/>
                             <constraint firstItem="EmG-wC-F9h" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="105" id="7nQ-Wh-YhY"/>
-                            <constraint firstItem="MAj-qL-Run" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="139" id="RLy-i6-46U"/>
-                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="MAj-qL-Run" secondAttribute="trailing" constant="139" id="ReD-N5-vdm"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="l7J-66-nUs" secondAttribute="bottom" constant="141" id="T2m-Pz-rBZ"/>
                             <constraint firstItem="mqx-0i-Sqq" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="166" id="UoM-UT-wbl"/>
-                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="MAj-qL-Run" secondAttribute="bottom" constant="142" id="nsR-TT-Eq8"/>
+                            <constraint firstItem="l7J-66-nUs" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="116.5" id="Vjl-hs-cGQ"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="MAj-qL-Run" secondAttribute="bottom" constant="139" id="bM1-zk-8TS"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="l7J-66-nUs" secondAttribute="trailing" constant="106" id="bt5-y8-v87"/>
+                            <constraint firstItem="MAj-qL-Run" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="105" id="ipY-wA-i8c"/>
+                            <constraint firstItem="l7J-66-nUs" firstAttribute="leading" secondItem="MAj-qL-Run" secondAttribute="trailing" constant="35" id="jnE-Vo-70G"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="mqx-0i-Sqq" secondAttribute="trailing" constant="167" id="oep-EY-Yqs"/>
-                            <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="mqx-0i-Sqq" secondAttribute="bottom" constant="21" id="rb5-mK-KLw"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="EmG-wC-F9h" secondAttribute="trailing" constant="106" id="tYH-57-hxb"/>
                             <constraint firstItem="EmG-wC-F9h" firstAttribute="top" secondItem="TiN-rZ-TCm" secondAttribute="top" constant="290" id="zAK-4n-Za4"/>
                             <constraint firstItem="mqx-0i-Sqq" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="73.5" id="zOg-Vr-kLU"/>
@@ -437,11 +444,12 @@
                     <tabBarItem key="tabBarItem" title="Item" id="9dN-5l-JqO"/>
                     <connections>
                         <outlet property="infoLable" destination="mqx-0i-Sqq" id="Sii-3C-0w8"/>
+                        <outlet property="usernameTextField" destination="MAj-qL-Run" id="oi1-Pi-ojD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YUR-de-cF5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-174" y="878"/>
+            <point key="canvasLocation" x="-175.19999999999999" y="877.51124437781118"/>
         </scene>
     </scenes>
     <resources>
