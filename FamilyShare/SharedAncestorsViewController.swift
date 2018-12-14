@@ -171,18 +171,38 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         self.present(importPicker, animated: true, completion: nil)
     }
     
-    func reserveAncestors() {
+    @IBAction func reserveAncestors(_ sender: UIButton) {
         if let userId = defaults.string(forKey: "User Id") {
-            // Make an Alamofire request to reserve the selected ancestors
-            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/reserve", method: .post).responseJSON { response in
-                
-            }
+            // Gather the ids of the selected ancestors
+            let ids = getIdsForSelectedAncestors()
             
-            // Show the Action Sheet
+            // For each id, make an id parameter
+            var parameters = [String: String]()
+            parameters["id"] = String(ids[0]) // For right now, we just get one at a time
+            parameters["user_id"] = userId
+            
+            // Make an Alamofire request to reserve the selected ancestors
+            print(parameters)
+            let url = "https://postgres-query-ancestors.herokuapp.com/reserve"
+            Alamofire.upload(multipartFormData: { (multipartFormData) in
+                for (key, value) in parameters {
+                    multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
+                }
+            }, to: url,
+              encodingCompletion: { response in
+                switch response {
+                case .success(let upload, _, _):
+                    upload.responseJSON { jsonResponse in
+                        debugPrint(jsonResponse)
+                    }
+                case .failure(let encodingError):
+                    print(encodingError)
+                }
+            })
         }
     }
     
-    @IBAction func showTempleActionSheet(_ sender: UIButton) {
+    func showTempleActionSheet() {
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
