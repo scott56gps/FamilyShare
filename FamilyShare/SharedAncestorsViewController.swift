@@ -189,24 +189,16 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                     multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
                 }
             }, to: url,
-              encodingCompletion: { response in
+               encodingCompletion: { response in
                 switch response {
                 case .success(let upload, _, _):
                     upload.responseJSON { jsonResponse in
                         debugPrint(jsonResponse.result)
                         
-                        guard let value = jsonResponse.result.value else {
-                            print("Data received was not able to be formed correctly")
-                            return
-                        }
-                        
-                        if let array = value as? [Any] {
-                            let jsonObject = array[0] as? [String: Any]
-                            let id = jsonObject!["id"] as! Int
-                            
-                            // Show the temple action sheet
-                            self.showTempleActionSheet(ancestorId: id)
-                        }
+                        // Set the reserved tab badge to the number of items selected
+                        self.setBadge()
+                        self.deselectTableViewCells()
+                        self.downloadAvailableAncestors()
                     }
                 case .failure(let encodingError):
                     print(encodingError)
@@ -215,15 +207,15 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
-    func downloadTempleCard(ancestorId: Int) {
+    func downloadTempleCard(familySearchId: String) {
         if let userId = defaults.string(forKey: "User Id") {
             // Set the parameters for the GET request
-            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + String(ancestorId)
+            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + familySearchId
             
             // Create a place to put the PDF once downloaded
             let destination: DownloadRequest.DownloadFileDestination = { _, _ in
                 let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let fileURL = documentsURL.appendingPathComponent("\(ancestorId).pdf")
+                let fileURL = documentsURL.appendingPathComponent("\(familySearchId).pdf")
                 
                 return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
             }
@@ -247,14 +239,16 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
-    func showTempleActionSheet(ancestorId: Int) {
+    func showTempleActionSheet(familySearchId: String) {
+        print("I AM IN showTempleActionsSheet!")
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
         // Make actions for Action Sheet
         let showCodeAction = UIAlertAction(title: "Show Code", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in
-            self.downloadTempleCard(ancestorId: ancestorId)
+            print("I am about to showCodeAction")
+            self.downloadTempleCard(familySearchId: familySearchId)
             self.showCodeView()
         })
         
@@ -286,9 +280,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         UIView.animate(withDuration: 0.5, animations: {
             self.sliderConstraint.constant = -400
             self.tabBarController?.tabBar.isHidden = false
-            
-            // Set the reserved tab badge to the number of items selected
-            self.setBadge()
             
             // Deselect the table view cells
             self.deselectTableViewCells()
