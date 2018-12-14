@@ -179,7 +179,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             // For each id, make an id parameter
             var parameters = [String: String]()
             parameters["id"] = String(ids[0]) // For right now, we just get one at a time
-            parameters["user_id"] = userId
+            parameters["userId"] = userId
             
             // Make an Alamofire request to reserve the selected ancestors
             print(parameters)
