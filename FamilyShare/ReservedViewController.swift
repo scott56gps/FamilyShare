@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import Alamofire
 
 class ReservedViewController: UIViewController, UITableViewDataSource {
     var ancestors = [Ancestor]()
+    var defaults = UserDefaults.standard
+    
+    //MARK: Outlets
     @IBOutlet weak var ancestorTableView: UITableView!
     
     override func viewDidLoad() {
@@ -20,7 +24,13 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
         ancestorTableView.separatorColor = UIColor.black
         ancestorTableView.separatorInset = UIEdgeInsets.init(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
         
-        loadSampleReservedAncestors()
+        //loadSampleReservedAncestors()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        downloadReservedAncestors()
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,6 +75,47 @@ class ReservedViewController: UIViewController, UITableViewDataSource {
     }
     
     //MARK: Private Functions
+    private func downloadReservedAncestors() {
+        if let userId = defaults.string(forKey: "User Id") {
+            // Make an Alamofire request to get the available ancestor data
+            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/reserved/\(userId)").responseJSON { response in
+                guard response.result.isSuccess else {
+                    print("GET request for reserved ancestors failed: \(String(describing: response.result.error))")
+                    return
+                }
+                
+                guard let value = response.result.value else {
+                    print("Data received was not able to be formed correctly")
+                    return
+                }
+                
+                if let array = value as? [Any] {
+                    var receivedAncestors = [Ancestor]()
+                    for object in array {
+                        let jsonObject = object as? [String: Any]
+                        let id = jsonObject!["id"]! as! Int
+                        let givenName = jsonObject!["given_name"]! as! String
+                        let surname =  jsonObject!["surname"] as! String
+                        let gender = jsonObject!["gender"] as! String
+                        let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
+                        
+                        // Create an Ancestor Object from the parts that we got from the JSON
+                        guard let ancestor = Ancestor(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
+                            fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
+                        }
+                        
+                        receivedAncestors.append(ancestor)
+                    }
+                    
+                    self.ancestors = receivedAncestors
+                    self.ancestorTableView.reloadData()
+                }
+            }
+        } else {
+            print("User Id nil.  User not signed in")
+        }
+    }
+    
     private func loadSampleReservedAncestors() {
         guard let ancestor1 = Ancestor(id: 1, givenNames: "Hector", surname: "Lopez", gender: "Male", neededOrdinance: .initiatory) else {
             fatalError("Error in instatiating Hector Lopez")
