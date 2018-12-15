@@ -23,7 +23,6 @@
 		279F5BEF20E83C7200DA7396 /* shareIconBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BEE20E83C7100DA7396 /* shareIconBlack.png */; };
 		279F5BF120E83C7900DA7396 /* shareIconBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BF020E83C7900DA7396 /* shareIconBlue.png */; };
 		27BAF3B920DF00C0007EDA9D /* SharedAncestorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BAF3B820DF00C0007EDA9D /* SharedAncestorsViewController.swift */; };
-		27BAF3BB20E18940007EDA9D /* exampleFOR.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 27BAF3BA20E18940007EDA9D /* exampleFOR.pdf */; };
 		689256A00AEC7C1718BDE459 /* Pods_FamilyShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,7 +48,6 @@
 		279F5BEE20E83C7100DA7396 /* shareIconBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlack.png; sourceTree = SOURCE_ROOT; };
 		279F5BF020E83C7900DA7396 /* shareIconBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlue.png; sourceTree = SOURCE_ROOT; };
 		27BAF3B820DF00C0007EDA9D /* SharedAncestorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAncestorsViewController.swift; sourceTree = "<group>"; };
-		27BAF3BA20E18940007EDA9D /* exampleFOR.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = exampleFOR.pdf; sourceTree = SOURCE_ROOT; };
 		F18ECCE529B89326DC3C32F2 /* Pods-FamilyShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,7 +98,6 @@
 				27705E7520C7D4180048DCC1 /* Ancestor.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
 				27705E5820C7C8B90048DCC1 /* Assets.xcassets */,
-				27BAF3BA20E18940007EDA9D /* exampleFOR.pdf */,
 				279F5BEE20E83C7100DA7396 /* shareIconBlack.png */,
 				279F5BF020E83C7900DA7396 /* shareIconBlue.png */,
 				2702DB9320E4853D00A193D5 /* blueCheckmark.png */,
@@ -192,7 +189,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				27BAF3BB20E18940007EDA9D /* exampleFOR.pdf in Resources */,
 				279F5BEF20E83C7200DA7396 /* shareIconBlack.png in Resources */,
 				27705E5920C7C8B90048DCC1 /* Assets.xcassets in Resources */,
 				2702DB9420E4853D00A193D5 /* blueCheckmark.png in Resources */,

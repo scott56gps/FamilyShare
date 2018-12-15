@@ -67,8 +67,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         
         // If there is no userId in UserDefaults, then make a request to get the id
         if (defaults.string(forKey: "User Id") == nil) {
-            // Make parameters
             let username = usernameTextField.text!
+            usernameTextField.text = ""
             
             // Make a log in request
             Alamofire.request("https://postgres-query-ancestors.herokuapp.com/login/" + username, method: .get).responseJSON { response in
@@ -92,13 +92,40 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         // Save the userId and username in UserDefaults
                         self.defaults.set(userId!, forKey: "User Id")
                         self.defaults.set(username, forKey: "Username")
+                        
+                        // Disable the log in button
+                        self.logInButton.isEnabled = false
+                        self.logInButton.alpha = 0.5
+                        
+                        // Enable the log out button
+                        self.logOutButton.isEnabled = true
+                        self.logOutButton.alpha = 1.0
+                        
+                        // Display username
+                        self.infoLabel.isHidden = false
+                        self.infoLabel.text = "\(username) logged in"
                     }
                 }
             }
         } else {
-            infoLabel.text = "User is already logged in"
+            print("User is already logged in")
         }
     }
     
-
+    @IBAction func logOut(_ sender: UIButton) {
+        // Delete the values for User Id and Username
+        defaults.removeObject(forKey: "User Id")
+        defaults.removeObject(forKey: "Username")
+        
+        // Disable the log out button
+        logOutButton.isEnabled = false
+        logOutButton.alpha = 0.5
+        
+        // Enable the log in button
+        logInButton.isEnabled = true
+        logInButton.alpha = 1.0
+        
+        // Hide the infoLabel
+        infoLabel.isHidden = true
+    }
 }

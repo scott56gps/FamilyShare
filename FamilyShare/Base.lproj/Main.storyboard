@@ -419,14 +419,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                             </textField>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqx-0i-Sqq" userLabel="Log In Info Label">
-                                <rect key="frame" x="166" y="233" width="42" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log In to FamilyShare" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EmG-wC-F9h" userLabel="Log In Label">
-                                <rect key="frame" x="105" y="197" width="164" height="20.5"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqx-0i-Sqq" userLabel="Log In Info Label">
+                                <rect key="frame" x="61" y="233" width="252" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -452,29 +446,38 @@
                                             <constraint firstAttribute="width" constant="60" id="f6l-iQ-3hl"/>
                                         </constraints>
                                         <state key="normal" title="Log Out"/>
+                                        <connections>
+                                            <action selector="logOut:" destination="hvA-Tg-8OB" eventType="touchUpInside" id="3Zd-CK-4mH"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log In to FamilyShare" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EmG-wC-F9h" userLabel="Log In Label">
+                                <rect key="frame" x="105" y="204" width="164" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.79607843137254897" green="0.94697457110000005" blue="0.79577922099999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="EmG-wC-F9h" secondAttribute="trailing" constant="106" id="0EF-r3-aed"/>
                             <constraint firstItem="T2J-zL-yuS" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="115" id="5xm-3y-rxX"/>
-                            <constraint firstItem="mqx-0i-Sqq" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="166" id="8iX-3Z-Zod"/>
-                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="mqx-0i-Sqq" secondAttribute="trailing" constant="167" id="BCt-ZX-Hwm"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="T2J-zL-yuS" secondAttribute="bottom" constant="289" id="GW0-i3-aCz"/>
                             <constraint firstItem="T2J-zL-yuS" firstAttribute="top" secondItem="MAj-qL-Run" secondAttribute="bottom" constant="7.5" id="Iqn-z9-ADe"/>
                             <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="mqx-0i-Sqq" secondAttribute="bottom" constant="8" id="Jl4-cg-MCc"/>
                             <constraint firstItem="EmG-wC-F9h" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="105" id="QuS-ci-kxA"/>
                             <constraint firstItem="MAj-qL-Run" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="144" id="WHd-s0-53f"/>
+                            <constraint firstItem="EmG-wC-F9h" firstAttribute="top" secondItem="TiN-rZ-TCm" secondAttribute="top" constant="184" id="YsM-qJ-jxs"/>
+                            <constraint firstItem="mqx-0i-Sqq" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="8.5" id="Zs0-4p-Wv0"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="MAj-qL-Run" secondAttribute="trailing" constant="144" id="hnQ-QS-pLt"/>
-                            <constraint firstItem="mqx-0i-Sqq" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="15.5" id="lcX-hO-wyB"/>
-                            <constraint firstItem="EmG-wC-F9h" firstAttribute="top" secondItem="TiN-rZ-TCm" secondAttribute="top" constant="177" id="okY-Dj-ifJ"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="mqx-0i-Sqq" secondAttribute="trailing" constant="62" id="p7P-5s-HrB"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="T2J-zL-yuS" secondAttribute="trailing" constant="115" id="vlV-R6-lhD"/>
+                            <constraint firstItem="mqx-0i-Sqq" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="61" id="zJJ-yB-xep"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="TiN-rZ-TCm"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="9dN-5l-JqO" userLabel="Log In"/>
+                    <tabBarItem key="tabBarItem" title="Log In" image="Key" id="9dN-5l-JqO" userLabel="Log In"/>
                     <connections>
                         <outlet property="infoLabel" destination="mqx-0i-Sqq" id="Sii-3C-0w8"/>
                         <outlet property="logInButton" destination="l7J-66-nUs" id="IVC-jI-PmK"/>
@@ -489,6 +492,7 @@
     </scenes>
     <resources>
         <image name="Default Male" width="313" height="313"/>
+        <image name="Key" width="34" height="34"/>
         <image name="Orange Share" width="35" height="35"/>
         <image name="Reserved Image" width="35" height="35"/>
     </resources>
