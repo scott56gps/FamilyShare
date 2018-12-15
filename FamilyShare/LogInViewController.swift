@@ -10,15 +10,45 @@ import UIKit
 import Alamofire
 
 class LogInViewController: UIViewController, UITextFieldDelegate {
+    //MARK: Properties
+    let defaults = UserDefaults.standard
+    var isLoggedIn: Bool = false
+    
     //MARK: Outlets
-    @IBOutlet weak var infoLable: UILabel!
+    @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var logInButton: UIButton!
+    @IBOutlet weak var logOutButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         usernameTextField.delegate = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        // If a user is not logged in
+        if defaults.string(forKey: "User Id") == nil {
+            // Disable the log out button
+            logOutButton.isEnabled = false
+            logOutButton.alpha = 0.5
+            
+            // Hide the infoLabel
+            infoLabel.isHidden = true
+        } else {
+            // Disable the log in button
+            logInButton.isEnabled = false
+            logInButton.alpha = 0.5
+            
+            // Display the username
+            if let username = defaults.string(forKey: "Username") {
+                infoLabel.isHidden = false
+                infoLabel.text = "\(username) logged in"
+            }
+        }
     }
     
     //MARK: UITextFieldDelegate
@@ -36,7 +66,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         }
         
         // If there is no userId in UserDefaults, then make a request to get the id
-        let defaults = UserDefaults.standard
         if (defaults.string(forKey: "User Id") == nil) {
             // Make parameters
             let username = usernameTextField.text!
@@ -60,13 +89,14 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                         let jsonArray = object as? [String: Any]
                         let userId = jsonArray!["user_id"]! as? Int
                         
-                        // Save the userId in UserDefaults
-                        defaults.set(userId!, forKey: "User Id")
+                        // Save the userId and username in UserDefaults
+                        self.defaults.set(userId!, forKey: "User Id")
+                        self.defaults.set(username, forKey: "Username")
                     }
                 }
             }
         } else {
-            infoLable.text = "User is already logged in"
+            infoLabel.text = "User is already logged in"
         }
     }
     

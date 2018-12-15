@@ -476,7 +476,9 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="9dN-5l-JqO" userLabel="Log In"/>
                     <connections>
-                        <outlet property="infoLable" destination="mqx-0i-Sqq" id="Sii-3C-0w8"/>
+                        <outlet property="infoLabel" destination="mqx-0i-Sqq" id="Sii-3C-0w8"/>
+                        <outlet property="logInButton" destination="l7J-66-nUs" id="IVC-jI-PmK"/>
+                        <outlet property="logOutButton" destination="z2y-hw-Mc3" id="o2x-um-lZd"/>
                         <outlet property="usernameTextField" destination="MAj-qL-Run" id="oi1-Pi-ojD"/>
                     </connections>
                 </viewController>
