@@ -21,8 +21,10 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     // MARK: Outlets
     @IBOutlet weak var reserveButton: UIButton!
+    @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var ancestorTableView: UITableView!
     @IBOutlet weak var sliderConstraint: NSLayoutConstraint!
+    @IBOutlet weak var infoLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,12 +37,28 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         
         reserveButton.isEnabled = false
         reserveButton.alpha = 0.5
+        shareButton.isEnabled = false
+        shareButton.alpha = 0.5
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        downloadAvailableAncestors()
+        // Only download the available ancestors if the user is signed in
+        let defaultUserId = defaults.integer(forKey: "User Id")
+        if defaultUserId == 0 {
+            print("User Id nil.  User not signed in")
+            infoLabel.isHidden = false
+            shareButton.isEnabled = false
+            shareButton.alpha = 0.5
+            ancestors.removeAll()
+            ancestorTableView.reloadData()
+        } else {
+            infoLabel.isHidden = true
+            shareButton.isEnabled = true
+            shareButton.alpha = 1.0
+            downloadAvailableAncestors()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -102,9 +120,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Increment selected ancestor count
         selectedAncestorsCount += 1
-        
-        // Add the IndexPath onto the selectedArray
-        //selectedAncestorCells.append(indexPath)
         
         // Enable Reserve Button
         reserveButton.isEnabled = true

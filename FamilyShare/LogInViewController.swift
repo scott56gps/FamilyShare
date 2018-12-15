@@ -46,7 +46,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             // Display the username
             if let username = defaults.string(forKey: "Username") {
                 infoLabel.isHidden = false
-                infoLabel.text = "\(username) logged in"
+                infoLabel.text = "\(username) signed in"
             }
         }
     }
@@ -63,6 +63,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     @IBAction func logIn(_ sender: UIButton) {
         if (usernameTextField.text == nil) {
             return
+        }
+        
+        if usernameTextField.isFirstResponder {
+            usernameTextField.resignFirstResponder()
         }
         
         // If there is no userId in UserDefaults, then make a request to get the id
