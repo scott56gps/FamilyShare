@@ -30,9 +30,12 @@ class AncestorDTO {
             }
             
             // For each of the 5 possible ordinances
-            for _ in 0..<5 {
+            for i in 0..<4 {
                 // Run Regex on the index ahead
                 if digitRegex.numberOfMatches(in: pdfLines[ordinanceIndex + 1], options: [], range: NSMakeRange(0, pdfLines[ordinanceIndex + 1].count)) == 0 {
+                    break
+                } else if i == 3 {
+                    ordinanceIndex = ordinanceIndex + 1
                     break
                 } else {
                     ordinanceIndex = ordinanceIndex + 2
@@ -41,7 +44,7 @@ class AncestorDTO {
             return pdfLines[ordinanceIndex]
         }
         
-        func parseName(_ pdfLines: [String]) -> (givenNames: String, surname: String)? {
+        func parseName(_ pdfLines: [String], _ forOrdinance: String) -> (givenNames: String, surname: String)? {
             //        for i in 0..<pdfLines.count {
             //            if pdfLines[i].contains("Given Names") {
             //                let givenNames = pdfLines[i + 3]
@@ -55,7 +58,7 @@ class AncestorDTO {
                 return nil
             }
             
-            return (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4])
+            return forOrdinance == "Sealing To Parents" ? (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4]) : (pdfLines[givenNameIndex + 2], pdfLines[givenNameIndex + 3])
         }
         
         func parseFamilySearchId(_ pdfLines: [String]) -> String? {
@@ -76,9 +79,11 @@ class AncestorDTO {
         self.neededOrdinance = neededOrdinance
         
         // Get the name of this ancestor
-        guard let nameTuple = parseName(pdfLines) else {
+        guard let nameTuple = parseName(pdfLines, neededOrdinance) else {
             fatalError("Ancestor name was not parsed from PDF String")
         }
+        
+        print("pdfLines count: \(pdfLines.count)")
         
         self.givenNames = nameTuple.givenNames
         self.surname = nameTuple.surname
