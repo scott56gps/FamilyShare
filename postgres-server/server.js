@@ -117,8 +117,8 @@ app.get('/reserved/:userId', async (request, response) => {
     }
 })
 
-app.post('/createUser', async (request, response) => {
-    var username = request.body.username
+app.post('/createUser/:username', async (request, response) => {
+    var username = request.params.username
     
     try {
         const client = await pool.connect()
@@ -129,7 +129,8 @@ app.post('/createUser', async (request, response) => {
         client.release()
     } catch (err) {
         console.error(err)
-        response.send("Error " + err)
+        response.status(500)
+        response.json({"error": err})
     }
 })
 
