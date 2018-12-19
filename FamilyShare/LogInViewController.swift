@@ -19,6 +19,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var logInButton: UIButton!
     @IBOutlet weak var logOutButton: UIButton!
+    @IBOutlet weak var signUpButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,5 +132,9 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         
         // Hide the infoLabel
         infoLabel.isHidden = true
+    }
+    
+    @IBAction func signUp(_ sender: UIButton) {
+        
     }
 }

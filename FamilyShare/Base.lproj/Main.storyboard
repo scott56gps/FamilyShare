@@ -487,19 +487,31 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="irX-t4-9fV" userLabel="Sign Up Button">
+                                <rect key="frame" x="157" y="386" width="60" height="30"/>
+                                <color key="backgroundColor" red="0.98823529409999999" green="0.70196078429999997" blue="0.29411764709999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Sign Up"/>
+                                <connections>
+                                    <action selector="signUp:" destination="hvA-Tg-8OB" eventType="touchUpInside" id="gqs-b0-XlT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.79607843137254897" green="0.94697457110000005" blue="0.79577922099999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="T2J-zL-yuS" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="115" id="5xm-3y-rxX"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="irX-t4-9fV" secondAttribute="bottom" constant="202" id="C1H-qo-cck"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="bottom" secondItem="T2J-zL-yuS" secondAttribute="bottom" constant="289" id="GW0-i3-aCz"/>
                             <constraint firstItem="T2J-zL-yuS" firstAttribute="top" secondItem="MAj-qL-Run" secondAttribute="bottom" constant="7.5" id="Iqn-z9-ADe"/>
                             <constraint firstItem="MAj-qL-Run" firstAttribute="top" secondItem="mqx-0i-Sqq" secondAttribute="bottom" constant="8" id="Jl4-cg-MCc"/>
+                            <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="irX-t4-9fV" secondAttribute="trailing" constant="158" id="OU6-QE-fcF"/>
                             <constraint firstItem="MAj-qL-Run" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="144" id="WHd-s0-53f"/>
+                            <constraint firstItem="irX-t4-9fV" firstAttribute="top" secondItem="T2J-zL-yuS" secondAttribute="bottom" constant="57" id="XH8-PQ-c8Q"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="EmG-wC-F9h" secondAttribute="trailing" constant="103" id="XRJ-RE-Vec"/>
                             <constraint firstItem="EmG-wC-F9h" firstAttribute="top" secondItem="TiN-rZ-TCm" secondAttribute="top" constant="184" id="YsM-qJ-jxs"/>
                             <constraint firstItem="mqx-0i-Sqq" firstAttribute="top" secondItem="EmG-wC-F9h" secondAttribute="bottom" constant="8.5" id="Zs0-4p-Wv0"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="MAj-qL-Run" secondAttribute="trailing" constant="144" id="hnQ-QS-pLt"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="mqx-0i-Sqq" secondAttribute="trailing" constant="62" id="p7P-5s-HrB"/>
+                            <constraint firstItem="irX-t4-9fV" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="157" id="t8H-DM-c1q"/>
                             <constraint firstItem="EmG-wC-F9h" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="103" id="vkE-uS-snu"/>
                             <constraint firstItem="TiN-rZ-TCm" firstAttribute="trailing" secondItem="T2J-zL-yuS" secondAttribute="trailing" constant="115" id="vlV-R6-lhD"/>
                             <constraint firstItem="mqx-0i-Sqq" firstAttribute="leading" secondItem="TiN-rZ-TCm" secondAttribute="leading" constant="61" id="zJJ-yB-xep"/>
@@ -511,6 +523,7 @@
                         <outlet property="infoLabel" destination="mqx-0i-Sqq" id="Sii-3C-0w8"/>
                         <outlet property="logInButton" destination="l7J-66-nUs" id="IVC-jI-PmK"/>
                         <outlet property="logOutButton" destination="z2y-hw-Mc3" id="o2x-um-lZd"/>
+                        <outlet property="signUpButton" destination="irX-t4-9fV" id="lkh-Ng-Qk8"/>
                         <outlet property="usernameTextField" destination="MAj-qL-Run" id="oi1-Pi-ojD"/>
                     </connections>
                 </viewController>
