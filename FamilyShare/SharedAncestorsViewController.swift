@@ -172,7 +172,10 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Actions
     @IBAction func pickFile(_ sender: UIButton) {
-        print("BUTTON PRESSED")
+        // Deselect selected ancestorTableView cells
+        self.deselectTableViewCells()
+        reserveButton.isEnabled = false
+        
         // Present the Document Picker
         let importPicker = UIDocumentPickerViewController(documentTypes: ["public.item"], in: .import)
         
