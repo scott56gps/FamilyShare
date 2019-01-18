@@ -64,9 +64,13 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" canCancelContentTouches="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="y59-cE-yhO">
                                 <rect key="frame" x="0.0" y="48.5" width="375" height="494.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <progressView key="tableHeaderView" hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" id="fmX-NU-lfY">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="3"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                </progressView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AncestorTableViewCell" rowHeight="90" id="dOV-Oq-9YG" customClass="AncestorTableViewCell" customModule="FamilyShare" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="90"/>
+                                        <rect key="frame" x="0.0" y="30" width="375" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dOV-Oq-9YG" id="3jK-1w-TKd">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
@@ -272,6 +276,7 @@
                     <connections>
                         <outlet property="ancestorTableView" destination="y59-cE-yhO" id="UZu-c0-ro5"/>
                         <outlet property="infoLabel" destination="B5x-zm-5jU" id="jVQ-ha-2C0"/>
+                        <outlet property="progressBar" destination="fmX-NU-lfY" id="Zax-bY-N5H"/>
                         <outlet property="reserveButton" destination="phh-oL-Ahw" id="WUD-f3-MUI"/>
                         <outlet property="shareButton" destination="uKX-N3-umn" id="UHd-l9-XbB"/>
                         <outlet property="sliderConstraint" destination="ohY-vb-W4X" id="9bj-vW-1wi"/>
@@ -533,9 +538,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Default Male" width="313" height="313"/>
-        <image name="Key" width="34" height="34"/>
-        <image name="Orange Share" width="35" height="35"/>
-        <image name="Reserved Image" width="35" height="35"/>
+        <image name="Default Male" width="626" height="626"/>
+        <image name="Key" width="69" height="69"/>
+        <image name="Orange Share" width="70" height="70"/>
+        <image name="Reserved Image" width="70" height="70"/>
     </resources>
 </document>

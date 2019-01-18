@@ -25,6 +25,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     @IBOutlet weak var ancestorTableView: UITableView!
     @IBOutlet weak var sliderConstraint: NSLayoutConstraint!
     @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var progressBar: UIProgressView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -225,7 +226,14 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: Private methods
     private func downloadAvailableAncestors() {
         // Make an Alamofire request to get the available ancestor data
-        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
+        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available")
+            .downloadProgress { progress in
+                print("Download Progress: \(progress.fractionCompleted)")
+                self.progressBar.isHidden = false
+                self.progressBar.progress = Float(progress.fractionCompleted)
+                self.progressBar.progress = 0.0
+                //self.progressBar.isHidden = true
+            } .responseJSON { response in
             guard response.result.isSuccess else {
                 print("GET request for available ancestors failed: \(String(describing: response.result.error))")
                 return
