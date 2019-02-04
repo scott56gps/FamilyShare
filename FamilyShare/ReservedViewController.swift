@@ -21,6 +21,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var ancestorTableView: UITableView!
     @IBOutlet weak var printButton: UIButton!
     @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var progressBar: UIProgressView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -162,10 +163,21 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
 
     
     //MARK: Private Functions
+    func showProgress(_ progress: Float) {
+        print("Download Progress: \(progress)")
+        self.progressBar.isHidden = false
+        self.progressBar.progress = progress
+        //self.progressBar.progress = 0.0
+        self.progressBar.isHidden = true
+    }
+    
     private func downloadReservedAncestors() {
         // Make an Alamofire request to get the available ancestor data
         let userId = self.userId!
-        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/reserved/\(userId)").responseJSON { response in
+        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/reserved/\(userId)").downloadProgress {
+                progress in
+                    self.showProgress(Float(progress.fractionCompleted))
+            }.responseJSON { response in
             guard response.result.isSuccess else {
                 print("GET request for reserved ancestors failed: \(String(describing: response.result.error))")
                 return

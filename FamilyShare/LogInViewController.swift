@@ -20,12 +20,14 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var logInButton: UIButton!
     @IBOutlet weak var logOutButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var progressBar: UIProgressView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         usernameTextField.delegate = self
+        progressBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +66,15 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    //MARK: Private Functions
+    func showProgress(_ progress: Float) {
+        print("Download Progress: \(progress)")
+        self.progressBar.isHidden = false
+        self.progressBar.progress = progress
+        //self.progressBar.progress = 0.0
+        self.progressBar.isHidden = true
+    }
+    
     //MARK: Actions
     @IBAction func logIn(_ sender: UIButton) {
         if (usernameTextField.text == nil) {
@@ -80,7 +91,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             usernameTextField.text = ""
             
             // Make a log in request
-            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/login/" + username, method: .get).responseJSON { response in
+            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/login/" + username, method: .get).downloadProgress {
+                    progress in
+                        self.showProgress(Float(progress.fractionCompleted))
+                }.responseJSON { response in
                 guard response.result.isSuccess else {
                     print("GET request for user_id failed: \(String(describing: response.result.error))")
                     return
@@ -159,7 +173,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             let username = usernameTextField.text!
             usernameTextField.text = ""
             
-            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/createUser/" + username, method: .post).validate().responseJSON { response in
+            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/createUser/" + username, method: .post).validate().downloadProgress {
+                    progress in
+                        self.showProgress(Float(progress.fractionCompleted))
+                }.responseJSON { response in
                 guard response.result.isSuccess else {
                     print("POST request for user_id failed")
                     

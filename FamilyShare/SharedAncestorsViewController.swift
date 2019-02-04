@@ -224,15 +224,20 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     //MARK: Private methods
+    func showProgress(_ progress: Float) {
+        print("Download Progress: \(progress)")
+        self.progressBar.isHidden = false
+        self.progressBar.progress = 0.2
+        self.progressBar.progress = progress
+        //self.progressBar.progress = 0.0
+        self.progressBar.isHidden = true
+    }
+    
     private func downloadAvailableAncestors() {
         // Make an Alamofire request to get the available ancestor data
         Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available")
             .downloadProgress { progress in
-                print("Download Progress: \(progress.fractionCompleted)")
-                self.progressBar.isHidden = false
-                self.progressBar.progress = Float(progress.fractionCompleted)
-                self.progressBar.progress = 0.0
-                //self.progressBar.isHidden = true
+                self.showProgress(Float(progress.fractionCompleted))
             } .responseJSON { response in
             guard response.result.isSuccess else {
                 print("GET request for available ancestors failed: \(String(describing: response.result.error))")
