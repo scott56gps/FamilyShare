@@ -10,14 +10,17 @@ import UIKit
 import PDFKit
 import CoreGraphics
 import Alamofire
+import Starscream
 
-class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
+class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate, WebSocketDelegate {
+    
     //MARK: Properties
     var ancestors = [Ancestor]()
     var ancestorToShare: AncestorDTO?
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
+    var socket = WebSocket(url: URL(string: "ws://192.168.0.106:8080/")!)
     
     // MARK: Outlets
     @IBOutlet weak var reserveButton: UIButton!
@@ -39,6 +42,10 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         reserveButton.alpha = 0.5
         shareButton.isEnabled = false
         shareButton.alpha = 0.5
+        
+        // Set up WebSocket
+        socket.delegate = self
+        socket.connect()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -168,6 +175,25 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         
+    }
+    
+    //MARK: WebSocket Delegate Methods
+    func websocketDidConnect(socket: WebSocketClient) {
+        print("WebSocket is connected!")
+        socket.write(string: "Hello from iOS, my friend!")
+    }
+    
+    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+        print("WebSocket was disconnected")
+    }
+    
+    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+        print("WebSocket received a message!")
+        print(text)
+    }
+    
+    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+        print("WebSocket received data!")
     }
     
     //MARK: Actions
