@@ -25,6 +25,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     @IBOutlet weak var ancestorTableView: UITableView!
     @IBOutlet weak var sliderConstraint: NSLayoutConstraint!
     @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         reserveButton.alpha = 0.5
         shareButton.isEnabled = false
         shareButton.alpha = 0.5
+        activityIndicator.hidesWhenStopped = true;
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -225,6 +227,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: Private methods
     private func downloadAvailableAncestors() {
         // Make an Alamofire request to get the available ancestor data
+        activityIndicator.startAnimating()
         Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
             guard response.result.isSuccess else {
                 print("GET request for available ancestors failed: \(String(describing: response.result.error))")
@@ -256,6 +259,8 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 
                 self.ancestors = receivedAncestors
                 self.ancestorTableView.reloadData()
+                
+                self.activityIndicator.stopAnimating()
             }
         }
     }
