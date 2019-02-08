@@ -44,6 +44,8 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        reserveButton.isEnabled = false
+        
         // Only download the available ancestors if the user is signed in
         let defaultUserId = defaults.integer(forKey: "User Id")
         if defaultUserId == 0 {
