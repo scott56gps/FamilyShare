@@ -59,12 +59,14 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             print("User Id nil.  User not signed in")
             infoLabel.isHidden = false
             shareButton.isEnabled = false
+            reserveButton.isEnabled = false
             shareButton.alpha = 0.5
             ancestors.removeAll()
             ancestorTableView.reloadData()
         } else {
             infoLabel.isHidden = true
             shareButton.isEnabled = true
+            reserveButton.isEnabled = false
             shareButton.alpha = 1.0
             downloadAvailableAncestors()
         }
