@@ -1,0 +1,20 @@
+PODS:
+  - Alamofire (4.8.0)
+  - Starscream (3.0.6)
+
+DEPENDENCIES:
+  - Alamofire (~> 4.7)
+  - Starscream (~> 3.0.2)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - Starscream
+
+SPEC CHECKSUMS:
+  Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
+  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+
+PODFILE CHECKSUM: 061e86a0028d73577eb70316e411dd9dbb988d30
+
+COCOAPODS: 1.5.3
