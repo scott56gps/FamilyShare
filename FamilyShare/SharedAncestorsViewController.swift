@@ -146,14 +146,14 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             templeCard = templeCardPdf
             // Parse the PDF
             //let templeOrdinanceInformation = parsePDF(pdfDocument: templeCardPdf)
-            let pdfLines = parsePDF(pdfDocument: templeCardPdf)
-            let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
+//            let pdfLines = parsePDF(pdfDocument: templeCardPdf)
+//            let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
             
-            print(pdfLines)
-            print(pdfLines[pdfLines.count - 2])
+//            print(pdfLines)
+//            print(pdfLines[pdfLines.count - 2])
             
             // Populate a new Ancestor Object
-            ancestorToShare = AncestorDTO(pdfLines, digitRegex: digitRegex)
+            ancestorToShare = AncestorDTO(templeCardPdf)
             
             print(ancestorToShare!.givenNames)
             print(ancestorToShare!.surname)

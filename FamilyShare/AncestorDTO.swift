@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PDFKit
 
 class AncestorDTO {
     var givenNames: String
@@ -23,7 +24,24 @@ class AncestorDTO {
         self.familySearchId = familySearchId
     }
     
-    init(_ pdfLines: [String], digitRegex: NSRegularExpression) {
+//    init(_ pdfLines: [String], digitRegex: NSRegularExpression) {
+    init(_ templeCardPdf: PDFDocument) {
+        func parsePDF(pdfDocument: PDFDocument) -> [String] {
+            // Get an array of lines of the PDF String
+            if let pdfString = pdfDocument.string {
+                var pdfLines = pdfString.components(separatedBy: CharacterSet.newlines)
+                
+                // Trim the whitespace in the array of pdfLines
+                pdfLines = pdfLines.map {
+                    $0.trimmingCharacters(in: CharacterSet.whitespaces)
+                }
+                
+                return pdfLines
+            } else {
+                fatalError("PDF String could not be extracted using the iOS API")
+            }
+        }
+        
         func parseOrdinanceNeeded(_ pdfLines: [String], _ digitRegex: NSRegularExpression) -> String? {
             guard var ordinanceIndex = pdfLines.firstIndex(of: "Baptism") else {
                 return nil
@@ -61,15 +79,25 @@ class AncestorDTO {
             return forOrdinance == "Sealing To Parents" ? (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4]) : (pdfLines[givenNameIndex + 2], pdfLines[givenNameIndex + 3])
         }
         
-        func parseFamilySearchId(_ pdfLines: [String]) -> String? {
-            for i in 0..<pdfLines.count {
-                if pdfLines[i].contains("Birth") {
-                    return pdfLines[i - 1]
-                }
-            }
+        func parseFamilySearchId(_ pdfString: String, familySearchIdRegex: NSRegularExpression) -> String {
+//            for i in 0..<pdfLines.count {
+//                if pdfLines[i].contains("Birth") {
+//                    return pdfLines[i - 1]
+//                }
+//            }
+
+            var matchedFamilySearchId = familySearchIdRegex.firstMatch(in: pdfString, options: [], range: NSMakeRange(0, pdfString.count))
             
-            return nil
+            var matchedString = String(pdfString[Range(matchedFamilySearchId!.range, in: pdfString)!])
+            
+            return matchedString
         }
+        
+        // Get the parsed lines for the document
+        var pdfLines = parsePDF(pdfDocument: templeCardPdf)
+        
+        let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
+        let familySearchIdRegex = try! NSRegularExpression(pattern: "[A-Z0-9]+-[A-Z0-9]+", options: NSRegularExpression.Options.caseInsensitive)
         
         // Get the ordinanceNeeded for this ancestor
         guard let neededOrdinance = parseOrdinanceNeeded(pdfLines, digitRegex) else {
@@ -89,9 +117,7 @@ class AncestorDTO {
         self.surname = nameTuple.surname
         
         // Get the FamilySearch ID of this ancestor
-        guard let familySearchId = parseFamilySearchId(pdfLines) else {
-            fatalError("Ancestor familySearchId was not parsed from PDF String")
-        }
+        let familySearchId = parseFamilySearchId(templeCardPdf.string!, familySearchIdRegex: familySearchIdRegex)
         
         self.familySearchId = familySearchId
         
