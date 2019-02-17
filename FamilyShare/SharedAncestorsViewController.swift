@@ -20,7 +20,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
-    var socket = WebSocket(url: URL(string: "ws://192.168.0.106:8080/")!)
+    var socket = WebSocket(url: URL(string: "wss://postgres-query-ancestors.herokuapp.com/reserve")!)
     
     // MARK: Outlets
     @IBOutlet weak var reserveButton: UIButton!
@@ -226,27 +226,33 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             
             // Make an Alamofire request to reserve the selected ancestors
             print(parameters)
-            let url = "https://postgres-query-ancestors.herokuapp.com/reserve"
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
-                for (key, value) in parameters {
-                    multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
-                }
-            }, to: url,
-               encodingCompletion: { response in
-                switch response {
-                case .success(let upload, _, _):
-                    upload.responseJSON { jsonResponse in
-                        debugPrint(jsonResponse.result)
-                        
-                        // Set the reserved tab badge to the number of items selected
-                        self.setBadge()
-                        self.deselectTableViewCells()
-                        self.downloadAvailableAncestors()
-                    }
-                case .failure(let encodingError):
-                    print(encodingError)
-                }
-            })
+//            let url = "https://postgres-query-ancestors.herokuapp.com/reserve"
+            do {
+                let data = try JSONSerialization.data(withJSONObject: parameters, options: [])
+                socket.write(data: data)
+            } catch let error {
+                print("ERROR in Serializing JSON data");
+            }
+//            Alamofire.upload(multipartFormData: { (multipartFormData) in
+//                for (key, value) in parameters {
+//                    multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
+//                }
+//            }, to: url,
+//               encodingCompletion: { response in
+//                switch response {
+//                case .success(let upload, _, _):
+//                    upload.responseJSON { jsonResponse in
+//                        debugPrint(jsonResponse.result)
+//
+//                        // Set the reserved tab badge to the number of items selected
+//                        self.setBadge()
+//                        self.deselectTableViewCells()
+//                        self.downloadAvailableAncestors()
+//                    }
+//                case .failure(let encodingError):
+//                    print(encodingError)
+//                }
+//            })
         }
     }
     
