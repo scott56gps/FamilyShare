@@ -196,6 +196,13 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("WebSocket received data!")
+        do {
+            var jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String];
+            print(jsonObject!["fs_id"]!)
+        } catch {
+            
+        }
+        
     }
     
     //MARK: Actions
