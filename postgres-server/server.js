@@ -316,7 +316,7 @@ app.ws('/reserve', (ws, request) => {
 
     ws.on('message', async (message) => {
         console.log('Message received in reserve', message.toString());
-        message = message.toString();
+        message = JSON.parse(message.toString())
         console.log(message.id)
         console.log(message.userId)
         var ancestorId = message.id

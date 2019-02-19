@@ -238,7 +238,12 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
 //            let url = "https://postgres-query-ancestors.herokuapp.com/reserve"
             do {
                 let data = try JSONSerialization.data(withJSONObject: parameters, options: [])
-                socket.write(data: data)
+                socket.write(data: data) { () in
+//                  Set the reserved tab badge to the number of items selected
+                    self.setBadge()
+                    self.deselectTableViewCells()
+                    self.downloadAvailableAncestors()
+                }
             } catch let error {
                 print("ERROR in Serializing JSON data");
             }
