@@ -11,7 +11,7 @@ import PDFKit
 import Alamofire
 
 class ReservedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var ancestors = [Ancestor]()
+    var ancestors = [AncestorSummary]()
     
     var defaults = UserDefaults.standard
     var userId: Int?
@@ -177,7 +177,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
             }
             
             if let array = value as? [Any] {
-                var receivedAncestors = [Ancestor]()
+                var receivedAncestors = [AncestorSummary]()
                 for object in array {
                     let jsonObject = object as? [String: Any]
                     let id = jsonObject!["id"]! as! Int
@@ -187,7 +187,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
                     let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
                     
                     // Create an Ancestor Object from the parts that we got from the JSON
-                    guard let ancestor = Ancestor(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
+                    guard let ancestor = AncestorSummary(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
                         fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
                     }
                     
@@ -235,7 +235,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    private func printTempleCard(templeCard: PDFDocument, selectedAncestor: Ancestor) {
+    private func printTempleCard(templeCard: PDFDocument, selectedAncestor: AncestorSummary) {
         // Configure the controller
         let printController = UIPrintInteractionController.shared
         if let pdfUrl = templeCard.documentURL {
@@ -276,9 +276,9 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    private func getSelectedAncestors() -> [Ancestor] {
+    private func getSelectedAncestors() -> [AncestorSummary] {
         if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
-            var retrievedAncestors = [Ancestor]()
+            var retrievedAncestors = [AncestorSummary]()
             for indexPath in selectedIndexPaths {
                 let retrievedAncestor = ancestors[indexPath.row]
                 retrievedAncestors.append(retrievedAncestor)

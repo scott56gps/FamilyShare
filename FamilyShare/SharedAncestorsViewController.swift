@@ -13,8 +13,8 @@ import Alamofire
 
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
     //MARK: Properties
-    var ancestors = [Ancestor]()
-    var ancestorToShare: AncestorDTO?
+    var ancestors = [AncestorSummary]()
+    var ancestorToShare: Ancestor?
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
@@ -153,7 +153,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
 //            print(pdfLines[pdfLines.count - 2])
             
             // Populate a new Ancestor Object
-            ancestorToShare = AncestorDTO(templeCardPdf)
+            ancestorToShare = Ancestor(templeCardPdf)
             
             print(ancestorToShare!.givenNames)
             print(ancestorToShare!.surname)
@@ -239,7 +239,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             }
             
             if let array = value as? [Any] {
-                var receivedAncestors = [Ancestor]()
+                var receivedAncestors = [AncestorSummary]()
                 for object in array {
                     let jsonObject = object as? [String: Any]
                     let id = jsonObject!["id"]! as! Int
@@ -249,7 +249,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                     let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
                     
                     // Create an Ancestor Object from the parts that we got from the JSON
-                    guard let ancestor = Ancestor(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
+                    guard let ancestor = AncestorSummary(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
                         fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
                     }
                     
