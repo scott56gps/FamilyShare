@@ -79,7 +79,6 @@ class Ancestor {
         }
         
         func parseFamilySearchId(_ pdfString: String, familySearchIdRegex: NSRegularExpression) -> String {
-
 //            for i in 0..<pdfLines.count {
 //                if pdfLines[i].contains("Birth") {
 //                    return pdfLines[i - 1]
