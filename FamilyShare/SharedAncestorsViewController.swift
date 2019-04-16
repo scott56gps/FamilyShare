@@ -10,9 +10,8 @@ import UIKit
 import PDFKit
 import CoreGraphics
 import Alamofire
-import Starscream
 
-class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate, WebSocketDelegate {
+class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
     
     //MARK: Properties
     var ancestors = [AncestorSummary]()
@@ -20,7 +19,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
-    var socket = WebSocket(url: URL(string: "wss://postgres-query-ancestors.herokuapp.com/reserve")!)
     
     // MARK: Outlets
     @IBOutlet weak var reserveButton: UIButton!
@@ -42,10 +40,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         reserveButton.alpha = 0.5
         shareButton.isEnabled = false
         shareButton.alpha = 0.5
-        
-        // Set up WebSocket
-        socket.delegate = self
-        socket.connect()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -181,26 +175,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         
     }
     
-    //MARK: WebSocket Delegate Methods
-    func websocketDidConnect(socket: WebSocketClient) {
-        print("WebSocket is connected!")
-//        socket.write(string: "Hello from iOS, my friend!")
-    }
-    
-    func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        print("WebSocket was disconnected")
-    }
-    
-    func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        print("WebSocket received a message!")
-        print(text)
-    }
-    
-    func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        print("WebSocket received data!")
-        downloadAvailableAncestors()
-    }
-    
     //MARK: Actions
     @IBAction func pickFile(_ sender: UIButton) {
         // Deselect selected ancestorTableView cells
@@ -227,40 +201,27 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             parameters["id"] = String(ids[0]) // For right now, we just get one at a time
             parameters["userId"] = userId
             
-            // Make an Alamofire request to reserve the selected ancestors
-            print(parameters)
-//            let url = "https://postgres-query-ancestors.herokuapp.com/reserve"
-            do {
-                let data = try JSONSerialization.data(withJSONObject: parameters, options: [])
-                socket.write(data: data) { () in
-//                  Set the reserved tab badge to the number of items selected
-                    self.setBadge()
-                    self.deselectTableViewCells()
-                    self.downloadAvailableAncestors()
+//             Make an Alamofire request to reserve the selected ancestors
+            Alamofire.upload(multipartFormData: { (multipartFormData) in
+                for (key, value) in parameters {
+                    multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
                 }
-            } catch let error {
-                print("ERROR in Serializing JSON data");
-            }
-//            Alamofire.upload(multipartFormData: { (multipartFormData) in
-//                for (key, value) in parameters {
-//                    multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
-//                }
-//            }, to: url,
-//               encodingCompletion: { response in
-//                switch response {
-//                case .success(let upload, _, _):
-//                    upload.responseJSON { jsonResponse in
-//                        debugPrint(jsonResponse.result)
-//
-//                        // Set the reserved tab badge to the number of items selected
-//                        self.setBadge()
-//                        self.deselectTableViewCells()
-//                        self.downloadAvailableAncestors()
-//                    }
-//                case .failure(let encodingError):
-//                    print(encodingError)
-//                }
-//            })
+            }, to: url,
+               encodingCompletion: { response in
+                switch response {
+                case .success(let upload, _, _):
+                    upload.responseJSON { jsonResponse in
+                        debugPrint(jsonResponse.result)
+
+                        // Set the reserved tab badge to the number of items selected
+                        self.setBadge()
+                        self.deselectTableViewCells()
+                        self.downloadAvailableAncestors()
+                    }
+                case .failure(let encodingError):
+                    print(encodingError)
+                }
+            })
         }
     }
     
