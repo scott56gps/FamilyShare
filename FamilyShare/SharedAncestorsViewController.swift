@@ -15,8 +15,8 @@ import Starscream
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate, WebSocketDelegate {
     
     //MARK: Properties
-    var ancestors = [Ancestor]()
-    var ancestorToShare: AncestorDTO?
+    var ancestors = [AncestorSummary]()
+    var ancestorToShare: Ancestor?
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
@@ -162,7 +162,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
 //            print(pdfLines[pdfLines.count - 2])
             
             // Populate a new Ancestor Object
-            ancestorToShare = AncestorDTO(templeCardPdf)
+            ancestorToShare = Ancestor(templeCardPdf)
             
             print(ancestorToShare!.givenNames)
             print(ancestorToShare!.surname)
@@ -184,7 +184,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: WebSocket Delegate Methods
     func websocketDidConnect(socket: WebSocketClient) {
         print("WebSocket is connected!")
-        socket.write(string: "Hello from iOS, my friend!")
+//        socket.write(string: "Hello from iOS, my friend!")
     }
     
     func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
@@ -198,13 +198,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         print("WebSocket received data!")
-        do {
-            var jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String];
-            print(jsonObject!["fs_id"]!)
-        } catch {
-            
-        }
-        
+        downloadAvailableAncestors()
     }
     
     //MARK: Actions
@@ -272,6 +266,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Private methods
     private func downloadAvailableAncestors() {
+        print("In DownloadAvailableAncestors")
         // Make an Alamofire request to get the available ancestor data
         Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
             guard response.result.isSuccess else {
@@ -285,7 +280,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             }
             
             if let array = value as? [Any] {
-                var receivedAncestors = [Ancestor]()
+                var receivedAncestors = [AncestorSummary]()
                 for object in array {
                     let jsonObject = object as? [String: Any]
                     let id = jsonObject!["id"]! as! Int
@@ -295,7 +290,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                     let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
                     
                     // Create an Ancestor Object from the parts that we got from the JSON
-                    guard let ancestor = Ancestor(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
+                    guard let ancestor = AncestorSummary(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
                         fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
                     }
                     
