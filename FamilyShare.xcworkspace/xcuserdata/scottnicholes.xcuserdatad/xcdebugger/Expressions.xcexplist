@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "parseOrdinanceNeeded #1 (_:_:) in AncestorDTO.init(_:digitRegex:):AncestorDTO.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pdfLines[ordinanceIndex]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "parseName #1 (_:_:) in AncestorDTO.init(_:digitRegex:):AncestorDTO.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "pdfLines[givenNameIndex + 2]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AncestorDTO.init(_:digitRegex:):AncestorDTO.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
