@@ -24,7 +24,6 @@ class Ancestor {
         self.familySearchId = familySearchId
     }
     
-    //    init(_ pdfLines: [String], digitRegex: NSRegularExpression) {
     init(_ templeCardPdf: PDFDocument) {
         func parsePDF(pdfDocument: PDFDocument) -> [String] {
             // Get an array of lines of the PDF String
@@ -80,12 +79,13 @@ class Ancestor {
         }
         
         func parseFamilySearchId(_ pdfString: String, familySearchIdRegex: NSRegularExpression) -> String {
-            //            for i in 0..<pdfLines.count {
-            //                if pdfLines[i].contains("Birth") {
-            //                    return pdfLines[i - 1]
-            //                }
-            //            }
-            
+
+//            for i in 0..<pdfLines.count {
+//                if pdfLines[i].contains("Birth") {
+//                    return pdfLines[i - 1]
+//                }
+//            }
+
             var matchedFamilySearchId = familySearchIdRegex.firstMatch(in: pdfString, options: [], range: NSMakeRange(0, pdfString.count))
             
             var matchedString = String(pdfString[Range(matchedFamilySearchId!.range, in: pdfString)!])
