@@ -15,7 +15,7 @@ class AncestorModel {
     
     func getAvailableAncestorSummaries(_ callback: @escaping ([AncestorSummary]) -> Void) {
         // Make a request to get the available ancestor summaries
-        let availableUrl = url.appendingPathComponent("available")
+        let availableUrl = url.appendingPathComponent("ancestors")
         getAncestorSummaries(summaryUrl: availableUrl) { (ancestorSummaries: [AncestorSummary]?) -> Void in
             if ancestorSummaries != nil {
                 callback(ancestorSummaries!)
@@ -26,7 +26,7 @@ class AncestorModel {
     
     func getReservedAncestorSummaries(forUserId: Int, _ callback: @escaping ([AncestorSummary]) -> Void) {
         // Make a request to get the reserved ancestor summaries for this userId
-        let reservedUrl = url.appendingPathComponent("reserved/\(String(forUserId))")
+        let reservedUrl = url.appendingPathComponent("ancestors/\(String(forUserId))")
         getAncestorSummaries(summaryUrl: reservedUrl) { (ancestorSummaries: [AncestorSummary]?) -> Void in
             if ancestorSummaries != nil {
                 callback(ancestorSummaries!)
@@ -36,7 +36,7 @@ class AncestorModel {
     
     func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (AncestorSummary?) -> Void) {
         // Make the share url
-        let shareUrl = url.appendingPathComponent("share")
+        let shareUrl = url.appendingPathComponent("ancestor")
         
         // Make parameters
         var parameters = [String: String]()
