@@ -8,12 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		1321DE2C2266484D00258E35 /* AncestorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321DE2B2266484D00258E35 /* AncestorModel.swift */; };
-		1321DE2E2266520A00258E35 /* Ancestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1321DE2D2266520A00258E35 /* Ancestor.swift */; };
 		136B58DB21C2E92C00C8D9FB /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */; };
 		13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C3E2A120EBDC4000458251 /* Ordinance.swift */; };
 		13E0132C21C08875009BC28D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E0132B21C08874009BC28D /* Default-568h@2x.png */; };
-		13FDDF5221C23E8F00A84F4A /* Ancestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FDDF5121C23E8F00A84F4A /* Ancestor.swift */; };
-		13FDDF5221C23E8F00A84F4A /* Ancestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13FDDF5121C23E8F00A84F4A /* Ancestor.swift */; };
+		13F41F8C22669F8600556B6F /* Ancestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F41F8B22669F8600556B6F /* Ancestor.swift */; };
 		2702DB9020E42A2A00A193D5 /* ReservedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */; };
 		2702DB9420E4853D00A193D5 /* blueCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2702DB9320E4853D00A193D5 /* blueCheckmark.png */; };
 		27705E5220C7C8AF0048DCC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E5120C7C8AF0048DCC1 /* AppDelegate.swift */; };
@@ -31,12 +29,10 @@
 
 /* Begin PBXFileReference section */
 		1321DE2B2266484D00258E35 /* AncestorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorModel.swift; sourceTree = "<group>"; };
-		1321DE2D2266520A00258E35 /* Ancestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ancestor.swift; sourceTree = "<group>"; };
 		136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		13C3E2A120EBDC4000458251 /* Ordinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ordinance.swift; sourceTree = "<group>"; };
 		13E0132B21C08874009BC28D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		13FDDF5121C23E8F00A84F4A /* Ancestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ancestor.swift; sourceTree = "<group>"; };
-		13FDDF5121C23E8F00A84F4A /* Ancestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ancestor.swift; sourceTree = "<group>"; };
+		13F41F8B22669F8600556B6F /* Ancestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ancestor.swift; sourceTree = "<group>"; };
 		13FDDF5321C2468B00A84F4A /* FamilyShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyShare.entitlements; sourceTree = "<group>"; };
 		1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FamilyShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C172981C9446BC2EB1A425C /* Pods-FamilyShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.release.xcconfig"; sourceTree = "<group>"; };
@@ -101,13 +97,7 @@
 				279F5BEA20E6D34200DA7396 /* TabBarController.swift */,
 				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
 				1321DE2B2266484D00258E35 /* AncestorModel.swift */,
-				1321DE2D2266520A00258E35 /* Ancestor.swift */,
-				13FDDF5121C23E8F00A84F4A /* Ancestor.swift */,
-				279F5BEA20E6D34200DA7396 /* TabBarController.swift */,
-				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
-				13FDDF5121C23E8F00A84F4A /* Ancestor.swift */,
-				279F5BEA20E6D34200DA7396 /* TabBarController.swift */,
-				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
+				13F41F8B22669F8600556B6F /* Ancestor.swift */,
 				27705E7520C7D4180048DCC1 /* AncestorSummary.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
 				27705E5820C7C8B90048DCC1 /* Assets.xcassets */,
@@ -165,7 +155,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Scott Nicholes";
 				TargetAttributes = {
 					27705E4D20C7C8AF0048DCC1 = {
@@ -267,9 +257,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1321DE2E2266520A00258E35 /* Ancestor.swift in Sources */,
-				13FDDF5221C23E8F00A84F4A /* Ancestor.swift in Sources */,
-				13FDDF5221C23E8F00A84F4A /* Ancestor.swift in Sources */,
+				13F41F8C22669F8600556B6F /* Ancestor.swift in Sources */,
 				27705E7620C7D4180048DCC1 /* AncestorSummary.swift in Sources */,
 				13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */,
 				279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */,

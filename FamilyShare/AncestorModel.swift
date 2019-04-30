@@ -11,7 +11,28 @@ import PDFKit
 import Alamofire
 
 class AncestorModel {
-    var url = URL(string: "https://postgres-query-ancestors.herokuapp.com")!
+    var url = URL(string: "https://familyshare-server.herokuapp.com")!
+    
+    func getAvailableAncestorSummaries(_ callback: @escaping ([AncestorSummary]) -> Void) {
+        // Make a request to get the available ancestor summaries
+        let availableUrl = url.appendingPathComponent("available")
+        getAncestorSummaries(summaryUrl: availableUrl) { (ancestorSummaries: [AncestorSummary]?) -> Void in
+            if ancestorSummaries != nil {
+                callback(ancestorSummaries!)
+            }
+        }
+        
+    }
+    
+    func getReservedAncestorSummaries(forUserId: Int, _ callback: @escaping ([AncestorSummary]) -> Void) {
+        // Make a request to get the reserved ancestor summaries for this userId
+        let reservedUrl = url.appendingPathComponent("reserved/\(String(forUserId))")
+        getAncestorSummaries(summaryUrl: reservedUrl) { (ancestorSummaries: [AncestorSummary]?) -> Void in
+            if ancestorSummaries != nil {
+                callback(ancestorSummaries!)
+            }
+        }
+    }
     
     func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (AncestorSummary?) -> Void) {
         // Make the share url
@@ -42,5 +63,24 @@ class AncestorModel {
                 print(encodingError)
             }
         })
+    }
+    
+    // MARK: Private Functions
+    private func getAncestorSummaries(summaryUrl: URL, _ callback: @escaping ([AncestorSummary]?) -> Void) {
+        Alamofire.request(summaryUrl).responseJSON { response in
+            if let json = response.result.value {
+                let ancestorDictionaries = json as! [Dictionary<String, Any>]
+                var ancestorSummaries = [AncestorSummary]()
+                
+                for ancestorDictionary in ancestorDictionaries {
+                    // Create an AncestorSummary Object from the parts that we got from the JSON
+                    if let ancestorSummary = AncestorSummary(ancestorDictionary: ancestorDictionary) {
+                        ancestorSummaries.append(ancestorSummary)
+                    }
+                }
+                
+                callback(ancestorSummaries)
+            }
+        }
     }
 }

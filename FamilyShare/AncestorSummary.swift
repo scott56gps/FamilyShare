@@ -26,4 +26,33 @@ class AncestorSummary {
         self.gender = gender
         self.neededOrdinance = neededOrdinance
     }
+    
+    init?(ancestorDictionary: [String: Any]) {
+        guard let id = ancestorDictionary["id"]! as? Int else {
+            return nil
+        }
+        guard let givenName = ancestorDictionary["given_name"]! as? String else {
+            return nil
+        }
+        guard let surname = ancestorDictionary["surname"]! as? String else {
+            return nil
+        }
+        guard let gender = ancestorDictionary["gender"]! as? String else {
+            return nil
+        }
+        guard let ordinanceString = ancestorDictionary["ordinance_needed"]! as? String else {
+            return nil
+        }
+        
+        self.id = id
+        self.givenNames = givenName
+        self.surname = surname
+        self.gender = gender
+        
+        if let ordinance = Ordinance(rawValue: ordinanceString) {
+            self.neededOrdinance = ordinance
+        } else {
+            return nil
+        }
+    }
 }
