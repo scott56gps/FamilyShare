@@ -10,13 +10,15 @@ import Foundation
 import PDFKit
 
 class Ancestor {
+    var id: Int?
     var givenNames: String
     var surname: String
     var neededOrdinance: String
     var gender: String
     var familySearchId: String
     
-    init(givenNames: String, surname: String, neededOrdinance: String, gender: String, familySearchId: String) {
+    init(id: Int?, givenNames: String, surname: String, neededOrdinance: String, gender: String, familySearchId: String) {
+        self.id = id
         self.givenNames = givenNames
         self.surname = surname
         self.neededOrdinance = neededOrdinance

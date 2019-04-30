@@ -34,6 +34,37 @@ class AncestorModel {
         }
     }
     
+    func getTempleCardForAncestor(ancestor: Ancestor, _ callback: @escaping (PDFDocument?) -> Void) {
+        // Set the parameters for the GET request
+        guard let ancestorId = ancestor.id else {
+            callback(nil)
+            return
+        }
+        
+        let templeCardUrl = url.appendingPathComponent("templeCard/\(String(ancestorId))")
+        
+        // Create a place to put the PDF once downloaded
+        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let fileURL = documentsURL.appendingPathComponent("\(ancestor.familySearchId).pdf")
+            
+            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+        }
+        
+        // Make an Alamofire GET request to get the temple card for this ancestorId
+        Alamofire.download(templeCardUrl, to: destination).response { response in
+            if response.error == nil, let fileURL = response.destinationURL {
+                print ("PDF Downloaded!")
+                
+                if let pdf = PDFDocument(url: fileURL) {
+                    callback(pdf)
+                }
+            } else {
+                callback(nil)
+            }
+        }
+    }
+    
     func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (AncestorSummary?) -> Void) {
         // Make the share url
         let shareUrl = url.appendingPathComponent("ancestor")
