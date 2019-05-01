@@ -87,9 +87,9 @@ class Ancestor {
 //                }
 //            }
 
-            var matchedFamilySearchId = familySearchIdRegex.firstMatch(in: pdfString, options: [], range: NSMakeRange(0, pdfString.count))
+            let matchedFamilySearchId = familySearchIdRegex.firstMatch(in: pdfString, options: [], range: NSMakeRange(0, pdfString.count))
             
-            var matchedString = String(pdfString[Range(matchedFamilySearchId!.range, in: pdfString)!])
+            let matchedString = String(pdfString[Range(matchedFamilySearchId!.range, in: pdfString)!])
             
             return matchedString
         }
