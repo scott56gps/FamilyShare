@@ -14,7 +14,7 @@ import Alamofire
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
     
     //MARK: Properties
-    var ancestors = [AncestorSummary]()
+    var ancestorSummaries = [AncestorSummary]()
     var ancestorToShare: Ancestor?
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
@@ -55,7 +55,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             shareButton.isEnabled = false
             reserveButton.isEnabled = false
             shareButton.alpha = 0.5
-            ancestors.removeAll()
+            ancestorSummaries.removeAll()
             ancestorTableView.reloadData()
         } else {
             infoLabel.isHidden = true
@@ -77,7 +77,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ancestors.count
+        return ancestorSummaries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,7 +86,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             fatalError("Unable to downcast tableViewCell to AncestorTableViewCell")
         }
         
-        let ancestor = ancestors[indexPath.row]
+        let ancestor = ancestorSummaries[indexPath.row]
         
         // Configure Cell Selection Color
         let selectionView = UIView(frame: cell.frame)
@@ -158,12 +158,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             // Populate a new Ancestor Object
             ancestorToShare = Ancestor(templeCardPdf)
             
-            print(ancestorToShare!.givenNames)
-            print(ancestorToShare!.surname)
-            print(ancestorToShare!.neededOrdinance)
-            print(ancestorToShare!.gender)
-            print(ancestorToShare!.familySearchId)
-            
             uploadFile()
         } else {
             // Throw an error
@@ -194,34 +188,16 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     @IBAction func reserveAncestors(_ sender: UIButton) {
         if let userId = defaults.string(forKey: "User Id") {
             // Gather the ids of the selected ancestors
-            let ids = getIdsForSelectedAncestors()
+//            let ids = getIdsForSelectedAncestors()
             
-            // For each id, make an id parameter
-            var parameters = [String: String]()
-            parameters["id"] = String(ids[0]) // For right now, we just get one at a time
-            parameters["userId"] = userId
+            guard let selectedAncestorSummaryIndexPath = ancestorTableView.indexPathForSelectedRow else {
+                print("There is no selected row")
+                return
+            }
             
-//             Make an Alamofire request to reserve the selected ancestors
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
-                for (key, value) in parameters {
-                    multipartFormData.append(value.data(using: String.Encoding.utf8)!, withName: key)
-                }
-            }, to: url,
-               encodingCompletion: { response in
-                switch response {
-                case .success(let upload, _, _):
-                    upload.responseJSON { jsonResponse in
-                        debugPrint(jsonResponse.result)
-
-                        // Set the reserved tab badge to the number of items selected
-                        self.setBadge()
-                        self.deselectTableViewCells()
-                        self.downloadAvailableAncestors()
-                    }
-                case .failure(let encodingError):
-                    print(encodingError)
-                }
-            })
+            let selectedAncestorSummary = ancestorSummaries[selectedAncestorSummaryIndexPath.row]
+            
+            
         }
     }
     
@@ -258,7 +234,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                     receivedAncestors.append(ancestor)
                 }
                 
-                self.ancestors = receivedAncestors
+                self.ancestorSummaries = receivedAncestors
                 self.ancestorTableView.reloadData()
             }
         }
@@ -340,7 +316,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             var ids = [Int]()
             for indexPath in selectedIndexPaths {
                 // Make an AncestorDTO for the Ancestor at this indexPath
-                let retrievedAncestor = ancestors[indexPath.row]
+                let retrievedAncestor = ancestorSummaries[indexPath.row]
                 ids.append(retrievedAncestor.id)
             }
             return ids
