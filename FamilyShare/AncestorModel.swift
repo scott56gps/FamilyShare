@@ -65,6 +65,38 @@ class AncestorModel {
         }
     }
     
+    func reserveAncestor(ancestor: Ancestor, userId: Int, _ callback: @escaping (AncestorSummary?) -> Void) {
+        guard let ancestorId = ancestor.id else {
+            callback(nil)
+            return
+        }
+        
+        let parameters: [String: AnyObject] = [
+            "ancestorId": ancestorId as AnyObject,
+            "userId": userId as AnyObject
+        ]
+        
+        let reserveUrl = url.appendingPathComponent("reserve")
+        
+        Alamofire.request(reserveUrl, method: .put, parameters: parameters, encoding: JSONEncoding.default)
+            .validate()
+            .responseJSON() { response in
+                switch response.result {
+                case .success:
+                    let ancestorDictionary = response.result.value as! Dictionary<String, Any>
+                    
+                    if let ancestorSummary = AncestorSummary(ancestorDictionary: ancestorDictionary) {
+                        callback(ancestorSummary)
+                    } else {
+                        print("Did not instantiate AncestorSummary for dictionary: \(ancestorDictionary)")
+                    }
+                case .failure(let error):
+                    print(error)
+                    callback(nil)
+                }
+        }
+    }
+    
     func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (AncestorSummary?) -> Void) {
         // Make the share url
         let shareUrl = url.appendingPathComponent("ancestor")
