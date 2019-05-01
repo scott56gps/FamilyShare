@@ -219,48 +219,55 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         print("In DownloadAvailableAncestors")
         
         ancestorModel.getAvailableAncestorSummaries() { (error: Error?, availableAncestors: [AncestorSummary]?) in
-            guard availableAncestors != nil else {
-                print("There was an error in getting the available ancestor summaries")
+            guard error != nil else {
+                print(error!)
                 return
             }
             
+            guard availableAncestors != nil else {
+                // There was an error in initializing an array of type AncestorSummary
+                print("There was an error in initializing an array of type AncestorSummary")
+                return
+            }
             
+            self.ancestorSummaries = availableAncestors!
+            self.ancestorTableView.reloadData()
         }
         
-        // Make an Alamofire request to get the available ancestor data
-        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
-            guard response.result.isSuccess else {
-                print("GET request for available ancestors failed: \(String(describing: response.result.error))")
-                return
-            }
-            
-            guard let value = response.result.value else {
-                print("Data received was not able to be formed correctly")
-                return
-            }
-            
-            if let array = value as? [Any] {
-                var receivedAncestors = [AncestorSummary]()
-                for object in array {
-                    let jsonObject = object as? [String: Any]
-                    let id = jsonObject!["id"]! as! Int
-                    let givenName = jsonObject!["given_name"]! as! String
-                    let surname =  jsonObject!["surname"] as! String
-                    let gender = jsonObject!["gender"] as! String
-                    let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
-                    
-                    // Create an Ancestor Object from the parts that we got from the JSON
-                    guard let ancestor = AncestorSummary(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
-                        fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
-                    }
-                    
-                    receivedAncestors.append(ancestor)
-                }
-                
-                self.ancestorSummaries = receivedAncestors
-                self.ancestorTableView.reloadData()
-            }
-        }
+//        // Make an Alamofire request to get the available ancestor data
+//        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
+//            guard response.result.isSuccess else {
+//                print("GET request for available ancestors failed: \(String(describing: response.result.error))")
+//                return
+//            }
+//            
+//            guard let value = response.result.value else {
+//                print("Data received was not able to be formed correctly")
+//                return
+//            }
+//            
+//            if let array = value as? [Any] {
+//                var receivedAncestors = [AncestorSummary]()
+//                for object in array {
+//                    let jsonObject = object as? [String: Any]
+//                    let id = jsonObject!["id"]! as! Int
+//                    let givenName = jsonObject!["given_name"]! as! String
+//                    let surname =  jsonObject!["surname"] as! String
+//                    let gender = jsonObject!["gender"] as! String
+//                    let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
+//                    
+//                    // Create an Ancestor Object from the parts that we got from the JSON
+//                    guard let ancestor = AncestorSummary(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
+//                        fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
+//                    }
+//                    
+//                    receivedAncestors.append(ancestor)
+//                }
+//                
+//                self.ancestorSummaries = receivedAncestors
+//                self.ancestorTableView.reloadData()
+//            }
+//        }
     }
     
     private func uploadFile() {

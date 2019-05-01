@@ -19,24 +19,33 @@ class AncestorModel {
         getAncestorSummaries(summaryUrl: availableUrl) { (error: Error?, ancestorSummaries: [AncestorSummary]?) -> Void in
             guard error != nil else {
                 callback(error, nil)
+                return
             }
             
             guard ancestorSummaries != nil else {
-                // There was an error in initializing an array of type AncestorSummary
                 callback(nil, nil)
+                return
             }
             
             callback(nil, ancestorSummaries)
         }
     }
     
-    func getReservedAncestorSummaries(forUserId: Int, _ callback: @escaping ([AncestorSummary]) -> Void) {
+    func getReservedAncestorSummaries(forUserId: Int, _ callback: @escaping (Error?, [AncestorSummary]?) -> Void) {
         // Make a request to get the reserved ancestor summaries for this userId
         let reservedUrl = url.appendingPathComponent("ancestors/\(String(forUserId))")
-        getAncestorSummaries(summaryUrl: reservedUrl) { (ancestorSummaries: [AncestorSummary]?) -> Void in
-            if ancestorSummaries != nil {
-                callback(ancestorSummaries!)
+        getAncestorSummaries(summaryUrl: reservedUrl) { (error: Error?, ancestorSummaries: [AncestorSummary]?) -> Void in
+            guard error != nil else {
+                callback(error, nil)
+                return
             }
+            
+            guard ancestorSummaries != nil else {
+                callback(nil, nil)
+                return
+            }
+            
+            callback(nil, ancestorSummaries)
         }
     }
     
