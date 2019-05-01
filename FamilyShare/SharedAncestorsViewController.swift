@@ -217,6 +217,16 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: Private methods
     private func downloadAvailableAncestors() {
         print("In DownloadAvailableAncestors")
+        
+        ancestorModel.getAvailableAncestorSummaries() { (error: Error?, availableAncestors: [AncestorSummary]?) in
+            guard availableAncestors != nil else {
+                print("There was an error in getting the available ancestor summaries")
+                return
+            }
+            
+            
+        }
+        
         // Make an Alamofire request to get the available ancestor data
         Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
             guard response.result.isSuccess else {
