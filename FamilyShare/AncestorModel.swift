@@ -65,14 +65,9 @@ class AncestorModel {
         }
     }
     
-    func reserveAncestor(ancestor: Ancestor, userId: Int, _ callback: @escaping (AncestorSummary?) -> Void) {
-        guard let ancestorId = ancestor.id else {
-            callback(nil)
-            return
-        }
-        
+    func reserveAncestor(ancestorSummary: AncestorSummary, userId: String, _ callback: @escaping (AncestorSummary?) -> Void) {
         let parameters: [String: AnyObject] = [
-            "ancestorId": ancestorId as AnyObject,
+            "ancestorId": ancestorSummary.id as AnyObject,
             "userId": userId as AnyObject
         ]
         

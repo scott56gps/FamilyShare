@@ -14,6 +14,7 @@ import Alamofire
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
     
     //MARK: Properties
+    let ancestorModel = AncestorModel()
     var ancestorSummaries = [AncestorSummary]()
     var ancestorToShare: Ancestor?
     var templeCard: PDFDocument?
@@ -186,18 +187,30 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     @IBAction func reserveAncestors(_ sender: UIButton) {
-        if let userId = defaults.string(forKey: "User Id") {
-            // Gather the ids of the selected ancestors
-//            let ids = getIdsForSelectedAncestors()
-            
-            guard let selectedAncestorSummaryIndexPath = ancestorTableView.indexPathForSelectedRow else {
-                print("There is no selected row")
+        guard let userId = defaults.string(forKey: "User Id") else {
+            print("User Id is nil")
+            return
+        }
+        
+        guard let selectedAncestorSummaryIndexPath = ancestorTableView.indexPathForSelectedRow else {
+            print("There is no selected row")
+            return
+        }
+        
+        let selectedAncestorSummary = ancestorSummaries[selectedAncestorSummaryIndexPath.row]
+        
+        ancestorModel.reserveAncestor(ancestorSummary: selectedAncestorSummary, userId: userId) { (reservedAncestorSummary: AncestorSummary?) in
+            guard reservedAncestorSummary != nil else {
+                print("There was an error in reserving ancestorSummary: \(selectedAncestorSummary)")
                 return
             }
             
-            let selectedAncestorSummary = ancestorSummaries[selectedAncestorSummaryIndexPath.row]
-            
-            
+            // Set the reserved tab badge to the number of reserved ancestors
+            if let tabItems = self.tabBarController?.tabBar.items {
+                let reservedTab = tabItems[1]
+                
+                self.setBadgeNumber(tabBarItem: reservedTab, number: 1)
+            }
         }
     }
     
@@ -291,12 +304,13 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
     
-    private func setBadge() {
-        if let tabItems = self.tabBarController?.tabBar.items {
-            let reservedTab = tabItems[1]
-            reservedTab.badgeValue = String(self.selectedAncestorsCount)
-            reservedTab.badgeColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
-        }
+    /**********************************************
+     SET BADGE NUMBER
+     Set the badge for a tab bar item to a number
+     **********************************************/
+    private func setBadgeNumber(tabBarItem: UITabBarItem, number: Int) {
+        tabBarItem.badgeValue = String(number)
+        tabBarItem.badgeColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
     }
     
     private func deselectTableViewCells() {
