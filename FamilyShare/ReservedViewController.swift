@@ -11,8 +11,9 @@ import PDFKit
 import Alamofire
 
 class ReservedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var ancestors = [AncestorSummary]()
-    
+    //MARK: Properties
+    let ancestorModel = AncestorModel()
+    var ancestorSummaries = [AncestorSummary]()
     var defaults = UserDefaults.standard
     var userId: Int?
     var selectedAncestorsCount = 0
@@ -38,13 +39,13 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
 
-        // Only download the available ancestors if the user is signed in
+        // Only download the reserved ancestors if the user is signed in
         let defaultUserId = defaults.integer(forKey: "User Id")
         if defaultUserId == 0 {
             print("User Id nil.  User not signed in")
             infoLabel.isHidden = false
             
-            ancestors.removeAll()
+            ancestorSummaries.removeAll()
             ancestorTableView.reloadData()
         } else {
             self.userId = defaultUserId
@@ -64,7 +65,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ancestors.count
+        return ancestorSummaries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -88,7 +89,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         
         cell.selectedBackgroundView = selectionView
         
-        let ancestor = ancestors[indexPath.row]
+        let ancestor = ancestorSummaries[indexPath.row]
         
         // Configure Date Formatter
         let dateFormatter = DateFormatter()
@@ -163,40 +164,20 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: Private Functions
     private func downloadReservedAncestors() {
-        // Make an Alamofire request to get the available ancestor data
-        let userId = self.userId!
-        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/reserved/\(userId)").responseJSON { response in
-            guard response.result.isSuccess else {
-                print("GET request for reserved ancestors failed: \(String(describing: response.result.error))")
+        ancestorModel.getReservedAncestorSummaries(forUserId: userId!) { (error: Error?, reservedAncestors: [AncestorSummary]?) in
+            guard error == nil else {
+                print(error as Any)
                 return
             }
             
-            guard let value = response.result.value else {
-                print("Data received was not able to be formed correctly")
+            guard reservedAncestors != nil else {
+                // There was an error in initializing an array of type AncestorSummary
+                print("There was an error in initializing an array of type AncestorSummary")
                 return
             }
             
-            if let array = value as? [Any] {
-                var receivedAncestors = [AncestorSummary]()
-                for object in array {
-                    let jsonObject = object as? [String: Any]
-                    let id = jsonObject!["id"]! as! Int
-                    let givenName = jsonObject!["given_name"]! as! String
-                    let surname =  jsonObject!["surname"] as! String
-                    let gender = jsonObject!["gender"] as! String
-                    let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
-                    
-                    // Create an Ancestor Object from the parts that we got from the JSON
-                    guard let ancestor = AncestorSummary(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
-                        fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
-                    }
-                    
-                    receivedAncestors.append(ancestor)
-                }
-                
-                self.ancestors = receivedAncestors
-                self.ancestorTableView.reloadData()
-            }
+            self.ancestorSummaries = reservedAncestors!
+            self.ancestorTableView.reloadData()
         }
     }
     
@@ -280,7 +261,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
             var retrievedAncestors = [AncestorSummary]()
             for indexPath in selectedIndexPaths {
-                let retrievedAncestor = ancestors[indexPath.row]
+                let retrievedAncestor = ancestorSummaries[indexPath.row]
                 retrievedAncestors.append(retrievedAncestor)
             }
             return retrievedAncestors

@@ -216,8 +216,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Private methods
     private func downloadAvailableAncestors() {
-        print("In DownloadAvailableAncestors")
-        
         ancestorModel.getAvailableAncestorSummaries() { (error: Error?, availableAncestors: [AncestorSummary]?) in
             guard error == nil else {
                 print(error as Any)
