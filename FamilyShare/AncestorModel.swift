@@ -17,7 +17,7 @@ class AncestorModel {
         // Make a request to get the available ancestor summaries
         let availableUrl = url.appendingPathComponent("ancestors")
         getAncestorSummaries(summaryUrl: availableUrl) { (error: Error?, ancestorSummaries: [AncestorSummary]?) -> Void in
-            guard error != nil else {
+            guard error == nil else {
                 callback(error, nil)
                 return
             }
@@ -35,7 +35,7 @@ class AncestorModel {
         // Make a request to get the reserved ancestor summaries for this userId
         let reservedUrl = url.appendingPathComponent("ancestors/\(String(forUserId))")
         getAncestorSummaries(summaryUrl: reservedUrl) { (error: Error?, ancestorSummaries: [AncestorSummary]?) -> Void in
-            guard error != nil else {
+            guard error == nil else {
                 callback(error, nil)
                 return
             }
@@ -138,7 +138,7 @@ class AncestorModel {
         })
     }
     
-    // MARK: Private Functions
+    // MARK: Private Functions    
     private func getAncestorSummaries(summaryUrl: URL, _ callback: @escaping (Error?, [AncestorSummary]?) -> Void) {
         Alamofire.request(summaryUrl).responseJSON { response in
             switch response.result {
