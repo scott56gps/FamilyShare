@@ -77,7 +77,12 @@ class Ancestor {
                 return nil
             }
             
-            return forOrdinance == "Sealing To Parents" ? (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4]) : (pdfLines[givenNameIndex + 2], pdfLines[givenNameIndex + 3])
+            let parentsRegex = try! NSRegularExpression(pattern: "\\s", options: NSRegularExpression.Options.caseInsensitive)
+            
+            let numberOfMatches = parentsRegex.numberOfMatches(in: pdfLines[givenNameIndex + 2], options: [], range: NSMakeRange(0, pdfLines[givenNameIndex + 2].count))
+            
+//            return forOrdinance == "Sealing To Parents" ? (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4]) : (pdfLines[givenNameIndex + 2], pdfLines[givenNameIndex + 3])
+            return numberOfMatches <= 1 ? (pdfLines[givenNameIndex + 2], pdfLines[givenNameIndex + 3]) : (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4])
         }
         
         func parseFamilySearchId(_ pdfString: String, familySearchIdRegex: NSRegularExpression) -> String {
@@ -111,8 +116,6 @@ class Ancestor {
         guard let nameTuple = parseName(pdfLines, neededOrdinance) else {
             fatalError("Ancestor name was not parsed from PDF String")
         }
-        
-        print("pdfLines count: \(pdfLines.count)")
         
         self.givenNames = nameTuple.givenNames
         self.surname = nameTuple.surname

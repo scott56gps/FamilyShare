@@ -15,8 +15,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Properties
     let ancestorModel = AncestorModel()
-    var ancestorSummaries = [AncestorSummary]()
-    var ancestorToShare: Ancestor?
+    var sharedAncestorSummaries = [AncestorSummary]()
     var templeCard: PDFDocument?
     var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
@@ -56,7 +55,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             shareButton.isEnabled = false
             reserveButton.isEnabled = false
             shareButton.alpha = 0.5
-            ancestorSummaries.removeAll()
+            sharedAncestorSummaries.removeAll()
             ancestorTableView.reloadData()
         } else {
             infoLabel.isHidden = true
@@ -78,7 +77,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ancestorSummaries.count
+        return sharedAncestorSummaries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -87,7 +86,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             fatalError("Unable to downcast tableViewCell to AncestorTableViewCell")
         }
         
-        let ancestor = ancestorSummaries[indexPath.row]
+        let ancestor = sharedAncestorSummaries[indexPath.row]
         
         // Configure Cell Selection Color
         let selectionView = UIView(frame: cell.frame)
@@ -147,19 +146,19 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         // Load the PDF
         if let templeCardPdf = PDFDocument(url: urls[0]) {
-            templeCard = templeCardPdf
-            // Parse the PDF
-            //let templeOrdinanceInformation = parsePDF(pdfDocument: templeCardPdf)
-//            let pdfLines = parsePDF(pdfDocument: templeCardPdf)
-//            let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
-            
-//            print(pdfLines)
-//            print(pdfLines[pdfLines.count - 2])
-            
             // Populate a new Ancestor Object
-            ancestorToShare = Ancestor(templeCardPdf)
-            
-            uploadFile()
+            let ancestorToShare = Ancestor(templeCardPdf)
+            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { (error: String?, postedAncestorSummary: AncestorSummary?) in
+                if (error != nil) {
+                    debugPrint(error!)
+                    return
+                }
+                
+                if let ancestorSummary = postedAncestorSummary {
+                    self.sharedAncestorSummaries.append(ancestorSummary)
+                    self.ancestorTableView.reloadData()
+                }
+            }
         } else {
             // Throw an error
             fatalError("PDF Document creation failed")
@@ -197,7 +196,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             return
         }
         
-        let selectedAncestorSummary = ancestorSummaries[selectedAncestorSummaryIndexPath.row]
+        let selectedAncestorSummary = sharedAncestorSummaries[selectedAncestorSummaryIndexPath.row]
         
         ancestorModel.reserveAncestor(ancestorSummary: selectedAncestorSummary, userId: userId) { (reservedAncestorSummary: AncestorSummary?) in
             guard reservedAncestorSummary != nil else {
@@ -228,59 +227,8 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             
-            self.ancestorSummaries = availableAncestors!
+            self.sharedAncestorSummaries = availableAncestors!
             self.ancestorTableView.reloadData()
-        }
-    }
-    
-    private func uploadFile() {
-        // Make an HTTP request
-        let url = URL(string: "https://postgres-query-ancestors.herokuapp.com/share")!
-        
-        // Make parameters
-        var parameters = [String: String]()
-        parameters["givenNames"] = ancestorToShare!.givenNames
-        parameters["surname"] = ancestorToShare!.surname
-        parameters["gender"] = ancestorToShare!.gender
-        parameters["ordinanceNeeded"] = ancestorToShare!.neededOrdinance
-        parameters["familySearchId"] = ancestorToShare!.familySearchId
-        
-        // Using Alamofire
-        Alamofire.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(self.templeCard!.documentURL!, withName: "templePdf", fileName: "\(self.ancestorToShare!.familySearchId).pdf", mimeType: "application/pdf")
-            for (key, value) in parameters {
-                multipartFormData.append(value.data(using: .utf8)!, withName: key)
-            }
-        },
-         to: url,
-         encodingCompletion: { encodingResult in
-            switch encodingResult {
-                case .success(let upload, _, _):
-                    upload.responseString { response in
-                        debugPrint(response)
-                                    
-                        // Update the available ancestors
-                        self.downloadAvailableAncestors()
-                    }
-                case .failure(let encodingError):
-                    print(encodingError)
-            }
-        })
-    }
-    
-    private func parsePDF(pdfDocument: PDFDocument) -> [String] {
-        // Get an array of lines of the PDF String
-        if let pdfString = pdfDocument.string {
-            var pdfLines = pdfString.components(separatedBy: CharacterSet.newlines)
-            
-            // Trim the whitespace in the array of pdfLines
-            pdfLines = pdfLines.map {
-                $0.trimmingCharacters(in: CharacterSet.whitespaces)
-            }
-            
-            return pdfLines
-        } else {
-            fatalError("PDF String could not be extracted using the iOS API")
         }
     }
     
@@ -310,7 +258,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             var ids = [Int]()
             for indexPath in selectedIndexPaths {
                 // Make an AncestorDTO for the Ancestor at this indexPath
-                let retrievedAncestor = ancestorSummaries[indexPath.row]
+                let retrievedAncestor = sharedAncestorSummaries[indexPath.row]
                 ids.append(retrievedAncestor.id)
             }
             return ids

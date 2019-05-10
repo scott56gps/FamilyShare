@@ -107,7 +107,7 @@ class AncestorModel {
         }
     }
     
-    func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (AncestorSummary?) -> Void) {
+    func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (String?, AncestorSummary?) -> Void) {
         // Make the share url
         let shareUrl = url.appendingPathComponent("ancestor")
         
@@ -130,10 +130,21 @@ class AncestorModel {
             case .success(let upload, _, _):
                 upload.responseJSON { response in
                     debugPrint(response)
-                    
+                    if let ancestorDictionary = response.result.value as? Dictionary<String, Any> {
+                        // Create an AncestorSummary Object
+                        if let ancestorSummary = AncestorSummary(ancestorDictionary: ancestorDictionary) {
+                            callback(nil, ancestorSummary)
+                        } else {
+                            callback("Did not create AncestorSummary for Dictionary: \(ancestorDictionary)", nil)
+                        }
+                    } else {
+                        debugPrint("Did not create AncestorDictionary for value: \(response.result.value)")
+                        callback("Did not create AncestorDictionary for value: \(response.result.value)", nil)
+                    }
                 }
-            case .failure(let encodingError):
-                print(encodingError)
+            case .failure(let error):
+                print(error)
+                callback(error.localizedDescription, nil)
             }
         })
     }
