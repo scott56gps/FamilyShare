@@ -204,6 +204,12 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             
+            self.deselectTableViewCells()
+            
+            // Remove the reservedAncestorSummary from the ancestorSummaries
+            self.sharedAncestorSummaries.remove(at: selectedAncestorSummaryIndexPath.row)
+            self.ancestorTableView.reloadData()
+            
             // Set the reserved tab badge to the number of reserved ancestors
             if let tabItems = self.tabBarController?.tabBar.items {
                 let reservedTab = tabItems[1]
