@@ -17,7 +17,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     let ancestorModel = AncestorModel()
     var sharedAncestorSummaries = [AncestorSummary]()
     var templeCard: PDFDocument?
-    var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
     
     // MARK: Outlets
@@ -123,23 +122,13 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Increment selected ancestor count
-        selectedAncestorsCount += 1
-        
         // Enable Reserve Button
-        reserveButton.isEnabled = true
-        reserveButton.alpha = 1.0
+        enableReserveButton()
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        // Decrement selected ancestor count
-        selectedAncestorsCount -= 1
-        
         // Check to see if we should disable the reserve button
-        if (selectedAncestorsCount == 0) {
-            reserveButton.isEnabled = false
-            reserveButton.alpha = 0.5
-        }
+        ancestorTableView.indexPathsForSelectedRows?.count == 0 ? disableReserveButton() : enableReserveButton()
     }
     
     // MARK: UIDocumentPickerDelegate Methods
@@ -253,9 +242,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 self.ancestorTableView.deselectRow(at: indexPath, animated: true)
             }
             
-            self.selectedAncestorsCount = 0
-            self.reserveButton.isEnabled = false
-            self.reserveButton.alpha = 0.5
+            disableReserveButton()
         }
     }
     
@@ -271,5 +258,15 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         } else {
             fatalError("Could not retrieve indexPathsForSelectedRows")
         }
+    }
+    
+    private func enableReserveButton() {
+        reserveButton.isEnabled = true
+        reserveButton.alpha = 1.0
+    }
+    
+    private func disableReserveButton() {
+        reserveButton.isEnabled = false
+        reserveButton.alpha = 0.5
     }
 }
