@@ -49,10 +49,10 @@ class AncestorModel {
         }
     }
     
-    func getTempleCardForAncestor(ancestor: Ancestor, _ callback: @escaping (PDFDocument?) -> Void) {
+    func getTempleCardForAncestor(ancestor: Ancestor, _ callback: @escaping (String?, PDFDocument?) -> Void) {
         // Set the parameters for the GET request
         guard let ancestorId = ancestor.id else {
-            callback(nil)
+            callback("Could not retrieve ancestorId", nil)
             return
         }
         
@@ -68,14 +68,19 @@ class AncestorModel {
         
         // Make an Alamofire GET request to get the temple card for this ancestorId
         Alamofire.download(templeCardUrl, to: destination).response { response in
-            if response.error == nil, let fileURL = response.destinationURL {
-                print ("PDF Downloaded!")
+            if response.error == nil {
+                guard let fileURL = response.destinationURL else {
+                    callback("fileURL is nil", nil)
+                    return
+                }
                 
                 if let pdf = PDFDocument(url: fileURL) {
-                    callback(pdf)
+                    callback(nil, pdf)
+                } else {
+                    callback("Could not retrieve PDFDocument from url: \(fileURL)", nil)
                 }
             } else {
-                callback(nil)
+                callback("There was an error in downloading the PDF", nil)
             }
         }
     }

@@ -13,7 +13,7 @@ import Alamofire
 class ReservedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //MARK: Properties
     let ancestorModel = AncestorModel()
-    var ancestorSummaries = [AncestorSummary]()
+    var ancestors = [Ancestor]()
     var defaults = UserDefaults.standard
     var userId: Int?
     var selectedAncestorsCount = 0
@@ -45,7 +45,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
             print("User Id nil.  User not signed in")
             infoLabel.isHidden = false
             
-            ancestorSummaries.removeAll()
+            ancestors.removeAll()
             ancestorTableView.reloadData()
         } else {
             self.userId = defaultUserId
@@ -65,7 +65,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ancestorSummaries.count
+        return ancestors.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -89,7 +89,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         
         cell.selectedBackgroundView = selectionView
         
-        let ancestor = ancestorSummaries[indexPath.row]
+        let ancestor = ancestors[indexPath.row]
         
         // Configure Date Formatter
         let dateFormatter = DateFormatter()
@@ -146,7 +146,6 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         let printFORAction = UIAlertAction(title: "Print", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in
             self.downloadTempleCard()
-            //self.printTempleCard()
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler:{(UIAlertAction) -> Void in
@@ -166,53 +165,38 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     private func downloadReservedAncestors() {
         ancestorModel.getReservedAncestorSummaries(forUserId: userId!) { (error: Error?, reservedAncestors: [AncestorSummary]?) in
             guard error == nil else {
-                print(error as Any)
+                debugPrint(error!)
                 return
             }
             
-            guard reservedAncestors != nil else {
+            if let reservedAncestors = reservedAncestors {
+                self.ancestors = reservedAncestors
+                self.ancestorTableView.reloadData()
+            } else {
                 // There was an error in initializing an array of type AncestorSummary
-                print("There was an error in initializing an array of type AncestorSummary")
+                debugPrint("There was an error in initializing an array of type AncestorSummary")
                 return
             }
-            
-            self.ancestorSummaries = reservedAncestors!
-            self.ancestorTableView.reloadData()
         }
     }
     
-    private func downloadTempleCard() {
-        if let userId = defaults.string(forKey: "User Id") {
-            // Get the ids for the selected ancestors
-            var selectedAncestors = getSelectedAncestors()
-            
-            // Set the parameters for the GET request
-            let url = "https://postgres-query-ancestors.herokuapp.com/templeCard/" + userId + "/" + String(selectedAncestors[0].id)
-            
-            // Create a place to put the PDF once downloaded
-            let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let fileURL = documentsURL.appendingPathComponent("templeCard.pdf")
-                
-                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
-            }
-            
-            // Make an Alamofire GET request to get the temple card for this ancestorId
-            Alamofire.download(url, to: destination).response { response in
-                if response.error == nil, let fileURL = response.destinationURL {
-                    print ("PDF Downloaded!")
-                    
-                    if let pdf = PDFDocument(url: fileURL) {
-                        print(pdf.string!)
-                        
-                        self.printTempleCard(templeCard: pdf, selectedAncestor: selectedAncestors[0])
-                    }
-                } else {
-                    fatalError("PDF was not downloaded correctly")
-                }
-            }
-        } else {
+    private func downloadTempleCard(_ callback: @escaping (String?, PDFDocument?) -> Void) {
+        guard let userId = defaults.string(forKey: "User Id") else {
             fatalError("User Id was not found")
+        }
+        
+        // Get the selected ancestor
+        guard let selectedAncestor = getSelectedAncestor() else {
+            debugPrint("Failed to retrieve the selected ancestor")
+        }
+        
+        ancestorModel.getTempleCardForAncestor(ancestor: selectedAncestor) { (error: String?, templeCardPdf: PDFDocument?) in
+            if (error != nil) {
+                callback(error!, nil)
+                return
+            }
+            
+            callback(nil, templeCardPdf)
         }
     }
     
@@ -257,16 +241,11 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    private func getSelectedAncestors() -> [AncestorSummary] {
-        if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
-            var retrievedAncestors = [AncestorSummary]()
-            for indexPath in selectedIndexPaths {
-                let retrievedAncestor = ancestorSummaries[indexPath.row]
-                retrievedAncestors.append(retrievedAncestor)
-            }
-            return retrievedAncestors
+    private func getSelectedAncestor() -> Ancestor? {
+        if let selectedIndexPath = self.ancestorTableView.indexPathForSelectedRow {
+            return ancestors[selectedIndexPath.row]
         } else {
-            fatalError("Could not retrieve indexPathsForSelectedRows")
+            return nil
         }
     }
 
