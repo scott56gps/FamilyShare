@@ -92,19 +92,13 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         selectionView.backgroundColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
         
         // Configure Cell Selection Checkmark
-        guard let image = UIImage(named: "blueCheckmark.png") else {
-            fatalError("PNG not loaded")
-        }
+        let blueCheckmark = #imageLiteral(resourceName: "Blue Checkmark")
         
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: blueCheckmark)
         imageView.frame = CGRect(x: 4, y: 26, width: 24, height: 24)
         selectionView.addSubview(imageView)
         
         cell.selectedBackgroundView = selectionView
-        
-        // Configure Date Formatter
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMMM YYYY"
         
         cell.ancestorNameLabel.text = ancestor.givenNames + " " + ancestor.surname
         cell.nextOrdinanceLabel.text = ancestor.neededOrdinance.rawValue
