@@ -19,7 +19,6 @@
 		27705E5720C7C8AF0048DCC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27705E5520C7C8AF0048DCC1 /* Main.storyboard */; };
 		27705E5920C7C8B90048DCC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27705E5820C7C8B90048DCC1 /* Assets.xcassets */; };
 		27705E7420C7CAD50048DCC1 /* AncestorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */; };
-		27705E7620C7D4180048DCC1 /* AncestorSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E7520C7D4180048DCC1 /* AncestorSummary.swift */; };
 		279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F5BEA20E6D34200DA7396 /* TabBarController.swift */; };
 		279F5BEF20E83C7200DA7396 /* shareIconBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BEE20E83C7100DA7396 /* shareIconBlack.png */; };
 		279F5BF120E83C7900DA7396 /* shareIconBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BF020E83C7900DA7396 /* shareIconBlue.png */; };
@@ -57,7 +56,6 @@
 		27705E5820C7C8B90048DCC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27705E5D20C7C8B90048DCC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorTableViewCell.swift; sourceTree = "<group>"; };
-		27705E7520C7D4180048DCC1 /* AncestorSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorSummary.swift; sourceTree = "<group>"; };
 		279F5BEA20E6D34200DA7396 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		279F5BEE20E83C7100DA7396 /* shareIconBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlack.png; sourceTree = SOURCE_ROOT; };
 		279F5BF020E83C7900DA7396 /* shareIconBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlue.png; sourceTree = SOURCE_ROOT; };
@@ -128,7 +126,6 @@
 				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
 				1321DE2B2266484D00258E35 /* AncestorModel.swift */,
 				13F41F8B22669F8600556B6F /* Ancestor.swift */,
-				27705E7520C7D4180048DCC1 /* AncestorSummary.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
 				27705E5820C7C8B90048DCC1 /* Assets.xcassets */,
 				279F5BEE20E83C7100DA7396 /* shareIconBlack.png */,
@@ -324,7 +321,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				13F41F8C22669F8600556B6F /* Ancestor.swift in Sources */,
-				27705E7620C7D4180048DCC1 /* AncestorSummary.swift in Sources */,
 				13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */,
 				279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */,
 				27705E7420C7CAD50048DCC1 /* AncestorTableViewCell.swift in Sources */,

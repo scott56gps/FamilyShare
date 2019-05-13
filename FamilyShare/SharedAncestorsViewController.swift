@@ -15,7 +15,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Properties
     let ancestorModel = AncestorModel()
-    var sharedAncestorSummaries = [AncestorSummary]()
+    var sharedAncestors = [Ancestor]()
     var templeCard: PDFDocument?
     let defaults = UserDefaults.standard
     
@@ -54,7 +54,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             shareButton.isEnabled = false
             reserveButton.isEnabled = false
             shareButton.alpha = 0.5
-            sharedAncestorSummaries.removeAll()
+            sharedAncestors.removeAll()
             ancestorTableView.reloadData()
         } else {
             infoLabel.isHidden = true
@@ -76,7 +76,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sharedAncestorSummaries.count
+        return sharedAncestors.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -85,7 +85,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             fatalError("Unable to downcast tableViewCell to AncestorTableViewCell")
         }
         
-        let ancestor = sharedAncestorSummaries[indexPath.row]
+        let ancestor = sharedAncestors[indexPath.row]
         
         // Configure Cell Selection Color
         let selectionView = UIView(frame: cell.frame)
@@ -131,14 +131,14 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         if let templeCardPdf = PDFDocument(url: urls[0]) {
             // Populate a new Ancestor Object
             let ancestorToShare = Ancestor(templeCardPdf)
-            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { (error: String?, postedAncestorSummary: AncestorSummary?) in
+            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { (error: String?, postedAncestor: Ancestor?) in
                 if (error != nil) {
                     debugPrint(error!)
                     return
                 }
                 
-                if let ancestorSummary = postedAncestorSummary {
-                    self.sharedAncestorSummaries.append(ancestorSummary)
+                if let ancestor = postedAncestor {
+                    self.sharedAncestors.append(ancestor)
                     self.ancestorTableView.reloadData()
                 }
             }
@@ -174,23 +174,23 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             return
         }
         
-        guard let selectedAncestorSummaryIndexPath = ancestorTableView.indexPathForSelectedRow else {
+        guard let selectedAncestorIndexPath = ancestorTableView.indexPathForSelectedRow else {
             print("There is no selected row")
             return
         }
         
-        let selectedAncestorSummary = sharedAncestorSummaries[selectedAncestorSummaryIndexPath.row]
+        let selectedAncestor = sharedAncestors[selectedAncestorIndexPath.row]
         
-        ancestorModel.reserveAncestor(ancestorSummary: selectedAncestorSummary, userId: userId) { (reservedAncestorSummary: AncestorSummary?) in
-            guard reservedAncestorSummary != nil else {
-                print("There was an error in reserving ancestorSummary: \(selectedAncestorSummary)")
+        ancestorModel.reserveAncestor(ancestor: selectedAncestor, userId: userId) { (reservedAncestor: Ancestor?) in
+            guard reservedAncestor != nil else {
+                print("There was an error in reserving ancestorSummary: \(selectedAncestor)")
                 return
             }
             
             self.deselectTableViewCells()
             
-            // Remove the reservedAncestorSummary from the ancestorSummaries
-            self.sharedAncestorSummaries.remove(at: selectedAncestorSummaryIndexPath.row)
+            // Remove the reservedAncestor from the ancestorSummaries
+            self.sharedAncestors.remove(at: selectedAncestorIndexPath.row)
             self.ancestorTableView.reloadData()
             
             // Set the reserved tab badge to the number of reserved ancestors
@@ -204,20 +204,20 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Private methods
     private func downloadAvailableAncestors() {
-        ancestorModel.getAvailableAncestorSummaries() { (error: Error?, availableAncestors: [AncestorSummary]?) in
+        ancestorModel.getAvailableAncestorSummaries() { (error: Error?, availableAncestors: [Ancestor]?) in
             guard error == nil else {
                 print(error as Any)
                 return
             }
             
-            guard availableAncestors != nil else {
-                // There was an error in initializing an array of type AncestorSummary
-                print("There was an error in initializing an array of type AncestorSummary")
+            if let availableAncestors = availableAncestors {
+                self.sharedAncestors = availableAncestors
+                self.ancestorTableView.reloadData()
+            } else {
+                // There was an error in initializing an array of type Ancestor
+                print("There was an error in initializing an array of type Ancestor")
                 return
             }
-            
-            self.sharedAncestorSummaries = availableAncestors!
-            self.ancestorTableView.reloadData()
         }
     }
     
@@ -244,9 +244,11 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
             var ids = [Int]()
             for indexPath in selectedIndexPaths {
-                // Make an AncestorDTO for the Ancestor at this indexPath
-                let retrievedAncestor = sharedAncestorSummaries[indexPath.row]
-                ids.append(retrievedAncestor.id)
+                // Get the id for this ancestor
+                let retrievedAncestor = sharedAncestors[indexPath.row]
+                if let id = retrievedAncestor.id {
+                    ids.append(id)
+                }
             }
             return ids
         } else {

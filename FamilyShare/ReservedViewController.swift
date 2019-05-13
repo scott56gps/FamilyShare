@@ -133,6 +133,16 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: Actions
     @IBAction func showTempleActionSheet(_ sender: UIButton) {
+        guard let userId = defaults.string(forKey: "User Id") else {
+            print("User Id is nil")
+            return
+        }
+        
+        guard let selectedAncestorIndexPath = ancestorTableView.indexPathForSelectedRow else {
+            print("There is no selected row")
+            return
+        }
+        
         // Initialize Alert Controller
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
         
@@ -145,7 +155,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         
         let printFORAction = UIAlertAction(title: "Print", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in
-            self.downloadTempleCard()
+            ancestorModel.getTempleCardForAncestor(ancestor: <#T##Ancestor#>, <#T##callback: (String?, PDFDocument?) -> Void##(String?, PDFDocument?) -> Void#>)
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler:{(UIAlertAction) -> Void in
@@ -163,7 +173,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: Private Functions
     private func downloadReservedAncestors() {
-        ancestorModel.getReservedAncestorSummaries(forUserId: userId!) { (error: Error?, reservedAncestors: [AncestorSummary]?) in
+        ancestorModel.getReservedAncestorSummaries(forUserId: userId!) { (error: Error?, reservedAncestors: [Ancestor]?) in
             guard error == nil else {
                 debugPrint(error!)
                 return
@@ -173,15 +183,15 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
                 self.ancestors = reservedAncestors
                 self.ancestorTableView.reloadData()
             } else {
-                // There was an error in initializing an array of type AncestorSummary
-                debugPrint("There was an error in initializing an array of type AncestorSummary")
+                // There was an error in initializing an array of type Ancestor
+                debugPrint("There was an error in initializing an array of type Ancestor")
                 return
             }
         }
     }
     
     private func downloadTempleCard(_ callback: @escaping (String?, PDFDocument?) -> Void) {
-        guard let userId = defaults.string(forKey: "User Id") else {
+        guard defaults.string(forKey: "User Id") != nil else {
             fatalError("User Id was not found")
         }
         
@@ -200,7 +210,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    private func printTempleCard(templeCard: PDFDocument, selectedAncestor: AncestorSummary) {
+    private func printTempleCard(templeCard: PDFDocument, selectedAncestor: Ancestor) {
         // Configure the controller
         let printController = UIPrintInteractionController.shared
         if let pdfUrl = templeCard.documentURL {

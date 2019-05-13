@@ -13,11 +13,11 @@ class Ancestor {
     var id: Int?
     var givenNames: String
     var surname: String
-    var neededOrdinance: String
+    var neededOrdinance: Ordinance
     var gender: String
     var familySearchId: String
     
-    init(id: Int?, givenNames: String, surname: String, neededOrdinance: String, gender: String, familySearchId: String) {
+    init(id: Int?, givenNames: String, surname: String, neededOrdinance: Ordinance, gender: String, familySearchId: String) {
         self.id = id
         self.givenNames = givenNames
         self.surname = surname
@@ -43,10 +43,12 @@ class Ancestor {
             }
         }
         
-        func parseOrdinanceNeeded(_ pdfLines: [String], _ digitRegex: NSRegularExpression) -> String? {
+        func parseOrdinanceNeeded(_ pdfLines: [String]) -> Ordinance? {
             guard var ordinanceIndex = pdfLines.firstIndex(of: "Baptism") else {
                 return nil
             }
+            
+            let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
             
             // For each of the 5 possible ordinances
             for i in 0..<4 {
@@ -60,19 +62,16 @@ class Ancestor {
                     ordinanceIndex = ordinanceIndex + 2
                 }
             }
-            return pdfLines[ordinanceIndex]
+            
+            if let parsedOrdinance = Ordinance(rawValue: pdfLines[ordinanceIndex]) {
+                return parsedOrdinance
+            } else {
+                return nil
+            }
+//            return pdfLines[ordinanceIndex]
         }
         
-        func parseName(_ pdfLines: [String], _ forOrdinance: String) -> (givenNames: String, surname: String)? {
-            //        for i in 0..<pdfLines.count {
-            //            if pdfLines[i].contains("Given Names") {
-            //                let givenNames = pdfLines[i + 3]
-            //                let surname = pdfLines[i + 4]
-            //
-            //                return givenNames + " " + surname
-            //            }
-            //        }
-            
+        func parseName(_ pdfLines: [String]) -> (givenNames: String, surname: String)? {
             guard let givenNameIndex = pdfLines.firstIndex(of: "Given Names") else {
                 return nil
             }
@@ -81,17 +80,11 @@ class Ancestor {
             
             let numberOfMatches = parentsRegex.numberOfMatches(in: pdfLines[givenNameIndex + 2], options: [], range: NSMakeRange(0, pdfLines[givenNameIndex + 2].count))
             
-//            return forOrdinance == "Sealing To Parents" ? (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4]) : (pdfLines[givenNameIndex + 2], pdfLines[givenNameIndex + 3])
             return numberOfMatches <= 1 ? (pdfLines[givenNameIndex + 2], pdfLines[givenNameIndex + 3]) : (pdfLines[givenNameIndex + 3], pdfLines[givenNameIndex + 4])
         }
         
-        func parseFamilySearchId(_ pdfString: String, familySearchIdRegex: NSRegularExpression) -> String {
-//            for i in 0..<pdfLines.count {
-//                if pdfLines[i].contains("Birth") {
-//                    return pdfLines[i - 1]
-//                }
-//            }
-
+        func parseFamilySearchId(_ pdfString: String) -> String {
+            let familySearchIdRegex = try! NSRegularExpression(pattern: "[A-Z0-9]+-[A-Z0-9]+", options: NSRegularExpression.Options.caseInsensitive)
             let matchedFamilySearchId = familySearchIdRegex.firstMatch(in: pdfString, options: [], range: NSMakeRange(0, pdfString.count))
             
             let matchedString = String(pdfString[Range(matchedFamilySearchId!.range, in: pdfString)!])
@@ -102,18 +95,13 @@ class Ancestor {
         // Get the parsed lines for the document
         var pdfLines = parsePDF(pdfDocument: templeCardPdf)
         
-        let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
-        let familySearchIdRegex = try! NSRegularExpression(pattern: "[A-Z0-9]+-[A-Z0-9]+", options: NSRegularExpression.Options.caseInsensitive)
-        
         // Get the ordinanceNeeded for this ancestor
-        guard let neededOrdinance = parseOrdinanceNeeded(pdfLines, digitRegex) else {
+        guard let neededOrdinance = parseOrdinanceNeeded(pdfLines) else {
             fatalError("Ancestor ordinanceNeeded was not parsed from PDF String")
         }
         
-        self.neededOrdinance = neededOrdinance
-        
         // Get the name of this ancestor
-        guard let nameTuple = parseName(pdfLines, neededOrdinance) else {
+        guard let nameTuple = parseName(pdfLines) else {
             fatalError("Ancestor name was not parsed from PDF String")
         }
         
@@ -121,11 +109,44 @@ class Ancestor {
         self.surname = nameTuple.surname
         
         // Get the FamilySearch ID of this ancestor
-        let familySearchId = parseFamilySearchId(templeCardPdf.string!, familySearchIdRegex: familySearchIdRegex)
+        self.familySearchId = parseFamilySearchId(templeCardPdf.string!)
         
-        self.familySearchId = familySearchId
+        self.neededOrdinance = neededOrdinance
         
         // Get the gender of this ancestor
         self.gender = pdfLines[pdfLines.count - 3]
+    }
+    
+    init?(ancestorDictionary: [String: Any]) {
+        guard let id = ancestorDictionary["id"]! as? Int else {
+            return nil
+        }
+        guard let givenName = ancestorDictionary["given_name"]! as? String else {
+            return nil
+        }
+        guard let surname = ancestorDictionary["surname"]! as? String else {
+            return nil
+        }
+        guard let gender = ancestorDictionary["gender"]! as? String else {
+            return nil
+        }
+        guard let ordinanceString = ancestorDictionary["ordinance_needed"]! as? String else {
+            return nil
+        }
+        guard let familySearchId = ancestorDictionary["fs_id"]! as? String else {
+            return nil
+        }
+        
+        self.id = id
+        self.givenNames = givenName
+        self.surname = surname
+        self.gender = gender
+        self.familySearchId = familySearchId
+        
+        if let ordinance = Ordinance(rawValue: ordinanceString) {
+            self.neededOrdinance = ordinance
+        } else {
+            return nil
+        }
     }
 }
