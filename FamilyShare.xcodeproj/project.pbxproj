@@ -14,13 +14,11 @@
 		13E0132C21C08875009BC28D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E0132B21C08874009BC28D /* Default-568h@2x.png */; };
 		13F41F8C22669F8600556B6F /* Ancestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F41F8B22669F8600556B6F /* Ancestor.swift */; };
 		2702DB9020E42A2A00A193D5 /* ReservedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */; };
-		2702DB9420E4853D00A193D5 /* blueCheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 2702DB9320E4853D00A193D5 /* blueCheckmark.png */; };
 		27705E5220C7C8AF0048DCC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E5120C7C8AF0048DCC1 /* AppDelegate.swift */; };
 		27705E5420C7C8AF0048DCC1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E5320C7C8AF0048DCC1 /* ViewController.swift */; };
 		27705E5720C7C8AF0048DCC1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27705E5520C7C8AF0048DCC1 /* Main.storyboard */; };
 		27705E5920C7C8B90048DCC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27705E5820C7C8B90048DCC1 /* Assets.xcassets */; };
 		27705E7420C7CAD50048DCC1 /* AncestorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */; };
-		27705E7620C7D4180048DCC1 /* AncestorSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E7520C7D4180048DCC1 /* AncestorSummary.swift */; };
 		279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F5BEA20E6D34200DA7396 /* TabBarController.swift */; };
 		279F5BEF20E83C7200DA7396 /* shareIconBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BEE20E83C7100DA7396 /* shareIconBlack.png */; };
 		279F5BF120E83C7900DA7396 /* shareIconBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BF020E83C7900DA7396 /* shareIconBlue.png */; };
@@ -51,7 +49,6 @@
 		1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FamilyShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C172981C9446BC2EB1A425C /* Pods-FamilyShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.release.xcconfig"; sourceTree = "<group>"; };
 		2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedViewController.swift; sourceTree = "<group>"; };
-		2702DB9320E4853D00A193D5 /* blueCheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueCheckmark.png; sourceTree = SOURCE_ROOT; };
 		27705E4E20C7C8AF0048DCC1 /* FamilyShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FamilyShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27705E5120C7C8AF0048DCC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		27705E5320C7C8AF0048DCC1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -59,7 +56,6 @@
 		27705E5820C7C8B90048DCC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27705E5D20C7C8B90048DCC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorTableViewCell.swift; sourceTree = "<group>"; };
-		27705E7520C7D4180048DCC1 /* AncestorSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorSummary.swift; sourceTree = "<group>"; };
 		279F5BEA20E6D34200DA7396 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		279F5BEE20E83C7100DA7396 /* shareIconBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlack.png; sourceTree = SOURCE_ROOT; };
 		279F5BF020E83C7900DA7396 /* shareIconBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlue.png; sourceTree = SOURCE_ROOT; };
@@ -130,12 +126,10 @@
 				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
 				1321DE2B2266484D00258E35 /* AncestorModel.swift */,
 				13F41F8B22669F8600556B6F /* Ancestor.swift */,
-				27705E7520C7D4180048DCC1 /* AncestorSummary.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
 				27705E5820C7C8B90048DCC1 /* Assets.xcassets */,
 				279F5BEE20E83C7100DA7396 /* shareIconBlack.png */,
 				279F5BF020E83C7900DA7396 /* shareIconBlue.png */,
-				2702DB9320E4853D00A193D5 /* blueCheckmark.png */,
 				27705E5D20C7C8B90048DCC1 /* Info.plist */,
 			);
 			path = FamilyShare;
@@ -256,7 +250,6 @@
 			files = (
 				279F5BEF20E83C7200DA7396 /* shareIconBlack.png in Resources */,
 				27705E5920C7C8B90048DCC1 /* Assets.xcassets in Resources */,
-				2702DB9420E4853D00A193D5 /* blueCheckmark.png in Resources */,
 				27705E5720C7C8AF0048DCC1 /* Main.storyboard in Resources */,
 				13E0132C21C08875009BC28D /* Default-568h@2x.png in Resources */,
 				279F5BF120E83C7900DA7396 /* shareIconBlue.png in Resources */,
@@ -328,7 +321,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				13F41F8C22669F8600556B6F /* Ancestor.swift in Sources */,
-				27705E7620C7D4180048DCC1 /* AncestorSummary.swift in Sources */,
 				13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */,
 				279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */,
 				27705E7420C7CAD50048DCC1 /* AncestorTableViewCell.swift in Sources */,

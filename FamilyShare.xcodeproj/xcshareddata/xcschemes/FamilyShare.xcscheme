@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "27705E6120C7C8B90048DCC1"
+               BlueprintIdentifier = "133DC77B2279176E008AB65B"
                BuildableName = "FamilyShareTests.xctest"
                BlueprintName = "FamilyShareTests"
                ReferencedContainer = "container:FamilyShare.xcodeproj">

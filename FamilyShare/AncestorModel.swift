@@ -13,31 +13,46 @@ import Alamofire
 class AncestorModel {
     var url = URL(string: "https://familyshare-server.herokuapp.com")!
     
-    func getAvailableAncestorSummaries(_ callback: @escaping ([AncestorSummary]) -> Void) {
+    func getAvailableAncestorSummaries(_ callback: @escaping (Error?, [Ancestor]?) -> Void) {
         // Make a request to get the available ancestor summaries
         let availableUrl = url.appendingPathComponent("ancestors")
-        getAncestorSummaries(summaryUrl: availableUrl) { (ancestorSummaries: [AncestorSummary]?) -> Void in
-            if ancestorSummaries != nil {
-                callback(ancestorSummaries!)
+        getAncestors(summaryUrl: availableUrl) { (error: Error?, ancestors: [Ancestor]?) -> Void in
+            guard error == nil else {
+                callback(error, nil)
+                return
             }
+            
+            guard ancestors != nil else {
+                callback(nil, nil)
+                return
+            }
+            
+            callback(nil, ancestors)
         }
-        
     }
     
-    func getReservedAncestorSummaries(forUserId: Int, _ callback: @escaping ([AncestorSummary]) -> Void) {
+    func getReservedAncestorSummaries(forUserId: Int, _ callback: @escaping (Error?, [Ancestor]?) -> Void) {
         // Make a request to get the reserved ancestor summaries for this userId
         let reservedUrl = url.appendingPathComponent("ancestors/\(String(forUserId))")
-        getAncestorSummaries(summaryUrl: reservedUrl) { (ancestorSummaries: [AncestorSummary]?) -> Void in
-            if ancestorSummaries != nil {
-                callback(ancestorSummaries!)
+        getAncestors(summaryUrl: reservedUrl) { (error: Error?, ancestors: [Ancestor]?) -> Void in
+            guard error == nil else {
+                callback(error, nil)
+                return
             }
+            
+            guard ancestors != nil else {
+                callback(nil, nil)
+                return
+            }
+            
+            callback(nil, ancestors)
         }
     }
     
-    func getTempleCardForAncestor(ancestor: Ancestor, _ callback: @escaping (PDFDocument?) -> Void) {
+    func getTempleCardForAncestor(ancestor: Ancestor, _ callback: @escaping (String?, PDFDocument?) -> Void) {
         // Set the parameters for the GET request
         guard let ancestorId = ancestor.id else {
-            callback(nil)
+            callback("Could not retrieve ancestorId", nil)
             return
         }
         
@@ -53,26 +68,26 @@ class AncestorModel {
         
         // Make an Alamofire GET request to get the temple card for this ancestorId
         Alamofire.download(templeCardUrl, to: destination).response { response in
-            if response.error == nil, let fileURL = response.destinationURL {
-                print ("PDF Downloaded!")
+            if response.error == nil {
+                guard let fileURL = response.destinationURL else {
+                    callback("fileURL is nil", nil)
+                    return
+                }
                 
                 if let pdf = PDFDocument(url: fileURL) {
-                    callback(pdf)
+                    callback(nil, pdf)
+                } else {
+                    callback("Could not retrieve PDFDocument from url: \(fileURL)", nil)
                 }
             } else {
-                callback(nil)
+                callback("There was an error in downloading the PDF", nil)
             }
         }
     }
     
-    func reserveAncestor(ancestor: Ancestor, userId: Int, _ callback: @escaping (AncestorSummary?) -> Void) {
-        guard let ancestorId = ancestor.id else {
-            callback(nil)
-            return
-        }
-        
+    func reserveAncestor(ancestor: Ancestor, userId: String, _ callback: @escaping (Ancestor?) -> Void) {
         let parameters: [String: AnyObject] = [
-            "ancestorId": ancestorId as AnyObject,
+            "ancestorId": ancestor.id as AnyObject,
             "userId": userId as AnyObject
         ]
         
@@ -85,10 +100,10 @@ class AncestorModel {
                 case .success:
                     let ancestorDictionary = response.result.value as! Dictionary<String, Any>
                     
-                    if let ancestorSummary = AncestorSummary(ancestorDictionary: ancestorDictionary) {
-                        callback(ancestorSummary)
+                    if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
+                        callback(ancestor)
                     } else {
-                        print("Did not instantiate AncestorSummary for dictionary: \(ancestorDictionary)")
+                        print("Did not instantiate Ancestor for dictionary: \(ancestorDictionary)")
                     }
                 case .failure(let error):
                     print(error)
@@ -97,7 +112,7 @@ class AncestorModel {
         }
     }
     
-    func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (AncestorSummary?) -> Void) {
+    func postAncestor(templeCard: PDFDocument, ancestor: Ancestor, _ callback: @escaping (String?, Ancestor?) -> Void) {
         // Make the share url
         let shareUrl = url.appendingPathComponent("ancestor")
         
@@ -106,7 +121,7 @@ class AncestorModel {
         parameters["givenNames"] = ancestor.givenNames
         parameters["surname"] = ancestor.surname
         parameters["gender"] = ancestor.gender
-        parameters["ordinanceNeeded"] = ancestor.neededOrdinance
+        parameters["ordinanceNeeded"] = ancestor.neededOrdinance.rawValue
         parameters["familySearchId"] = ancestor.familySearchId
         
         // Using Alamofire
@@ -120,29 +135,44 @@ class AncestorModel {
             case .success(let upload, _, _):
                 upload.responseJSON { response in
                     debugPrint(response)
-                    
+                    if let ancestorDictionary = response.result.value as? Dictionary<String, Any> {
+                        // Create an Ancestor Object
+                        if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
+                            callback(nil, ancestor)
+                        } else {
+                            callback("Did not create Ancestor for Dictionary: \(ancestorDictionary)", nil)
+                        }
+                    } else {
+                        debugPrint("Did not create AncestorDictionary for value: \(response.result.value)")
+                        callback("Did not create AncestorDictionary for value: \(response.result.value)", nil)
+                    }
                 }
-            case .failure(let encodingError):
-                print(encodingError)
+            case .failure(let error):
+                print(error)
+                callback(error.localizedDescription, nil)
             }
         })
     }
     
-    // MARK: Private Functions
-    private func getAncestorSummaries(summaryUrl: URL, _ callback: @escaping ([AncestorSummary]?) -> Void) {
+    // MARK: Private Functions    
+    private func getAncestors(summaryUrl: URL, _ callback: @escaping (Error?, [Ancestor]?) -> Void) {
         Alamofire.request(summaryUrl).responseJSON { response in
-            if let json = response.result.value {
-                let ancestorDictionaries = json as! [Dictionary<String, Any>]
-                var ancestorSummaries = [AncestorSummary]()
+            switch response.result {
+            case .success:
+                var ancestors = [Ancestor]()
+                let ancestorDictionaries = response.result.value as! [Dictionary<String, Any>]
                 
                 for ancestorDictionary in ancestorDictionaries {
-                    // Create an AncestorSummary Object from the parts that we got from the JSON
-                    if let ancestorSummary = AncestorSummary(ancestorDictionary: ancestorDictionary) {
-                        ancestorSummaries.append(ancestorSummary)
+                    // Create an Ancestor Object from the parts that we got from the JSON
+                    if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
+                        ancestors.append(ancestor)
                     }
                 }
                 
-                callback(ancestorSummaries)
+                callback(nil, ancestors)
+                
+            case .failure(let error):
+                callback(error, nil)
             }
         }
     }

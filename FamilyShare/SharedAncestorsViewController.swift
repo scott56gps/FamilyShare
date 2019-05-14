@@ -14,10 +14,9 @@ import Alamofire
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
     
     //MARK: Properties
-    var ancestorSummaries = [AncestorSummary]()
-    var ancestorToShare: Ancestor?
+    let ancestorModel = AncestorModel()
+    var sharedAncestors = [Ancestor]()
     var templeCard: PDFDocument?
-    var selectedAncestorsCount = 0
     let defaults = UserDefaults.standard
     
     // MARK: Outlets
@@ -55,7 +54,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             shareButton.isEnabled = false
             reserveButton.isEnabled = false
             shareButton.alpha = 0.5
-            ancestorSummaries.removeAll()
+            sharedAncestors.removeAll()
             ancestorTableView.reloadData()
         } else {
             infoLabel.isHidden = true
@@ -77,7 +76,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return ancestorSummaries.count
+        return sharedAncestors.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,26 +85,20 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             fatalError("Unable to downcast tableViewCell to AncestorTableViewCell")
         }
         
-        let ancestor = ancestorSummaries[indexPath.row]
+        let ancestor = sharedAncestors[indexPath.row]
         
         // Configure Cell Selection Color
         let selectionView = UIView(frame: cell.frame)
         selectionView.backgroundColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
         
         // Configure Cell Selection Checkmark
-        guard let image = UIImage(named: "blueCheckmark.png") else {
-            fatalError("PNG not loaded")
-        }
+        let blueCheckmark = #imageLiteral(resourceName: "Blue Checkmark")
         
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: blueCheckmark)
         imageView.frame = CGRect(x: 4, y: 26, width: 24, height: 24)
         selectionView.addSubview(imageView)
         
         cell.selectedBackgroundView = selectionView
-        
-        // Configure Date Formatter
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "d MMMM YYYY"
         
         cell.ancestorNameLabel.text = ancestor.givenNames + " " + ancestor.surname
         cell.nextOrdinanceLabel.text = ancestor.neededOrdinance.rawValue
@@ -123,42 +116,32 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Increment selected ancestor count
-        selectedAncestorsCount += 1
-        
         // Enable Reserve Button
-        reserveButton.isEnabled = true
-        reserveButton.alpha = 1.0
+        enableReserveButton()
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        // Decrement selected ancestor count
-        selectedAncestorsCount -= 1
-        
         // Check to see if we should disable the reserve button
-        if (selectedAncestorsCount == 0) {
-            reserveButton.isEnabled = false
-            reserveButton.alpha = 0.5
-        }
+        ancestorTableView.indexPathsForSelectedRows?.count == 0 ? disableReserveButton() : enableReserveButton()
     }
     
     // MARK: UIDocumentPickerDelegate Methods
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         // Load the PDF
         if let templeCardPdf = PDFDocument(url: urls[0]) {
-            templeCard = templeCardPdf
-            // Parse the PDF
-            //let templeOrdinanceInformation = parsePDF(pdfDocument: templeCardPdf)
-//            let pdfLines = parsePDF(pdfDocument: templeCardPdf)
-//            let digitRegex = try! NSRegularExpression(pattern: "\\d", options: NSRegularExpression.Options.caseInsensitive)
-            
-//            print(pdfLines)
-//            print(pdfLines[pdfLines.count - 2])
-            
             // Populate a new Ancestor Object
-            ancestorToShare = Ancestor(templeCardPdf)
-            
-            uploadFile()
+            let ancestorToShare = Ancestor(templeCardPdf)
+            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { (error: String?, postedAncestor: Ancestor?) in
+                if (error != nil) {
+                    debugPrint(error!)
+                    return
+                }
+                
+                if let ancestor = postedAncestor {
+                    self.sharedAncestors.append(ancestor)
+                    self.ancestorTableView.reloadData()
+                }
+            }
         } else {
             // Throw an error
             fatalError("PDF Document creation failed")
@@ -186,117 +169,65 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     @IBAction func reserveAncestors(_ sender: UIButton) {
-        if let userId = defaults.string(forKey: "User Id") {
-            // Gather the ids of the selected ancestors
-//            let ids = getIdsForSelectedAncestors()
-            
-            guard let selectedAncestorSummaryIndexPath = ancestorTableView.indexPathForSelectedRow else {
-                print("There is no selected row")
+        guard let userId = defaults.string(forKey: "User Id") else {
+            print("User Id is nil")
+            return
+        }
+        
+        guard let selectedAncestorIndexPath = ancestorTableView.indexPathForSelectedRow else {
+            print("There is no selected row")
+            return
+        }
+        
+        let selectedAncestor = sharedAncestors[selectedAncestorIndexPath.row]
+        
+        ancestorModel.reserveAncestor(ancestor: selectedAncestor, userId: userId) { (reservedAncestor: Ancestor?) in
+            guard reservedAncestor != nil else {
+                print("There was an error in reserving ancestorSummary: \(selectedAncestor)")
                 return
             }
             
-            let selectedAncestorSummary = ancestorSummaries[selectedAncestorSummaryIndexPath.row]
+            self.deselectTableViewCells()
             
+            // Remove the reservedAncestor from the ancestorSummaries
+            self.sharedAncestors.remove(at: selectedAncestorIndexPath.row)
+            self.ancestorTableView.reloadData()
             
+            // Set the reserved tab badge to the number of reserved ancestors
+            if let tabItems = self.tabBarController?.tabBar.items {
+                let reservedTab = tabItems[1]
+                
+                self.setBadgeNumber(tabBarItem: reservedTab, number: 1)
+            }
         }
     }
     
     //MARK: Private methods
     private func downloadAvailableAncestors() {
-        print("In DownloadAvailableAncestors")
-        // Make an Alamofire request to get the available ancestor data
-        Alamofire.request("https://postgres-query-ancestors.herokuapp.com/available").responseJSON { response in
-            guard response.result.isSuccess else {
-                print("GET request for available ancestors failed: \(String(describing: response.result.error))")
+        ancestorModel.getAvailableAncestorSummaries() { (error: Error?, availableAncestors: [Ancestor]?) in
+            guard error == nil else {
+                print(error as Any)
                 return
             }
             
-            guard let value = response.result.value else {
-                print("Data received was not able to be formed correctly")
-                return
-            }
-            
-            if let array = value as? [Any] {
-                var receivedAncestors = [AncestorSummary]()
-                for object in array {
-                    let jsonObject = object as? [String: Any]
-                    let id = jsonObject!["id"]! as! Int
-                    let givenName = jsonObject!["given_name"]! as! String
-                    let surname =  jsonObject!["surname"] as! String
-                    let gender = jsonObject!["gender"] as! String
-                    let neededOrdinance = Ordinance(rawValue: jsonObject!["ordinance_needed"]! as! String)!
-                    
-                    // Create an Ancestor Object from the parts that we got from the JSON
-                    guard let ancestor = AncestorSummary(id: id, givenNames: givenName, surname: surname, gender: gender, neededOrdinance: neededOrdinance) else {
-                        fatalError("There was an error in instantiating ancestor with name \(givenName + " " + surname)")
-                    }
-                    
-                    receivedAncestors.append(ancestor)
-                }
-                
-                self.ancestorSummaries = receivedAncestors
+            if let availableAncestors = availableAncestors {
+                self.sharedAncestors = availableAncestors
                 self.ancestorTableView.reloadData()
+            } else {
+                // There was an error in initializing an array of type Ancestor
+                print("There was an error in initializing an array of type Ancestor")
+                return
             }
         }
     }
     
-    private func uploadFile() {
-        // Make an HTTP request
-        let url = URL(string: "https://postgres-query-ancestors.herokuapp.com/share")!
-        
-        // Make parameters
-        var parameters = [String: String]()
-        parameters["givenNames"] = ancestorToShare!.givenNames
-        parameters["surname"] = ancestorToShare!.surname
-        parameters["gender"] = ancestorToShare!.gender
-        parameters["ordinanceNeeded"] = ancestorToShare!.neededOrdinance
-        parameters["familySearchId"] = ancestorToShare!.familySearchId
-        
-        // Using Alamofire
-        Alamofire.upload(multipartFormData: { multipartFormData in
-            multipartFormData.append(self.templeCard!.documentURL!, withName: "templePdf", fileName: "\(self.ancestorToShare!.familySearchId).pdf", mimeType: "application/pdf")
-            for (key, value) in parameters {
-                multipartFormData.append(value.data(using: .utf8)!, withName: key)
-            }
-        },
-         to: url,
-         encodingCompletion: { encodingResult in
-            switch encodingResult {
-                case .success(let upload, _, _):
-                    upload.responseString { response in
-                        debugPrint(response)
-                                    
-                        // Update the available ancestors
-                        self.downloadAvailableAncestors()
-                    }
-                case .failure(let encodingError):
-                    print(encodingError)
-            }
-        })
-    }
-    
-    private func parsePDF(pdfDocument: PDFDocument) -> [String] {
-        // Get an array of lines of the PDF String
-        if let pdfString = pdfDocument.string {
-            var pdfLines = pdfString.components(separatedBy: CharacterSet.newlines)
-            
-            // Trim the whitespace in the array of pdfLines
-            pdfLines = pdfLines.map {
-                $0.trimmingCharacters(in: CharacterSet.whitespaces)
-            }
-            
-            return pdfLines
-        } else {
-            fatalError("PDF String could not be extracted using the iOS API")
-        }
-    }
-    
-    private func setBadge() {
-        if let tabItems = self.tabBarController?.tabBar.items {
-            let reservedTab = tabItems[1]
-            reservedTab.badgeValue = String(self.selectedAncestorsCount)
-            reservedTab.badgeColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
-        }
+    /**********************************************
+     SET BADGE NUMBER
+     Set the badge for a tab bar item to a number
+     **********************************************/
+    private func setBadgeNumber(tabBarItem: UITabBarItem, number: Int) {
+        tabBarItem.badgeValue = String(number)
+        tabBarItem.badgeColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
     }
     
     private func deselectTableViewCells() {
@@ -305,9 +236,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 self.ancestorTableView.deselectRow(at: indexPath, animated: true)
             }
             
-            self.selectedAncestorsCount = 0
-            self.reserveButton.isEnabled = false
-            self.reserveButton.alpha = 0.5
+            disableReserveButton()
         }
     }
     
@@ -315,13 +244,25 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
             var ids = [Int]()
             for indexPath in selectedIndexPaths {
-                // Make an AncestorDTO for the Ancestor at this indexPath
-                let retrievedAncestor = ancestorSummaries[indexPath.row]
-                ids.append(retrievedAncestor.id)
+                // Get the id for this ancestor
+                let retrievedAncestor = sharedAncestors[indexPath.row]
+                if let id = retrievedAncestor.id {
+                    ids.append(id)
+                }
             }
             return ids
         } else {
             fatalError("Could not retrieve indexPathsForSelectedRows")
         }
+    }
+    
+    private func enableReserveButton() {
+        reserveButton.isEnabled = true
+        reserveButton.alpha = 1.0
+    }
+    
+    private func disableReserveButton() {
+        reserveButton.isEnabled = false
+        reserveButton.alpha = 0.5
     }
 }
