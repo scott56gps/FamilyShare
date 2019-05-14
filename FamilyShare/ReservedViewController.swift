@@ -48,7 +48,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
             ancestors.removeAll()
             ancestorTableView.reloadData()
         } else {
-            self.userId = defaultUserId
+            userId = defaultUserId
             infoLabel.isHidden = true
             downloadReservedAncestors()
         }
