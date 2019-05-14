@@ -78,12 +78,10 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         let selectionView = UIView(frame: cell.frame)
         selectionView.backgroundColor = UIColor(red: 252.0/255.0, green: 179.0/255.0, blue: 75.0/255.0, alpha: 1.0)
         
-        // Configure Cell Selection Checkmark
-        guard let image = UIImage(named: "blueCheckmark.png") else {
-            fatalError("PNG not loaded")
-        }
+        // Configure Cell Selection Checkmark        
+        let blueCheckmark = #imageLiteral(resourceName: "Blue Checkmark")
         
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: blueCheckmark)
         imageView.frame = CGRect(x: 4, y: 26, width: 24, height: 24)
         selectionView.addSubview(imageView)
         
@@ -133,13 +131,13 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: Actions
     @IBAction func showTempleActionSheet(_ sender: UIButton) {
-        guard let userId = defaults.string(forKey: "User Id") else {
-            print("User Id is nil")
+        guard defaults.string(forKey: "User Id") != nil else {
+            debugPrint("User Id is nil")
             return
         }
         
-        guard let selectedAncestorIndexPath = ancestorTableView.indexPathForSelectedRow else {
-            print("There is no selected row")
+        guard let selectedAncestor = getSelectedAncestor() else {
+            debugPrint("Expected a selected Ancestor, but there was none found")
             return
         }
         
@@ -155,7 +153,18 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         
         let printFORAction = UIAlertAction(title: "Print", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in
-            ancestorModel.getTempleCardForAncestor(ancestor: <#T##Ancestor#>, <#T##callback: (String?, PDFDocument?) -> Void##(String?, PDFDocument?) -> Void#>)
+            self.ancestorModel.getTempleCardForAncestor(ancestor: selectedAncestor) { (error: String?, templeCard: PDFDocument?) in
+                guard error == nil else {
+                    debugPrint(error!)
+                    return
+                }
+                
+                if let templeCard = templeCard {
+                    self.printTempleCard(templeCard: templeCard, selectedAncestor: selectedAncestor)
+                } else {
+                    debugPrint("Expected PDFDocument, but instead found nil")
+                }
+            }
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler:{(UIAlertAction) -> Void in
@@ -187,26 +196,6 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
                 debugPrint("There was an error in initializing an array of type Ancestor")
                 return
             }
-        }
-    }
-    
-    private func downloadTempleCard(_ callback: @escaping (String?, PDFDocument?) -> Void) {
-        guard defaults.string(forKey: "User Id") != nil else {
-            fatalError("User Id was not found")
-        }
-        
-        // Get the selected ancestor
-        guard let selectedAncestor = getSelectedAncestor() else {
-            debugPrint("Failed to retrieve the selected ancestor")
-        }
-        
-        ancestorModel.getTempleCardForAncestor(ancestor: selectedAncestor) { (error: String?, templeCardPdf: PDFDocument?) in
-            if (error != nil) {
-                callback(error!, nil)
-                return
-            }
-            
-            callback(nil, templeCardPdf)
         }
     }
     
