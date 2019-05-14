@@ -12,6 +12,7 @@
 		136B58DB21C2E92C00C8D9FB /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */; };
 		13C3E2A220EBDC4000458251 /* Ordinance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C3E2A120EBDC4000458251 /* Ordinance.swift */; };
 		13E0132C21C08875009BC28D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13E0132B21C08874009BC28D /* Default-568h@2x.png */; };
+		13E1A939228A61E00032D75C /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E1A938228A61E00032D75C /* UserModel.swift */; };
 		13F41F8C22669F8600556B6F /* Ancestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F41F8B22669F8600556B6F /* Ancestor.swift */; };
 		2702DB9020E42A2A00A193D5 /* ReservedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */; };
 		27705E5220C7C8AF0048DCC1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E5120C7C8AF0048DCC1 /* AppDelegate.swift */; };
@@ -44,6 +45,7 @@
 		136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		13C3E2A120EBDC4000458251 /* Ordinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ordinance.swift; sourceTree = "<group>"; };
 		13E0132B21C08874009BC28D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		13E1A938228A61E00032D75C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		13F41F8B22669F8600556B6F /* Ancestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ancestor.swift; sourceTree = "<group>"; };
 		13FDDF5321C2468B00A84F4A /* FamilyShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyShare.entitlements; sourceTree = "<group>"; };
 		1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FamilyShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +126,7 @@
 				136B58DA21C2E92C00C8D9FB /* LogInViewController.swift */,
 				279F5BEA20E6D34200DA7396 /* TabBarController.swift */,
 				27705E5520C7C8AF0048DCC1 /* Main.storyboard */,
+				13E1A938228A61E00032D75C /* UserModel.swift */,
 				1321DE2B2266484D00258E35 /* AncestorModel.swift */,
 				13F41F8B22669F8600556B6F /* Ancestor.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
@@ -330,6 +333,7 @@
 				136B58DB21C2E92C00C8D9FB /* LogInViewController.swift in Sources */,
 				1321DE2C2266484D00258E35 /* AncestorModel.swift in Sources */,
 				27705E5220C7C8AF0048DCC1 /* AppDelegate.swift in Sources */,
+				13E1A939228A61E00032D75C /* UserModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

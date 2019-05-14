@@ -153,7 +153,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
         
         let printFORAction = UIAlertAction(title: "Print", style: UIAlertAction.Style.default, handler: {
             (UIAlertAction) -> Void in
-            self.ancestorModel.getTempleCardForAncestor(ancestor: selectedAncestor) { (error: String?, templeCard: PDFDocument?) in
+            self.ancestorModel.getTempleCardForAncestor(ancestor: selectedAncestor) { [unowned self] (error: String?, templeCard: PDFDocument?) in
                 guard error == nil else {
                     debugPrint(error!)
                     return
@@ -182,7 +182,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: Private Functions
     private func downloadReservedAncestors() {
-        ancestorModel.getReservedAncestorSummaries(forUserId: userId!) { (error: Error?, reservedAncestors: [Ancestor]?) in
+        ancestorModel.getReservedAncestorSummaries(forUserId: userId!) { [unowned self] (error: Error?, reservedAncestors: [Ancestor]?) in
             guard error == nil else {
                 debugPrint(error!)
                 return
@@ -212,7 +212,7 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
             
             printController.printInfo = printInfo
             
-            printController.present(animated: true, completionHandler: { theHandler, didComplete, errorOptional in
+            printController.present(animated: true) { [unowned self] theHandler, didComplete, errorOptional in
                 // Delete the pdf that was downloaded
                 let fileManager = FileManager.default
                 do {
@@ -222,26 +222,26 @@ class ReservedViewController: UIViewController, UITableViewDelegate, UITableView
                     print("Error in deleting pdf")
                     self.deselectTableViewCells()
                 }
-            })
+            }
         } else {
             print("PDF Url could not be loaded")
         }
     }
     
     private func deselectTableViewCells() {
-        if let selectedIndexPaths = self.ancestorTableView.indexPathsForSelectedRows {
+        if let selectedIndexPaths = ancestorTableView.indexPathsForSelectedRows {
             for indexPath in selectedIndexPaths {
-                self.ancestorTableView.deselectRow(at: indexPath, animated: true)
+                ancestorTableView.deselectRow(at: indexPath, animated: true)
             }
             
-            self.selectedAncestorsCount = 0
-            self.printButton.isEnabled = false
-            self.printButton.alpha = 0.5
+            selectedAncestorsCount = 0
+            printButton.isEnabled = false
+            printButton.alpha = 0.5
         }
     }
     
     private func getSelectedAncestor() -> Ancestor? {
-        if let selectedIndexPath = self.ancestorTableView.indexPathForSelectedRow {
+        if let selectedIndexPath = ancestorTableView.indexPathForSelectedRow {
             return ancestors[selectedIndexPath.row]
         } else {
             return nil

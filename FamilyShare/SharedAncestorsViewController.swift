@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import PDFKit
 import CoreGraphics
+import PDFKit
 import Alamofire
 
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
@@ -16,7 +16,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     //MARK: Properties
     let ancestorModel = AncestorModel()
     var sharedAncestors = [Ancestor]()
-    var templeCard: PDFDocument?
     let defaults = UserDefaults.standard
     
     // MARK: Outlets
@@ -131,7 +130,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         if let templeCardPdf = PDFDocument(url: urls[0]) {
             // Populate a new Ancestor Object
             let ancestorToShare = Ancestor(templeCardPdf)
-            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { (error: String?, postedAncestor: Ancestor?) in
+            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { [unowned self] (error: String?, postedAncestor: Ancestor?) in
                 if (error != nil) {
                     debugPrint(error!)
                     return
@@ -181,7 +180,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         
         let selectedAncestor = sharedAncestors[selectedAncestorIndexPath.row]
         
-        ancestorModel.reserveAncestor(ancestor: selectedAncestor, userId: userId) { (reservedAncestor: Ancestor?) in
+        ancestorModel.reserveAncestor(ancestor: selectedAncestor, userId: userId) { [unowned self] (reservedAncestor: Ancestor?) in
             guard reservedAncestor != nil else {
                 print("There was an error in reserving ancestorSummary: \(selectedAncestor)")
                 return
@@ -204,7 +203,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     //MARK: Private methods
     private func downloadAvailableAncestors() {
-        ancestorModel.getAvailableAncestorSummaries() { (error: Error?, availableAncestors: [Ancestor]?) in
+        ancestorModel.getAvailableAncestorSummaries() { [unowned self] (error: Error?, availableAncestors: [Ancestor]?) in
             guard error == nil else {
                 print(error as Any)
                 return
