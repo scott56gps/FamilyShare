@@ -9,8 +9,14 @@
 import UIKit
 import Alamofire
 
+enum Toggle {
+    case enable
+    case disable
+}
+
 class LogInViewController: UIViewController, UITextFieldDelegate {
     //MARK: Properties
+    let userModel = UserModel()
     let defaults = UserDefaults.standard
     var isLoggedIn: Bool = false
     
@@ -80,44 +86,30 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             usernameTextField.text = ""
             
             // Make a log in request
-            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/login/" + username, method: .get).responseJSON { response in
-                guard response.result.isSuccess else {
-                    print("GET request for user_id failed: \(String(describing: response.result.error))")
+            userModel.logInUser(username: username) { [unowned self] (error: String?, userId: Int?) in
+                guard error == nil else {
+                    debugPrint(error!)
                     return
                 }
                 
-                guard let value = response.result.value else {
-                    print("Data received was not able to be formed correctly")
+                if userId != nil {
+                    // Save the userId and username in UserDefaults
+                    self.setUserIdToDefaults(userId: userId!, defaults: self.defaults)
+                    
+                    // Disable the log in button
+                    self.toggleButton(button: self.logInButton, toggle: .disable)
+                    
+                    // Disable the sign up button
+                    self.toggleButton(button: self.signUpButton, toggle: .disable)
+                    
+                    // Enable the log out button
+                    self.toggleButton(button: self.logOutButton, toggle: .enable)
+                    
+                    // Display username
+                    self.toggleUsernameDisplay(infoLabel: self.infoLabel, username: username, toggle: .enable)
+                } else {
+                    debugPrint("userId returned nil from logInUser")
                     return
-                }
-                
-                print(response)
-                
-                if let array = value as? [Any] {
-                    for object in array {
-                        let jsonArray = object as? [String: Any]
-                        let userId = jsonArray!["user_id"]! as? Int
-                        
-                        // Save the userId and username in UserDefaults
-                        self.defaults.set(userId!, forKey: "User Id")
-                        self.defaults.set(username, forKey: "Username")
-                        
-                        // Disable the log in button
-                        self.logInButton.isEnabled = false
-                        self.logInButton.alpha = 0.5
-                        
-                        // Disable the sign up button
-                        self.signUpButton.isEnabled = false
-                        self.signUpButton.alpha = 0.5
-                        
-                        // Enable the log out button
-                        self.logOutButton.isEnabled = true
-                        self.logOutButton.alpha = 1.0
-                        
-                        // Display username
-                        self.infoLabel.isHidden = false
-                        self.infoLabel.text = "\(username) logged in"
-                    }
                 }
             }
         } else {
@@ -219,6 +211,31 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
             }
+        }
+    }
+    
+    // MARK: Private Methods
+    private func setUserIdToDefaults(userId: Int, defaults: UserDefaults) { defaults.set(userId, forKey: "User Id") }
+    
+    private func toggleButton(button: UIButton, toggle: Toggle) {
+        switch toggle {
+        case .enable:
+            button.isEnabled = true
+            button.alpha = 1.0
+        case .disable:
+            button.isEnabled = false
+            button.alpha = 0.5
+        }
+    }
+    
+    private func toggleUsernameDisplay(infoLabel: UILabel, username: String, toggle: Toggle) {
+        switch toggle {
+        case .enable:
+            infoLabel.isHidden = false
+            infoLabel.text = "\(username) logged in"
+        case .disable:
+            infoLabel.isHidden = true
+            infoLabel.text = ""
         }
     }
 }
