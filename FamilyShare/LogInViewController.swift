@@ -106,7 +106,8 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                     self.toggleButton(button: self.logOutButton, toggle: .enable)
                     
                     // Display username
-                    self.toggleUsernameDisplay(infoLabel: self.infoLabel, username: username, toggle: .enable)
+                    self.infoLabel.text = "\(username) logged in"
+                    self.toggleUsernameDisplay(displayLabel: self.infoLabel, toggle: .enable)
                 } else {
                     debugPrint("userId returned nil from logInUser")
                     return
@@ -120,22 +121,18 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     @IBAction func logOut(_ sender: UIButton) {
         // Delete the values for User Id and Username
         defaults.removeObject(forKey: "User Id")
-        defaults.removeObject(forKey: "Username")
         
         // Disable the log out button
-        logOutButton.isEnabled = false
-        logOutButton.alpha = 0.5
+        toggleButton(button: logOutButton, toggle: .disable)
         
         // Enable the log in button
-        logInButton.isEnabled = true
-        logInButton.alpha = 1.0
+        toggleButton(button: logInButton, toggle: .enable)
         
         // Enable the sign up button
-        signUpButton.isEnabled = true
-        signUpButton.alpha = 1.0
+        toggleButton(button: signUpButton, toggle: .enable)
         
-        // Hide the infoLabel
-        infoLabel.isHidden = true
+        // Hide the username display
+        toggleUsernameDisplay(displayLabel: infoLabel, toggle: .disable)
     }
     
     @IBAction func signUp(_ sender: UIButton) {
@@ -228,14 +225,12 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func toggleUsernameDisplay(infoLabel: UILabel, username: String, toggle: Toggle) {
+    private func toggleUsernameDisplay(displayLabel: UILabel, toggle: Toggle) {
         switch toggle {
         case .enable:
-            infoLabel.isHidden = false
-            infoLabel.text = "\(username) logged in"
+            displayLabel.isHidden = false
         case .disable:
-            infoLabel.isHidden = true
-            infoLabel.text = ""
+            displayLabel.isHidden = true
         }
     }
 }
