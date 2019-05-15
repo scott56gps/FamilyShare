@@ -21,8 +21,6 @@
 		27705E5920C7C8B90048DCC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27705E5820C7C8B90048DCC1 /* Assets.xcassets */; };
 		27705E7420C7CAD50048DCC1 /* AncestorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */; };
 		279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F5BEA20E6D34200DA7396 /* TabBarController.swift */; };
-		279F5BEF20E83C7200DA7396 /* shareIconBlack.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BEE20E83C7100DA7396 /* shareIconBlack.png */; };
-		279F5BF120E83C7900DA7396 /* shareIconBlue.png in Resources */ = {isa = PBXBuildFile; fileRef = 279F5BF020E83C7900DA7396 /* shareIconBlue.png */; };
 		27BAF3B920DF00C0007EDA9D /* SharedAncestorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BAF3B820DF00C0007EDA9D /* SharedAncestorsViewController.swift */; };
 		689256A00AEC7C1718BDE459 /* Pods_FamilyShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */; };
 /* End PBXBuildFile section */
@@ -59,8 +57,6 @@
 		27705E5D20C7C8B90048DCC1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorTableViewCell.swift; sourceTree = "<group>"; };
 		279F5BEA20E6D34200DA7396 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		279F5BEE20E83C7100DA7396 /* shareIconBlack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlack.png; sourceTree = SOURCE_ROOT; };
-		279F5BF020E83C7900DA7396 /* shareIconBlue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shareIconBlue.png; sourceTree = SOURCE_ROOT; };
 		27BAF3B820DF00C0007EDA9D /* SharedAncestorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAncestorsViewController.swift; sourceTree = "<group>"; };
 		F18ECCE529B89326DC3C32F2 /* Pods-FamilyShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -131,8 +127,6 @@
 				13F41F8B22669F8600556B6F /* Ancestor.swift */,
 				13C3E2A120EBDC4000458251 /* Ordinance.swift */,
 				27705E5820C7C8B90048DCC1 /* Assets.xcassets */,
-				279F5BEE20E83C7100DA7396 /* shareIconBlack.png */,
-				279F5BF020E83C7900DA7396 /* shareIconBlue.png */,
 				27705E5D20C7C8B90048DCC1 /* Info.plist */,
 			);
 			path = FamilyShare;
@@ -251,11 +245,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				279F5BEF20E83C7200DA7396 /* shareIconBlack.png in Resources */,
 				27705E5920C7C8B90048DCC1 /* Assets.xcassets in Resources */,
 				27705E5720C7C8AF0048DCC1 /* Main.storyboard in Resources */,
 				13E0132C21C08875009BC28D /* Default-568h@2x.png in Resources */,
-				279F5BF120E83C7900DA7396 /* shareIconBlue.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
