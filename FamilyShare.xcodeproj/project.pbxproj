@@ -22,7 +22,7 @@
 		27705E7420C7CAD50048DCC1 /* AncestorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */; };
 		279F5BEB20E6D34200DA7396 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 279F5BEA20E6D34200DA7396 /* TabBarController.swift */; };
 		27BAF3B920DF00C0007EDA9D /* SharedAncestorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27BAF3B820DF00C0007EDA9D /* SharedAncestorsViewController.swift */; };
-		689256A00AEC7C1718BDE459 /* Pods_FamilyShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */; };
+		508428C6ABB7A6A176B7C6E7 /* Pods_FamilyShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D41988273AA7BF538C88FF60 /* Pods_FamilyShare.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,8 +46,6 @@
 		13E1A938228A61E00032D75C /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		13F41F8B22669F8600556B6F /* Ancestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ancestor.swift; sourceTree = "<group>"; };
 		13FDDF5321C2468B00A84F4A /* FamilyShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FamilyShare.entitlements; sourceTree = "<group>"; };
-		1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FamilyShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1C172981C9446BC2EB1A425C /* Pods-FamilyShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.release.xcconfig"; sourceTree = "<group>"; };
 		2702DB8F20E42A2A00A193D5 /* ReservedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservedViewController.swift; sourceTree = "<group>"; };
 		27705E4E20C7C8AF0048DCC1 /* FamilyShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FamilyShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		27705E5120C7C8AF0048DCC1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -58,7 +56,9 @@
 		27705E7320C7CAD50048DCC1 /* AncestorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AncestorTableViewCell.swift; sourceTree = "<group>"; };
 		279F5BEA20E6D34200DA7396 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		27BAF3B820DF00C0007EDA9D /* SharedAncestorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAncestorsViewController.swift; sourceTree = "<group>"; };
-		F18ECCE529B89326DC3C32F2 /* Pods-FamilyShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.debug.xcconfig"; sourceTree = "<group>"; };
+		4276752DED419261CB8625EF /* Pods-FamilyShare.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.debug.xcconfig"; sourceTree = "<group>"; };
+		8E4D95A76AD25687D8002C4B /* Pods-FamilyShare.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FamilyShare.release.xcconfig"; path = "Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare.release.xcconfig"; sourceTree = "<group>"; };
+		D41988273AA7BF538C88FF60 /* Pods_FamilyShare.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FamilyShare.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,13 +73,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				689256A00AEC7C1718BDE459 /* Pods_FamilyShare.framework in Frameworks */,
+				508428C6ABB7A6A176B7C6E7 /* Pods_FamilyShare.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11BF89B2B18E3B42D0DA1528 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4276752DED419261CB8625EF /* Pods-FamilyShare.debug.xcconfig */,
+				8E4D95A76AD25687D8002C4B /* Pods-FamilyShare.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		133DC77D2279176E008AB65B /* FamilyShareTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -96,8 +105,8 @@
 				27705E5020C7C8AF0048DCC1 /* FamilyShare */,
 				133DC77D2279176E008AB65B /* FamilyShareTests */,
 				27705E4F20C7C8AF0048DCC1 /* Products */,
-				9FC6A7D86C950BE82B7E778A /* Pods */,
-				5DB8128E20FD421AD016D135 /* Frameworks */,
+				11BF89B2B18E3B42D0DA1528 /* Pods */,
+				3AA127BD813A5C2E9D978518 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -132,21 +141,12 @@
 			path = FamilyShare;
 			sourceTree = "<group>";
 		};
-		5DB8128E20FD421AD016D135 /* Frameworks */ = {
+		3AA127BD813A5C2E9D978518 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1645F18CEF171197A7E5E6D0 /* Pods_FamilyShare.framework */,
+				D41988273AA7BF538C88FF60 /* Pods_FamilyShare.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		9FC6A7D86C950BE82B7E778A /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F18ECCE529B89326DC3C32F2 /* Pods-FamilyShare.debug.xcconfig */,
-				1C172981C9446BC2EB1A425C /* Pods-FamilyShare.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -174,11 +174,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 27705E6B20C7C8B90048DCC1 /* Build configuration list for PBXNativeTarget "FamilyShare" */;
 			buildPhases = (
-				BF54765FE6138B711E4235BE /* [CP] Check Pods Manifest.lock */,
+				61604CDA87318B8E24B74211 /* [CP] Check Pods Manifest.lock */,
 				27705E4A20C7C8AF0048DCC1 /* Sources */,
 				27705E4B20C7C8AF0048DCC1 /* Frameworks */,
 				27705E4C20C7C8AF0048DCC1 /* Resources */,
-				88A9EF8A1CA0EAC8A45AA5C8 /* [CP] Embed Pods Frameworks */,
+				B7585AC3DD367C089BF7EF3A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -254,31 +254,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		88A9EF8A1CA0EAC8A45AA5C8 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BF54765FE6138B711E4235BE /* [CP] Check Pods Manifest.lock */ = {
+		61604CDA87318B8E24B74211 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -298,6 +274,32 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B7585AC3DD367C089BF7EF3A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FamilyShare/Pods-FamilyShare-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -514,7 +516,7 @@
 		};
 		27705E6C20C7C8B90048DCC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F18ECCE529B89326DC3C32F2 /* Pods-FamilyShare.debug.xcconfig */;
+			baseConfigurationReference = 4276752DED419261CB8625EF /* Pods-FamilyShare.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FamilyShare/FamilyShare.entitlements;
@@ -536,7 +538,7 @@
 		};
 		27705E6D20C7C8B90048DCC1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C172981C9446BC2EB1A425C /* Pods-FamilyShare.release.xcconfig */;
+			baseConfigurationReference = 8E4D95A76AD25687D8002C4B /* Pods-FamilyShare.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FamilyShare/FamilyShare.entitlements;

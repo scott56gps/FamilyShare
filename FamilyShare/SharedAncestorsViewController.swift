@@ -10,6 +10,7 @@ import UIKit
 import CoreGraphics
 import PDFKit
 import Alamofire
+import SocketIO
 
 class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIDocumentPickerDelegate {
     
@@ -17,6 +18,8 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     let ancestorModel = AncestorModel()
     var sharedAncestors = [Ancestor]()
     let defaults = UserDefaults.standard
+    let manager = SocketManager(socketURL: URL(string: "https://familyshare-server.herokuapp.com")!)
+    var socket: SocketIOClient!
     
     // MARK: Outlets
     @IBOutlet weak var reserveButton: UIButton!
@@ -38,6 +41,12 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         reserveButton.alpha = 0.5
         shareButton.isEnabled = false
         shareButton.alpha = 0.5
+        
+        socket = manager.defaultSocket
+        setSocketEvents()
+        socket.connect()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -263,5 +272,36 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     private func disableReserveButton() {
         reserveButton.isEnabled = false
         reserveButton.alpha = 0.5
+    }
+    
+    private func setSocketEvents() {
+        self.socket.on(clientEvent: .connect) {data, ack in
+            print("Socket Connected")
+        }
+        
+        self.socket.on(clientEvent: .disconnect) {data, ack in
+            print("Socket Disconnected")
+        }
+        
+        self.socket.on("message") {data, ack in
+            print(data[0] as! String)
+        }
+        
+        self.socket.on("availableAncestorsUpdated") {data, ack in
+            print("ancestors received")
+            
+            var ancestors = [Ancestor]()
+            
+            if let ancestorDictionaries = data[0] as? [Dictionary<String, Any>] {
+                for ancestorDictionary in ancestorDictionaries {
+                    // Create an Ancestor Object from the parts that we got from the JSON
+                    if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
+                        ancestors.append(ancestor)
+                    }
+                }
+                
+                print(ancestors)
+            }
+        }
     }
 }

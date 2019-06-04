@@ -1,3 +1,4 @@
+source 'https://github.com/CocoaPods/Specs.git'
 # Uncomment the next line to define a global platform for your project
 platform :ios, '12.1'
 
@@ -7,6 +8,5 @@ target 'FamilyShare' do
 
   # Pods for FamilyShare
   pod 'Alamofire', '~> 4.7'
-  pod 'Starscream', '~> 3.0.2'
-
+  pod 'Socket.IO-Client-Swift', '~> 15.0.0'
 end
