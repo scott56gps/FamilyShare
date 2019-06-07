@@ -46,7 +46,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         setSocketEvents()
         socket.connect()
         
-        
+        downloadAvailableAncestors()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,7 +69,7 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             shareButton.isEnabled = true
             reserveButton.isEnabled = false
             shareButton.alpha = 1.0
-            downloadAvailableAncestors()
+//            downloadAvailableAncestors()
         }
     }
 
@@ -139,16 +139,17 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         if let templeCardPdf = PDFDocument(url: urls[0]) {
             // Populate a new Ancestor Object
             let ancestorToShare = Ancestor(templeCardPdf)
+            
             ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { [unowned self] (error: String?, postedAncestor: Ancestor?) in
                 if (error != nil) {
                     debugPrint(error!)
                     return
                 }
-                
-                if let ancestor = postedAncestor {
-                    self.sharedAncestors.append(ancestor)
-                    self.ancestorTableView.reloadData()
-                }
+
+//                if let ancestor = postedAncestor {
+//                    self.sharedAncestors.append(ancestor)
+//                    self.ancestorTableView.reloadData()
+//                }
             }
         } else {
             // Throw an error
@@ -287,21 +288,24 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             print(data[0] as! String)
         }
         
-        self.socket.on("availableAncestorsUpdated") {data, ack in
-            print("ancestors received")
+        self.socket.on("newAvailableAncestor") {[unowned self] data, ack in
+            print("ancestor received")
             
-            var ancestors = [Ancestor]()
-            
-            if let ancestorDictionaries = data[0] as? [Dictionary<String, Any>] {
-                for ancestorDictionary in ancestorDictionaries {
-                    // Create an Ancestor Object from the parts that we got from the JSON
-                    if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
-                        ancestors.append(ancestor)
-                    }
+            if let ancestorDictionary = data[0] as? [String: Any] {
+                // Create an Ancestor Object from the JSON
+                if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
+                    print(ancestor)
+                    self.sharedAncestors.append(ancestor)
+                    self.ancestorTableView.reloadData()
                 }
-                
-                print(ancestors)
             }
+        }
+        
+        self.socket.on("testCompleted") { data, ack in
+            print("test completed")
+            
+            let successMessage = data[0] as! String
+            print(successMessage)
         }
     }
 }

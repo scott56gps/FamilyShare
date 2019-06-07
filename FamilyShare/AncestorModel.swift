@@ -135,17 +135,22 @@ class AncestorModel {
             case .success(let upload, _, _):
                 upload.responseJSON { response in
                     debugPrint(response)
-                    if let ancestorDictionary = response.result.value as? Dictionary<String, Any> {
-                        // Create an Ancestor Object
-                        if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
-                            callback(nil, ancestor)
-                        } else {
-                            callback("Did not create Ancestor for Dictionary: \(ancestorDictionary)", nil)
-                        }
+                    if let responseDictionary = response.result.value as? [String: String] {
+                        callback(responseDictionary["success"], nil)
                     } else {
-                        debugPrint("Did not create AncestorDictionary for value: \(response.result.value)")
-                        callback("Did not create AncestorDictionary for value: \(response.result.value)", nil)
+                        callback("Error", nil)
                     }
+//                    if let ancestorDictionary = response.result.value as? Dictionary<String, Any> {
+//                        // Create an Ancestor Object
+//                        if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
+//                            callback(nil, ancestor)
+//                        } else {
+//                            callback("Did not create Ancestor for Dictionary: \(ancestorDictionary)", nil)
+//                        }
+//                    } else {
+//                        debugPrint("Did not create AncestorDictionary for value: \(response.result.value)")
+//                        callback("Did not create AncestorDictionary for value: \(response.result.value)", nil)
+//                    }
                 }
             case .failure(let error):
                 print(error)
