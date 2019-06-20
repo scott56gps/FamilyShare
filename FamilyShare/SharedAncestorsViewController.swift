@@ -140,17 +140,19 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             // Populate a new Ancestor Object
             let ancestorToShare = Ancestor(templeCardPdf)
             
-            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { [unowned self] (error: String?, postedAncestor: Ancestor?) in
-                if (error != nil) {
-                    debugPrint(error!)
-                    return
-                }
-
-//                if let ancestor = postedAncestor {
-//                    self.sharedAncestors.append(ancestor)
-//                    self.ancestorTableView.reloadData()
+            
+            
+//            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { [unowned self] (error: String?, postedAncestor: Ancestor?) in
+//                if (error != nil) {
+//                    debugPrint(error!)
+//                    return
 //                }
-            }
+//
+////                if let ancestor = postedAncestor {
+////                    self.sharedAncestors.append(ancestor)
+////                    self.ancestorTableView.reloadData()
+////                }
+//            }
         } else {
             // Throw an error
             fatalError("PDF Document creation failed")
