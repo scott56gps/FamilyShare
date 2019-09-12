@@ -64,11 +64,17 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             shareButton.alpha = 0.5
             sharedAncestors.removeAll()
             ancestorTableView.reloadData()
+            
+            // Disconnect from the websocket
+            socket.disconnect()
         } else {
             infoLabel.isHidden = true
             shareButton.isEnabled = true
             reserveButton.isEnabled = false
             shareButton.alpha = 1.0
+            
+            // Check to see if the websocket is connected
+                // If the socket is not connected, make a connection
 //            downloadAvailableAncestors()
         }
     }
@@ -140,8 +146,6 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
             // Populate a new Ancestor Object
             let ancestorToShare = Ancestor(templeCardPdf)
             
-            
-            
 //            ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { [unowned self] (error: String?, postedAncestor: Ancestor?) in
 //                if (error != nil) {
 //                    debugPrint(error!)
@@ -191,26 +195,29 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         let selectedAncestor = sharedAncestors[selectedAncestorIndexPath.row]
+
         
-        ancestorModel.reserveAncestor(ancestor: selectedAncestor, userId: userId) { [unowned self] (reservedAncestor: Ancestor?) in
-            guard reservedAncestor != nil else {
-                print("There was an error in reserving ancestorSummary: \(selectedAncestor)")
-                return
-            }
-            
-            self.deselectTableViewCells()
-            
-            // Remove the reservedAncestor from the ancestorSummaries
-            self.sharedAncestors.remove(at: selectedAncestorIndexPath.row)
-            self.ancestorTableView.reloadData()
-            
-            // Set the reserved tab badge to the number of reserved ancestors
-            if let tabItems = self.tabBarController?.tabBar.items {
-                let reservedTab = tabItems[1]
-                
-                self.setBadgeNumber(tabBarItem: reservedTab, number: 1)
-            }
-        }
+        socket.emit("reserveAncestor", [selectedAncestor])
+        
+//        ancestorModel.reserveAncestor(ancestor: selectedAncestor, userId: userId) { [unowned self] (reservedAncestor: Ancestor?) in
+//            guard reservedAncestor != nil else {
+//                print("There was an error in reserving ancestorSummary: \(selectedAncestor)")
+//                return
+//            }
+//
+//            self.deselectTableViewCells()
+//
+//            // Remove the reservedAncestor from the ancestorSummaries
+//            self.sharedAncestors.remove(at: selectedAncestorIndexPath.row)
+//            self.ancestorTableView.reloadData()
+//
+//            // Set the reserved tab badge to the number of reserved ancestors
+//            if let tabItems = self.tabBarController?.tabBar.items {
+//                let reservedTab = tabItems[1]
+//
+//                self.setBadgeNumber(tabBarItem: reservedTab, number: 1)
+//            }
+//        }
     }
     
     //MARK: Private methods
@@ -302,6 +309,18 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
                 }
             }
         }
+        
+//        self.socket.on("reservedAncestor") {[unowned self] data, ack in
+//            print("Ancestor was reserved")
+//            
+//            if let ancestorDictionary = data[0] as? [String: Any] {
+//                // Create an Ancestor Object from the JSON
+//                if let ancestor = Ancestor(ancestorDictionary: ancestorDictionary) {
+//                    print(ancestor)
+//                    
+//                }
+//            }
+//        }
         
         self.socket.on("testCompleted") { data, ack in
             print("test completed")
