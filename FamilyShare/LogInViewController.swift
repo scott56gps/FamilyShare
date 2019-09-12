@@ -9,10 +9,15 @@
 import UIKit
 import Alamofire
 
+enum Toggle {
+    case enable
+    case disable
+}
+
 class LogInViewController: UIViewController, UITextFieldDelegate {
     //MARK: Properties
+    let userModel = UserModel()
     let defaults = UserDefaults.standard
-    var isLoggedIn: Bool = false
     
     //MARK: Outlets
     @IBOutlet weak var infoLabel: UILabel!
@@ -24,7 +29,6 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
         usernameTextField.delegate = self
     }
     
@@ -34,19 +38,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         // If a user is not logged in
         if defaults.string(forKey: "User Id") == nil {
             // Disable the log out button
-            logOutButton.isEnabled = false
-            logOutButton.alpha = 0.5
+            toggleButton(button: logOutButton, toggle: .disable)
             
             // Hide the infoLabel
-            infoLabel.isHidden = true
+            toggleUsernameDisplay(displayLabel: infoLabel, toggle: .disable)
         } else {
             // Disable the log in button
-            logInButton.isEnabled = false
-            logInButton.alpha = 0.5
+            toggleButton(button: logInButton, toggle: .disable)
             
             // Disable the sign up button
-            signUpButton.isEnabled = false
-            signUpButton.alpha = 0.5
+            toggleButton(button: signUpButton, toggle: .disable)
             
             // Display the username
             if let username = defaults.string(forKey: "Username") {
@@ -60,13 +61,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Hide the keyboard
         textField.resignFirstResponder()
-        
         return true
     }
     
     //MARK: Actions
     @IBAction func logIn(_ sender: UIButton) {
         if (usernameTextField.text == nil) {
+            return
+        }
+        
+        if (usernameTextField.text!.isEmpty) {
             return
         }
         
@@ -80,44 +84,32 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             usernameTextField.text = ""
             
             // Make a log in request
-            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/login/" + username, method: .get).responseJSON { response in
-                guard response.result.isSuccess else {
-                    print("GET request for user_id failed: \(String(describing: response.result.error))")
+            userModel.logInUser(username: username) { [unowned self] (error: String?, userId: Int?) in
+                guard error == nil else {
+                    debugPrint(error!)
                     return
                 }
                 
-                guard let value = response.result.value else {
-                    print("Data received was not able to be formed correctly")
+                if userId != nil {
+                    // Save the userId and username in UserDefaults
+                    self.defaults.set(userId, forKey: "User Id")
+                    self.defaults.set(username, forKey: "Username")
+                    
+                    // Disable the log in button
+                    self.toggleButton(button: self.logInButton, toggle: .disable)
+                    
+                    // Disable the sign up button
+                    self.toggleButton(button: self.signUpButton, toggle: .disable)
+                    
+                    // Enable the log out button
+                    self.toggleButton(button: self.logOutButton, toggle: .enable)
+                    
+                    // Display username
+                    self.infoLabel.text = "\(username) logged in"
+                    self.toggleUsernameDisplay(displayLabel: self.infoLabel, toggle: .enable)
+                } else {
+                    debugPrint("userId returned nil from logInUser")
                     return
-                }
-                
-                print(response)
-                
-                if let array = value as? [Any] {
-                    for object in array {
-                        let jsonArray = object as? [String: Any]
-                        let userId = jsonArray!["user_id"]! as? Int
-                        
-                        // Save the userId and username in UserDefaults
-                        self.defaults.set(userId!, forKey: "User Id")
-                        self.defaults.set(username, forKey: "Username")
-                        
-                        // Disable the log in button
-                        self.logInButton.isEnabled = false
-                        self.logInButton.alpha = 0.5
-                        
-                        // Disable the sign up button
-                        self.signUpButton.isEnabled = false
-                        self.signUpButton.alpha = 0.5
-                        
-                        // Enable the log out button
-                        self.logOutButton.isEnabled = true
-                        self.logOutButton.alpha = 1.0
-                        
-                        // Display username
-                        self.infoLabel.isHidden = false
-                        self.infoLabel.text = "\(username) logged in"
-                    }
                 }
             }
         } else {
@@ -131,19 +123,16 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         defaults.removeObject(forKey: "Username")
         
         // Disable the log out button
-        logOutButton.isEnabled = false
-        logOutButton.alpha = 0.5
+        toggleButton(button: logOutButton, toggle: .disable)
         
         // Enable the log in button
-        logInButton.isEnabled = true
-        logInButton.alpha = 1.0
+        toggleButton(button: logInButton, toggle: .enable)
         
         // Enable the sign up button
-        signUpButton.isEnabled = true
-        signUpButton.alpha = 1.0
+        toggleButton(button: signUpButton, toggle: .enable)
         
-        // Hide the infoLabel
-        infoLabel.isHidden = true
+        // Hide the username display
+        toggleUsernameDisplay(displayLabel: infoLabel, toggle: .disable)
     }
     
     @IBAction func signUp(_ sender: UIButton) {
@@ -155,70 +144,59 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
             usernameTextField.resignFirstResponder()
         }
         
-        if (defaults.string(forKey: "User Id") == nil) {
-            let username = usernameTextField.text!
-            usernameTextField.text = ""
-            
-            Alamofire.request("https://postgres-query-ancestors.herokuapp.com/createUser/" + username, method: .post).validate().responseJSON { response in
-                guard response.result.isSuccess else {
-                    print("POST request for user_id failed")
-                    
-                    if let error = response.result.error as? AFError {
-                        switch error {
-                        case .responseValidationFailed(let reason):
-                            
-                            switch reason {
-                            case .unacceptableStatusCode(let code):
-                                self.infoLabel.isHidden = false
-                                self.infoLabel.text = "\(username) is already signed up"
-                            case .dataFileNil:
-                                print("dataFileNil")
-                            case .dataFileReadFailed(let at):
-                                print("dataFileReadFailed at: \(at)")
-                            case .missingContentType(let acceptableContentTypes):
-                                print("missingContentType.  Acceptable types: \(acceptableContentTypes)")
-                            case .unacceptableContentType(let acceptableContentTypes, let responseContentType):
-                                print("unacceptableContentType.  Acceptable types: \(acceptableContentTypes)")
-                            }
-                        default:
-                            let defaultDescription = "Unknown"
-                            print("Unknown error: \(error.errorDescription ?? defaultDescription)")
-                        }
-                    }
-                    
-                    return
-                }
-                
-                guard let value = response.result.value else {
-                    print("Data received was not able to be formed correctly")
-                    return
-                }
-                
-                print(response)
-                
-                if let array = value as? [Any] {
-                    for object in array {
-                        let jsonArray = object as? [String: Any]
-                        let userId = jsonArray!["user_id"]! as? Int
-                        
-                        // Save the userId and username in UserDefaults
-                        self.defaults.set(userId!, forKey: "User Id")
-                        self.defaults.set(username, forKey: "Username")
-                        
-                        // Disable the log in button
-                        self.logInButton.isEnabled = false
-                        self.logInButton.alpha = 0.5
-                        
-                        // Enable the log out button
-                        self.logOutButton.isEnabled = true
-                        self.logOutButton.alpha = 1.0
-                        
-                        // Display username
-                        self.infoLabel.isHidden = false
-                        self.infoLabel.text = "\(username) created.  \(username) logged in"
-                    }
-                }
+        guard defaults.string(forKey: "User Id") == nil else {
+            debugPrint("User Id is not nil.  User Id must be nil to create a user")
+            return
+        }
+        
+        let username = usernameTextField.text!
+        usernameTextField.text = ""
+        
+        userModel.postUser(username: username) { [unowned self] (error: String?, userId: Int?) in
+            guard error == nil else {
+                debugPrint(error!)
+                return
             }
+            
+            if userId != nil {
+                // Save the userId and username in UserDefaults
+                self.defaults.set(userId, forKey: "User Id")
+                self.defaults.set(username, forKey: "Username")
+                
+                // Disable the log in button
+                self.toggleButton(button: self.logInButton, toggle: .disable)
+                
+                // Enable the log out button
+                self.toggleButton(button: self.logOutButton, toggle: .enable)
+                
+                // Display username
+                self.infoLabel.text = "\(username) created.  \(username) logged in"
+                self.toggleUsernameDisplay(displayLabel: self.infoLabel, toggle: .enable)
+            } else {
+                debugPrint("User Id is nil")
+                return
+            }
+        }
+    }
+    
+    // MARK: Private Methods
+    private func toggleButton(button: UIButton, toggle: Toggle) {
+        switch toggle {
+        case .enable:
+            button.isEnabled = true
+            button.alpha = 1.0
+        case .disable:
+            button.isEnabled = false
+            button.alpha = 0.5
+        }
+    }
+    
+    private func toggleUsernameDisplay(displayLabel: UILabel, toggle: Toggle) {
+        switch toggle {
+        case .enable:
+            displayLabel.isHidden = false
+        case .disable:
+            displayLabel.isHidden = true
         }
     }
 }
