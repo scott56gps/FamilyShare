@@ -93,7 +93,7 @@ class Ancestor {
         }
         
         // Get the parsed lines for the document
-        var pdfLines = parsePDF(pdfDocument: templeCardPdf)
+        let pdfLines = parsePDF(pdfDocument: templeCardPdf)
         
         // Get the ordinanceNeeded for this ancestor
         guard let neededOrdinance = parseOrdinanceNeeded(pdfLines) else {
