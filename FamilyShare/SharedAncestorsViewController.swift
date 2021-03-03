@@ -128,11 +128,15 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
     
     // MARK: UIDocumentPickerDelegate Methods
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        activityIndicator.startAnimating()
+        
         // Load the PDF
         if let templeCardPdf = PDFDocument(url: urls[0]) {
             // Populate a new Ancestor Object
             let ancestorToShare = Ancestor(templeCardPdf)
             ancestorModel.postAncestor(templeCard: templeCardPdf, ancestor: ancestorToShare) { [unowned self] (error: String?, postedAncestor: Ancestor?) in
+                self.activityIndicator.stopAnimating()
+                
                 if (error != nil) {
                     debugPrint(error!)
                     return
@@ -182,7 +186,10 @@ class SharedAncestorsViewController: UIViewController, UITableViewDelegate, UITa
         
         let selectedAncestor = sharedAncestors[selectedAncestorIndexPath.row]
         
+        activityIndicator.startAnimating()
+        
         ancestorModel.reserveAncestor(ancestor: selectedAncestor, userId: userId) { [unowned self] (reservedAncestor: Ancestor?) in
+            self.activityIndicator.stopAnimating()
             guard reservedAncestor != nil else {
                 print("There was an error in reserving ancestorSummary: \(selectedAncestor)")
                 return
